@@ -8,45 +8,40 @@ In each meeting, you are required to discuss:
 4. Deviations and changes to the project plan, if any
 
 
-# Meeting dd.mm.2021 HH::MM
+# Meeting 18.10.2023
 
 **Participants**: 
-1. Member 1
-2. Member 2
-3. Member 3
-4. Member 4 
+1. Aleksi Kalsta
+2. Eetu Reijonen
+3. Eemeli Forsbom
+4. Henri-Mikael Suominen
 
 ## Summary of works
-1. Member 1 
-   
-   Implementing the class XX. Tested the class XX. 
-   Results are in `tests/<class-xx-tests>`. Resolved the identified problems.
+1. All
+Getting to know what we have to do for project plan. Testing that Git repo works for all.
+Went through which things we want to implement:
+- All basic features
+- From recommended: All but advanced materials
+- From advanced: We will check if we have time when we proceed
 
-2. Member 2
+Planned which file format we want to use for 3D scenes. Possible options:
+- XML
+- YML
+- Universal scene description
 
-   Same as above
+Switched some ideas on high level structure of the program.
 
-3. ...
+Settled the time for meetings to be 14:15-16:00 on mondays.
 
 ## Challenges
 
-1. The integration of UI with the monsters requires an abstract interface.
-2. ...
+1. Lack of knowledge
 
 ## Actions
-1. Member 1 is going to look into defining an abstract interface for monsters 
-   to enable easy UI integration.
-2. Member 2 is going to work with Member 1 to use abstract interface in derived 
-   monster classes.
-3. Member 2 is going to test the interface.
-4. Member 3 is going to use ...
-
-> Please reflect these action decisions in your git commit messages so that 
-> your group members and advisor can follow the progress.
+1. For all
+- Gather more knowledge on the subject
 
 ## Project status 
 Short summary of current project status. 
 
 ### TODOs
-1. Member 1: Write an action.
-2. ...
