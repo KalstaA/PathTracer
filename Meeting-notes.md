@@ -42,6 +42,33 @@ Settled the time for meetings to be 14:15-16:00 on mondays.
 - Gather more knowledge on the subject
 
 ## Project status 
-Short summary of current project status. 
+First meeting held.
 
 ### TODOs
+
+# Meeting 23.10.2023
+
+**Participants**: 
+1. Aleksi Kalsta
+2. Eetu Reijonen
+3. Eemeli Forsbom
+4. Henri-Mikael Suominen
+
+## Summary of works
+1. Everybody - familiarizing with the topic, project plan formulation during the meeting
+2. Eetu - Julia demo
+
+## Challenges
+
+## Actions
+1. Start working on the code
+2. Finish project plan
+
+## Project status 
+Julia demo implementation exists. 
+
+### TODOs
+1. Aleksi - software structure -part of project report, Interface part of first implementation
+2. Eetu - external libraries -part of project report, core Renderer part of first implementation
+3. Eemeli - division of work and schedule -parts of project report, Scene and related objects part of first implementation
+4. Henri - scope of work -part of project report, Fileloader part of first implementation
