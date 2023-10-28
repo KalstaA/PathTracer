@@ -2,6 +2,6 @@
 #include "message.h"
 
 void Message::printMessage() {
-  std::cout << "Hello world" << std::endl;
+  std::cout << "Hello world CMake" << std::endl;
 }
 
