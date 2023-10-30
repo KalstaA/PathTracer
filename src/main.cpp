@@ -8,7 +8,7 @@ int main() {
   sf::Image img;
   img.create(300, 200);
   img.saveToFile("image.png");
-  Eigen::Vector3d vec(1.2, 1.4, 4.9);
+  Eigen::Vector3d vec(1.2, 2.3, 5.5);
   std::cout << vec << std::endl;
   YAML::Parser parser;
   return 0;

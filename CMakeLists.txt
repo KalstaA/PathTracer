@@ -13,7 +13,7 @@ file(GLOB SOURCES src/*.cpp)
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
 # Link yaml-cpp library
-target_link_directories(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/yaml-cpp-master/build)
+target_link_directories(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/yaml-cpp-master/buildlib)
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE yaml-cpp)
 
 # Get SFML library from github
