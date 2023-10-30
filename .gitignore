@@ -47,3 +47,5 @@ dkms.conf
 
 # Builds
 build/
+.vscode/
+.metals/
