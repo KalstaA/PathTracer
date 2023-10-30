@@ -72,3 +72,30 @@ Julia demo implementation exists.
 2. Eetu - external libraries -part of project report, core Renderer part of first implementation
 3. Eemeli - division of work and schedule -parts of project report, Scene and related objects part of first implementation
 4. Henri - scope of work -part of project report, Fileloader part of first implementation
+
+# Meeting 30.10.2023
+
+**Participants**: 
+1. Aleksi Kalsta
+2. Eetu Reijonen
+3. Henri-Mikael Suominen
+
+## Summary of works
+1. Aleksi - Got the SFML library to work with CMake and got the CMake file working seamesly
+2. Everybody - Choosing and getting familiar with exteranl libraries
+
+## Challenges
+1. Getting libraries to work with CMake
+2. CMake in general
+
+## Actions
+1. Start actually working on the code after starting hurdles
+
+## Project status 
+First implementation work in progress
+
+### TODOs
+1. Aleksi - Continuation of Interface class implementation
+2. Eetu - Porting Julia code for Renderer class
+3. Eemeli - Implementation of Scene and related objects classes
+4. Henri - Continuation of Fileloader implementation
