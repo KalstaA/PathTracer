@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 class Renderer
 {
 private:
@@ -95,7 +93,8 @@ private:
 
             else 
             {
-                // TO-DO environment light
+                // TO-DO better environment light
+                ray.light += Color(0.5, 0.5, 0.5).cwiseProduct(ray.color);
                 break;
             }
         }
@@ -121,7 +120,7 @@ public:
     // TO-DO copy constructor and copy assigment
 
     /*
-    * Returns a vector of vector containing the colors of each pixel in the output image
+    * Returns a vector of vectors containing the colors of each pixel in the output image
     */
     auto render() {
         

@@ -6,8 +6,6 @@ typedef Eigen::Vector3d Color;
 typedef Eigen::Vector3d Light;
 typedef Eigen::Vector2d Vector2;
 
-#include <random>
-
 struct Material
 {
     Color color;

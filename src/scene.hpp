@@ -1,3 +1,5 @@
+#pragma once
+
 class Scene
 {
 private:
@@ -5,16 +7,18 @@ private:
     Camera camera_;
 
 public:
+
+    Scene() = default;
     Scene(Camera camera, std::list<Ball> balls) : camera_(camera), balls_(balls) {}
     ~Scene() = default;
 
     // TO-DO copy constructor and copy assigment
 
-    Camera getCamera() {
+    Camera getCamera() const {
         return camera_;
     }
 
-    std::list<Ball> getBalls() {
+    std::list<Ball> getBalls() const {
         return balls_;
     }
 };

@@ -1,4 +1,6 @@
-class Ball : public Object
+#pragma once
+
+class Ball
 {
 private:
     Vector position_;
@@ -8,16 +10,18 @@ private:
 public:
     Ball(Vector position, float radius, Material material) : position_(position), radius_(radius), material_(material) {}
     ~Ball() = default;
+    
+    // TO-DO copy constructor and copy assigment
 
-    Point getPosition() {
+    Point getPosition() const {
         return position_;
     }
 
-    float getRadius() {
+    float getRadius() const {
         return radius_;
     }
 
-    Material getMaterial() {
+    Material getMaterial() const {
         return material_;
     }
 };

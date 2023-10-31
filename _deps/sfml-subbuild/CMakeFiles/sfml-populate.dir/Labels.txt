@@ -1,0 +1,14 @@
+# Target labels
+ sfml-populate
+# Source files and their labels
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/CMakeFiles/sfml-populate
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/CMakeFiles/sfml-populate.rule
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/CMakeFiles/sfml-populate-complete.rule
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build.rule
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure.rule
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-download.rule
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install.rule
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-mkdir.rule
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch.rule
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test.rule
+/Users/eetureijonen/Desktop/PATHTRACER/cpp-course-path-tracer-project/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update.rule
