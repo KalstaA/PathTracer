@@ -32,14 +32,16 @@ int main() {
 
   Scene testScene(testCam, testBalls);
 
-  Renderer testRenderer(20, 10, testScene);
+  int resX = 70, resY = 50;
+  Renderer testRenderer(resX, resY, testScene);
   auto result = testRenderer.render();
 
-  for (int x = 0; x < 20; x++)
+  for (int y = 0; y < resY; y++)
   {
-    for (int y = 0; y < 10; y++)
+    for (int x = 0; x < resX; x++)
     {
-      std::cout << result[x][y].lpNorm<1>() << " ";
+      char symbol = result[x][y].lpNorm<1>() > 1.0 ? '#' : '.';
+      std::cout << symbol << " ";
     }
     std::cout << std::endl;
   }
