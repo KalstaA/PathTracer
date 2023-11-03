@@ -14,7 +14,7 @@ private:
     float depth_of_field = 10;
 
     int max_bounces = 3;
-    int rays_per_pixel = 5;
+    int rays_per_pixel = 10;
 
     float view_width;
     float view_height;
@@ -46,27 +46,13 @@ private:
         Hit rayHit;
         rayHit.did_hit = false;
 
+        // TO-DO all objects in the scene - not just balls
         for (auto ball : scene_.getBalls()) {
-            Vector toBall = ray.origin - ball.getPosition();
-            float a = ray.direction.dot(ray.direction);
-            float b = 2 * ray.direction.dot(toBall);
-            float c = toBall.dot(toBall) - ball.getRadius() * ball.getRadius();
+            rayHit = ball.collision(ray);
 
-            float discriminant = b*b - 4*a*c;
-            float distance = INFINITY;
-
-            if (discriminant >= 0)
+            if (rayHit.did_hit && rayHit.distance < closest_hit)
             {
-                distance = (-b - sqrt(discriminant)) / (2*a);
-            }
-
-            if (discriminant >= 0 && distance < closest_hit && distance > 0)
-            {
-                closest_hit = distance;
-                rayHit.material = ball.getMaterial();
-                rayHit.did_hit = true;
-                rayHit.point = ray.origin + ray.direction * distance;
-                rayHit.normal = (rayHit.point - ball.getPosition()).normalized();
+                closest_hit = rayHit.distance;
             }
         }
 
@@ -82,9 +68,9 @@ private:
                 ray.origin = hit.point;
 
                 Vector diffuse_direction = (randomDirection() + hit.normal).normalized();
-                // TO-DO specular reflection
+                Vector specular_direction = reflect(ray.direction, hit.normal);
 
-                ray.direction = diffuse_direction;
+                ray.direction = diffuse_direction + hit.material.specularity * (specular_direction - diffuse_direction);
                 Light emitted_light = hit.material.emission_strength * hit.material.emission_color;
                 
                 ray.light += emitted_light.cwiseProduct(ray.color);

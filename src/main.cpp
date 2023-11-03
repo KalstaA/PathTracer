@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "types.hpp"
+#include "object.hpp"
 #include "ball.hpp"
 #include "scene.hpp"
 #include "renderer.hpp"
@@ -25,6 +26,7 @@ int main() {
   testMaterial.color = Color(1, 0, 0);
   testMaterial.emission_color = Color(0, 0, 0);
   testMaterial.emission_strength = 0.0f;
+  testMaterial.specularity = 0.5;
 
   Ball ball1(Vector(5, 0, 0), 1, testMaterial);
   std::list<Ball> testBalls;
@@ -32,7 +34,7 @@ int main() {
 
   Scene testScene(testCam, testBalls);
 
-  int resX = 70, resY = 50;
+  int resX = 300, resY = 170;
   Renderer testRenderer(resX, resY, testScene);
   auto result = testRenderer.render();
 

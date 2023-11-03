@@ -11,6 +11,7 @@ struct Material
     Color color;
     float emission_strength;
     Color emission_color;
+    float specularity;
 };
     
 struct Camera
