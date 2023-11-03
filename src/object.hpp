@@ -14,5 +14,5 @@ public:
     Vector getPosition() const { return position_; }
     Material getMaterial() const { return material_; }
 
-    virtual Hit collision(Ray ray) = 0;
+    virtual void collision(Ray ray, Hit &rayHit) = 0;
 };

@@ -48,7 +48,7 @@ private:
 
         // TO-DO all objects in the scene - not just balls
         for (auto ball : scene_.getBalls()) {
-            rayHit = ball.collision(ray);
+            ball.collision(ray, rayHit);
 
             if (rayHit.did_hit && rayHit.distance < closest_hit)
             {

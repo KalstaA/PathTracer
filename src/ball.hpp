@@ -11,10 +11,10 @@ public:
 
     // TO-DO copy constructor and copy assigment
 
-    Hit collision(Ray ray) {
+    void collision(Ray ray, Hit &rayHit) {
 
-        Hit rayHit;
-        rayHit.did_hit = false;
+        //Hit rayHit;
+        //rayHit.did_hit = false;
 
         Vector toBall = ray.origin - this->getPosition();
 
@@ -39,7 +39,7 @@ public:
             }
         }
 
-        return rayHit;
+        return; //rayHit;
     }
 
     float getRadius() const {

@@ -35,6 +35,9 @@ public:
         }
     }
 
+    /*
+    * Saves the image with given filename
+    */
     bool saveImage(const std::string &filename) {
         return img.saveToFile(filename);
     }

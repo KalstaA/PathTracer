@@ -26,15 +26,22 @@ int main() {
   testCam.right = Vector(0, -1, 0);
   testCam.focus_distance = 5;
 
-  Material testMaterial;
-  testMaterial.color = Color(1, 0, 0);
-  testMaterial.emission_color = Color(0, 0, 0);
-  testMaterial.emission_strength = 0.0f;
-  testMaterial.specularity = 0.5;
+  Material testMaterial1;
+  testMaterial1.color = Color(1, 0, 0);
+  testMaterial1.emission_color = Color(0, 0, 0);
+  testMaterial1.emission_strength = 0.0f;
+  testMaterial1.specularity = 0.5;
 
-  //Ball ball1(Vector(5, 0, 0), 1, testMaterial);
-  Ball ball2(Vector(10, 1, 1), 1, testMaterial);
+  Material testMaterial2;
+  testMaterial2.color = Color(0, 0, 0);
+  testMaterial2.emission_color = Color(0, 0, 0);
+  testMaterial2.emission_strength = 1000.0f;
+  testMaterial2.specularity = 0.5;
+
+  Ball ball1(Vector(5, 0, 0), 1, testMaterial1);
+  Ball ball2(Vector(-10, 3, 3), 1, testMaterial2);
   std::list<Ball> testBalls;
+  testBalls.push_back(ball1);
   testBalls.push_back(ball2);
 
   Scene testScene(testCam, testBalls);
