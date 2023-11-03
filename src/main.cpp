@@ -14,6 +14,7 @@
 #include "ball.hpp"
 #include "scene.hpp"
 #include "renderer.hpp"
+#include "interface.hpp"
 
 int main() {
 
@@ -31,9 +32,10 @@ int main() {
   testMaterial.emission_strength = 0.0f;
   testMaterial.specularity = 0.5;
 
-  Ball ball1(Vector(5, 0, 0), 1, testMaterial);
+  //Ball ball1(Vector(5, 0, 0), 1, testMaterial);
+  Ball ball2(Vector(10, 1, 1), 1, testMaterial);
   std::list<Ball> testBalls;
-  testBalls.push_back(ball1);
+  testBalls.push_back(ball2);
 
   Scene testScene(testCam, testBalls);
 
@@ -41,20 +43,20 @@ int main() {
   Renderer testRenderer(resX, resY, testScene);
   auto result = testRenderer.render();
 
-  for (int y = 0; y < resY; y++)
+  std::cout << "Hello world" << std::endl;
+
+  Interface interface;
+  interface.createImg(result);
+  bool imgSaved = interface.saveImage("image.png");
+  if (imgSaved)
   {
-    for (int x = 0; x < resX; x++)
-    {
-      char symbol = result[x][y].lpNorm<1>() > 1.0 ? '#' : '.';
-      std::cout << symbol << " ";
-    }
-    std::cout << std::endl;
+    std::cout << "Image saved succesfully" << std::endl;
+  }
+  else
+  {
+    std::cout << "Saving image failed" << std::endl;
   }
 
-  std::cout << "Hello world" << std::endl;
-  sf::Image img;
-  img.create(100, 100);
-  img.saveToFile("image.png");
   return 0;
 }
 

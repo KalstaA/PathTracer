@@ -11,7 +11,7 @@ private:
     int resolution_y;
 
     float anti_alias_radius = 1;
-    float depth_of_field = 10;
+    float depth_of_field = 0;
 
     int max_bounces = 3;
     int rays_per_pixel = 10;
