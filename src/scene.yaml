@@ -1,0 +1,68 @@
+Camera: 
+  Position: 
+    - 0
+    - 0
+    - 0
+  Direction:
+    - 1
+    - 0
+    - 0
+
+  Up:
+    - 0
+    - 0
+    - 1
+  
+  Right: 
+    - 0
+    - -1
+    - 0
+  
+  Fov: 0.33
+  
+  FocusDistance: 5
+  
+Objects:
+  - Ball1:
+      Position:
+        - 5
+        - 0
+        - 0
+      Radius: 1
+      Material: 
+        Color: 
+          - 1
+          - 0
+          - 0
+        EmissionColor: 
+          - 0
+          - 0
+          - 0
+        EmissionStrength: 0.0
+        Specularity: 0
+
+  - Ball2:
+      Position:
+        - -10
+        - 3
+        - 3
+      Radius: 1
+      Material: 
+        Color: 
+          - 0
+          - 0
+          - 0
+        EmissionColor: 
+          - 0
+          - 0
+          - 0
+        EmissionStrength: 1000.0
+        Specularity: 0.5
+
+    
+
+
+
+
+
+  
