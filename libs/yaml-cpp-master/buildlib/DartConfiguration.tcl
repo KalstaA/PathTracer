@@ -4,31 +4,30 @@
 
 
 # Configuration directories and files
-SourceDirectory: /Users/aleksikalsta/Documents/cpp-course/path-tracer_current/cpp-course-path-tracer-project/libs/yaml-cpp-master
-BuildDirectory: /Users/aleksikalsta/Documents/cpp-course/path-tracer_current/cpp-course-path-tracer-project/libs/yaml-cpp-master/build
+SourceDirectory: /root/cpp-course/cpp-course-path-tracer-project/libs/yaml-cpp-master
+BuildDirectory: /root/cpp-course/cpp-course-path-tracer-project/libs/yaml-cpp-master/buildlib
 
 # Where to place the cost data store
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: Aleksi-MacBook-Pro.local
+Site: LAPTOP-1P1QVSV8
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
-BuildName: Darwin-c++
+BuildName: Linux-c++
 
 # Subprojects
 LabelsForSubprojects: 
 
 # Submission information
 SubmitURL: http://
-SubmitInactivityTimeout: 
 
 # Dashboard start time
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/local/Cellar/cmake/3.27.1/bin/cmake" "/Users/aleksikalsta/Documents/cpp-course/path-tracer_current/cpp-course-path-tracer-project/libs/yaml-cpp-master"
-MakeCommand: /usr/local/Cellar/cmake/3.27.1/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
+ConfigureCommand: "/usr/bin/cmake" "/root/cpp-course/cpp-course-path-tracer-project/libs/yaml-cpp-master"
+MakeCommand: /usr/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 DefaultCTestConfigurationType: Release
 
 # version control
@@ -63,8 +62,8 @@ UpdateOptions:
 UpdateType: 
 
 # Compiler info
-Compiler: /Library/Developer/CommandLineTools/usr/bin/c++
-CompilerVersion: 14.0.3.14030022
+Compiler: /usr/bin/c++
+CompilerVersion: 11.3.0
 
 # Dynamic analysis (MemCheck)
 PurifyCommand: 
@@ -76,7 +75,7 @@ CudaSanitizerCommand:
 CudaSanitizerCommandOptions: 
 MemoryCheckType: 
 MemoryCheckSanitizerOptions: 
-MemoryCheckCommand: MEMORYCHECK_COMMAND-NOTFOUND
+MemoryCheckCommand: /usr/bin/valgrind
 MemoryCheckCommandOptions: 
 MemoryCheckSuppressionFile: 
 

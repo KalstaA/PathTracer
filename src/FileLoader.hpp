@@ -35,7 +35,7 @@ class FileLoader{
             return Ball(LoadVector(ball["Position"]), ball["Radius"].as<float>(), LoadMaterial(ball["Material"]));
         }
 
-        std::list<Ball> LoadBalls() {
+        std::list<Ball> LoadBalls() { //helper function to load balls
             YAML::Node objects = YAML::LoadFile(filepath_)["Objects"];
             std::list<Ball> ball_list;
             int i = 1;
