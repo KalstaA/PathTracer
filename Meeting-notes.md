@@ -99,3 +99,34 @@ First implementation work in progress
 2. Eetu - Porting Julia code for Renderer class
 3. Eemeli - Implementation of Scene and related objects classes
 4. Henri - Continuation of Fileloader implementation
+
+# Meeting 6.11.2023
+
+**Participants**: 
+1. Aleksi Kalsta
+2. Eetu Reijonen
+3. Henri-Mikael Suominen
+
+## Summary of works
+1. Eetu - Renderer and partial Object, Ball and Scene implementations
+2. Aleksi - Interface implementation and bug fixes
+3. Henri - partial FileLoader implementation
+
+## Challenges
+* Use of external libraries (yaml)
+
+## Actions
+* Complete basic features except for triangle meshes
+* Add support for triangle meshes
+* Print methods for objects
+* Renderer status messages to console
+* Start designing basic unit tests (testing libraries?)
+
+## Project status 
+Initial implementation of the program exists. The programmer can input scene parameters into the code and then render the scene.
+
+### TODOs
+1. Aleksi - integrate scene input into Interface, start looking into unit testing
+2. Eetu - create print methods, complete classes, fix includes, add environment lighting, optimize rendering code (and comment everything)
+3. Eemeli - start working on triangle meshes (.obj files)
+4. Henri - complete yaml scene input
