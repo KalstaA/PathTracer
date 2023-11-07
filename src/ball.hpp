@@ -1,5 +1,7 @@
 #pragma once
 
+#include "object.hpp"
+
 class Ball : public Object
 {
 private:
@@ -7,14 +9,13 @@ private:
 
 public:
     Ball(Vector position, float radius, Material material) : Object(position, material), radius_(radius) {}
+
+    // Default destructor, copy constructor and copy assignment
     ~Ball() = default;
+    Ball& operator=(const Ball& that) = default;
+    Ball(const Ball& that) = default;
 
-    // TO-DO copy constructor and copy assigment
-
-    void collision(Ray ray, Hit &rayHit) {
-
-        //Hit rayHit;
-        //rayHit.did_hit = false;
+    void collision(Ray ray, Hit &rayHit, float& smallestDistance) {
 
         Vector toBall = ray.origin - this->getPosition();
 
@@ -23,14 +24,14 @@ public:
         float c = toBall.dot(toBall) - radius_ * radius_;
 
         float discriminant = b*b - 4*a*c;
-        float distance = INFINITY;
 
         if (discriminant >= 0)
         {
-            distance = (-b - sqrt(discriminant)) / (2*a);
+            float distance = (-b - sqrt(discriminant)) / (2*a);
 
-            if (distance > 0)
+            if (distance > 0 && distance < smallestDistance)
             {
+                smallestDistance = distance;
                 rayHit.distance = distance;
                 rayHit.material = this->getMaterial();
                 rayHit.did_hit = true;
@@ -42,7 +43,10 @@ public:
         return; //rayHit;
     }
 
-    float getRadius() const {
-        return radius_;
-    }
+    float getRadius() const { return radius_; }
 };
+
+std::ostream &operator<<(std::ostream& out, const Ball& ball) {
+    out << "Ball at: (" << ball.getPosition().transpose() << ") with radius: " << ball.getRadius() << std::endl;
+    return out;
+}

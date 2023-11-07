@@ -1,5 +1,7 @@
 #pragma once
 
+#include "types.hpp"
+
 class Renderer
 {
 private:
@@ -12,9 +14,10 @@ private:
 
     float anti_alias_radius = 1;
     float depth_of_field = 0;
+    float focusDistance = 5;
 
     int max_bounces = 3;
-    int rays_per_pixel = 10;
+    int rays_per_pixel = 5;
 
     float view_width;
     float view_height;
@@ -37,34 +40,28 @@ private:
 
         Vector direction = (target - origin).normalized();
 
-        return Ray{origin, direction, Color(1.0, 1.0, 1.0), Light(0.0, 0.0, 0.0)};
+        return Ray{.origin = origin, .direction = direction};
     }
 
     Hit rayCollision(Ray ray) {
-        float closest_hit = INFINITY;
 
-        Hit rayHit;
-        rayHit.did_hit = false;
+        float closestHit = INFINITY;
+        Hit rayHit = { .did_hit = false };
 
         // TO-DO all objects in the scene - not just balls
         for (auto ball : scene_.getBalls()) {
-            ball.collision(ray, rayHit);
-
-            if (rayHit.did_hit && rayHit.distance < closest_hit)
-            {
-                closest_hit = rayHit.distance;
-            }
+            ball.collision(ray, rayHit, closestHit);
         }
 
         return rayHit;
     }
 
     Light trace(Ray ray) {
-        for (int bounce = 0; bounce < max_bounces; bounce++)
+        for (int bounce = 0; bounce < max_bounces; ++bounce)
         {
             Hit hit = rayCollision(ray);
 
-            if (hit.did_hit && hit.distance > 0.0001) {
+            if (hit.did_hit && hit.distance > 0.001) {
                 ray.origin = hit.point;
 
                 Vector diffuse_direction = (randomDirection() + hit.normal).normalized();
@@ -79,8 +76,7 @@ private:
 
             else 
             {
-                // TO-DO better environment light
-                ray.light += Color(0.5, 0.5, 0.5).cwiseProduct(ray.color);
+                ray.light += environmentLight(ray).cwiseProduct(ray.color);
                 break;
             }
         }
@@ -94,11 +90,11 @@ public:
         resolution_y = res_y;
         scene_ = sceneToRender;
         camera_ = scene_.getCamera();
-        view_width = tan(camera_.fov / 2);
+        view_width = focusDistance * tan(camera_.fov / 2);
         view_height = view_width * (resolution_y - 1) / (resolution_x - 1);
         pixel_x = 2 * view_width / (resolution_x - 1) * camera_.right;
         pixel_y = - 2 * view_height / (resolution_y - 1) * camera_.up;
-        topleft_pixel = camera_.direction - view_width * camera_.right + view_height * camera_.up;
+        topleft_pixel = camera_.direction * focusDistance - view_width * camera_.right + view_height * camera_.up;
     }
 
     ~Renderer() = default;
@@ -122,9 +118,13 @@ public:
                 {
                     totalLight += trace(createRay(x, y));
                 }
-                result[x][y] = clamp(totalLight / rays_per_pixel);
+
+                // Clamp for safety, sqrt for gamma correction
+                result[x][y] = clamp(totalLight / rays_per_pixel).cwiseSqrt();
             }   
         }
+
+        std::cout << "Rendering complete." << std::endl;
 
         return result;
     }
