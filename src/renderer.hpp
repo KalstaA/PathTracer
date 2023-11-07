@@ -48,9 +48,8 @@ private:
         float closestHit = INFINITY;
         Hit rayHit = { .did_hit = false };
 
-        // TO-DO all objects in the scene - not just balls
-        for (auto ball : scene_.getBalls()) {
-            ball.collision(ray, rayHit, closestHit);
+        for (auto object : scene_.getObjects()) {
+            object->collision(ray, rayHit, closestHit);
         }
 
         return rayHit;

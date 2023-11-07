@@ -42,13 +42,13 @@ int main() {
   Ball ball5(Vector(6, 2, -0.5), 0.5, BLUE_DIFFUSE);
   Ball ball6(Vector(6, 1.5, 1), 0.7, MIRROR);
 
-  std::list<Ball> testBalls;
-  testBalls.push_back(ball1);
-  testBalls.push_back(ball2);
-  testBalls.push_back(ball3);
-  testBalls.push_back(ball4);
-  testBalls.push_back(ball5);
-  testBalls.push_back(ball6);
+  std::list<Object*> testBalls;
+  testBalls.push_back(&ball1);
+  testBalls.push_back(&ball2);
+  testBalls.push_back(&ball3);
+  testBalls.push_back(&ball4);
+  testBalls.push_back(&ball5);
+  testBalls.push_back(&ball6);
 
   Scene testScene(testCam, testBalls);
   std::cout << testScene;
