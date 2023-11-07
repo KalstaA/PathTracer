@@ -43,6 +43,13 @@ struct Hit
     float distance;
 };
 
+/**
+ * @brief Reflects a vector according to a surface normal.
+ * 
+ * @param in input vector to be reflected
+ * @param normal surface normal
+ * @return reflected vector
+ */
 Vector reflect(Vector in, Vector normal) {
     return in - 2 * in.dot(normal) * normal;
 }

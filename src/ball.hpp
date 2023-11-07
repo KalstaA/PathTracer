@@ -2,6 +2,10 @@
 
 #include "object.hpp"
 
+/**
+ * @brief Representation of a mathematical ball object in the scene.
+ * 
+ */
 class Ball : public Object
 {
 private:
@@ -10,12 +14,22 @@ private:
 public:
     Ball(Vector position, float radius, Material material) : Object(position, material), radius_(radius) {}
 
-    // Default destructor, copy constructor and copy assignment
     ~Ball() = default;
     Ball& operator=(const Ball& that) = default;
     Ball(const Ball& that) = default;
 
-    void collision(Ray ray, Hit &rayHit, float& smallestDistance) {
+
+    /**
+     * @brief Calculate whether a given ray collides with the ball.
+     * 
+     * If the ray collides with the ball and the collision is closer than the current smallest distance,
+     * the "rayHit" data structure will be updated according to the collision.
+     * 
+     * @param ray ray whose collision will be checked
+     * @param rayHit address of a Hit data structure
+     * @param smallestDistance 
+     */
+    void collision(Ray& ray, Hit &rayHit, float& smallestDistance) {
 
         Vector toBall = ray.origin - this->getPosition();
 
@@ -40,12 +54,19 @@ public:
             }
         }
 
-        return; //rayHit;
+        return;
     }
 
     float getRadius() const { return radius_; }
 };
 
+/**
+ * @brief Print ball info to the desired output stream.
+ * 
+ * @param out output stream
+ * @param ball ball to be printed
+ * @return std::ostream& the output stream
+ */
 std::ostream &operator<<(std::ostream& out, const Ball& ball) {
     out << "Ball at: (" << ball.getPosition().transpose() << ") with radius: " << ball.getRadius() << std::endl;
     return out;

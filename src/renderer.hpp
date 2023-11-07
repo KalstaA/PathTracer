@@ -1,7 +1,12 @@
 #pragma once
 
 #include "types.hpp"
+#include <vector>
 
+/**
+ * @brief Implements the ray tracing algorithm.
+ * 
+ */
 class Renderer
 {
 private:
@@ -26,14 +31,24 @@ private:
     Vector pixel_x;
     Vector pixel_y;
 
+    /**
+     * @brief Create a Ray structure pointing to a certain pixel from the camera.
+     * 
+     * The ray target will be slighty randomized for anti-aliasing.
+     * The ray origin will be randomized for depth of field.
+     * 
+     * @param x x-coordinate of the pixel
+     * @param y y-coordinate of the pixel
+     * @return Ray originating from the camera pointing to the pixel
+     */
     Ray createRay(int x, int y) {
 
-        // depth of field effect randomizes the origin
+        // Depth of field effect randomizes the origin
         Vector2 jiggle = randomInCircle() * depth_of_field;
         Vector randomShift = jiggle(0) * pixel_x + jiggle(1) * pixel_y;
         Point origin = camera_.position + randomShift;
 
-        // anti-aliasing randomizes the target
+        // Anti-aliasing randomizes the target
         jiggle = randomInCircle() * anti_alias_radius;
         randomShift = jiggle(0) * pixel_x + jiggle(1) * pixel_y;
         Vector target = topleft_pixel + pixel_y * y + pixel_x * x + randomShift;
@@ -43,7 +58,15 @@ private:
         return Ray{.origin = origin, .direction = direction};
     }
 
-    Hit rayCollision(Ray ray) {
+    /**
+     * @brief Creates a Hit data structure representing a ray collision.
+     * 
+     * Checks whether the ray intersects any visible objects in the scene and picks the one closest to the camera.
+     * 
+     * @param ray a ray to be checked for collisions
+     * @return Hit representing a possible collision
+     */
+    Hit rayCollision(Ray& ray) {
 
         float closestHit = INFINITY;
         Hit rayHit = { .did_hit = false };
@@ -55,7 +78,13 @@ private:
         return rayHit;
     }
 
-    Light trace(Ray ray) {
+    /**
+     * @brief Get all the light collected by a ray along its path.
+     * 
+     * @param ray ray to be traced
+     * @return Light collected by the ray
+     */
+    Light trace(Ray& ray) {
         for (int bounce = 0; bounce < max_bounces; ++bounce)
         {
             Hit hit = rayCollision(ray);
@@ -84,6 +113,13 @@ private:
     
 public:
 
+    /**
+     * @brief Construct a new Renderer object and initialize all necessary values.
+     * 
+     * @param res_x horizontal resolution of the rendering area
+     * @param res_y vertical resolution of the rendering area
+     * @param sceneToRender Scene object to be renderer
+     */
     Renderer(int res_x, int res_y, Scene sceneToRender) {
         resolution_x = res_x;
         resolution_y = res_y;
@@ -100,8 +136,10 @@ public:
 
     // TO-DO copy constructor and copy assigment
 
-    /*
-    * Returns a vector of vectors containing the colors of each pixel in the output image
+    /**
+    * Get the result of the rendering. Takes no input parameters.
+    *
+    * @return a vector of vectors containing the colors of each pixel in the output image
     */
     auto render() {
         
@@ -115,7 +153,8 @@ public:
 
                 for (int rayNum = 0; rayNum < rays_per_pixel; rayNum++)
                 {
-                    totalLight += trace(createRay(x, y));
+                    Ray ray = createRay(x, y);
+                    totalLight += trace(ray);
                 }
 
                 // Clamp for safety, sqrt for gamma correction

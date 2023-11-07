@@ -4,6 +4,10 @@
 #include "ball.hpp"
 #include "types.hpp"
 
+/**
+ * @brief Representation of a 3D-scene
+ * 
+ */
 class Scene
 {
 private:
@@ -13,6 +17,8 @@ private:
 public:
     Scene() = default;
     Scene(Camera camera, std::list<Object*> objects) : camera_(camera), objects_(objects) {}
+    
+    // Should release the list?
     ~Scene() = default;
 
     // Default copying for now - list is copied (are the balls copied as well?)
@@ -24,6 +30,13 @@ public:
     std::list<Object*> getObjects() const { return objects_; }
 };
 
+/**
+ * @brief Print scene info to the desired output stream.
+ * 
+ * @param out output stream
+ * @param scene scene to be printed
+ * @return std::ostream& the output stream
+ */
 std::ostream &operator<<(std::ostream& out, const Scene& scene) {
     out << "\n========== SCENE INFORMATION ==========" << std::endl;
     for (auto object : scene.getObjects())

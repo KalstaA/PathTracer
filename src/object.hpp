@@ -1,8 +1,11 @@
 #pragma once
 
 #include "types.hpp"
-#include <string>
 
+/**
+ * @brief An abstract base class for any type of visible object in a scene
+ * 
+ */
 class Object
 {
 private:
@@ -25,5 +28,15 @@ public:
     Vector getUp() const { return up_; }
     Vector getForward() const { return forward_; }
 
-    virtual void collision(Ray ray, Hit &rayHit, float& smallestDistance) = 0;
+    /**
+     * @brief Calculate whether a given ray collides with the object.
+     * 
+     * If the ray collides with the object and the collision is closer than the current smallest distance,
+     * the "rayHit" data structure will be updated according to the collision.
+     * 
+     * @param ray ray whose collision will be checked
+     * @param rayHit address of a Hit data structure
+     * @param smallestDistance 
+     */
+    virtual void collision(Ray& ray, Hit &rayHit, float& smallestDistance) = 0;
 };
