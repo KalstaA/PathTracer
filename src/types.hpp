@@ -11,10 +11,10 @@ typedef Eigen::Vector2d Vector2;
 
 struct Material
 {
-    Color color;
-    float emission_strength;
-    Color emission_color;
-    float specularity;
+    Color color = Color(1.0, 1.0, 1.0);
+    float emission_strength = 0.0;
+    Color emission_color = Color(1.0, 1.0, 1.0);
+    float specularity = 0.0;
 };
     
 struct Camera
@@ -22,7 +22,6 @@ struct Camera
     Point position;
     Vector direction;
     Vector up;
-    Vector right;
     float fov;
     float focus_distance;
 };

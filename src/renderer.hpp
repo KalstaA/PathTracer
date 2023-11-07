@@ -92,9 +92,9 @@ public:
         camera_ = scene_.getCamera();
         view_width = focusDistance * tan(camera_.fov / 2);
         view_height = view_width * (resolution_y - 1) / (resolution_x - 1);
-        pixel_x = 2 * view_width / (resolution_x - 1) * camera_.right;
+        pixel_x = 2 * view_width / (resolution_x - 1) * camera_.direction.cross(camera_.up);
         pixel_y = - 2 * view_height / (resolution_y - 1) * camera_.up;
-        topleft_pixel = camera_.direction * focusDistance - view_width * camera_.right + view_height * camera_.up;
+        topleft_pixel = camera_.direction * focusDistance - view_width * camera_.direction.cross(camera_.up) + view_height * camera_.up;
     }
 
     ~Renderer() = default;
