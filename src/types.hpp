@@ -1,6 +1,5 @@
 #pragma once
 
-#include <random>
 #include <../libs/Eigen/Dense>
 
 typedef Eigen::Vector3d Vector;
@@ -42,43 +41,6 @@ struct Hit
     Point point;
     float distance;
 };
-
-/**
- * @brief Reflects a vector according to a surface normal.
- * 
- * @param in input vector to be reflected
- * @param normal surface normal
- * @return reflected vector
- */
-Vector reflect(Vector in, Vector normal) {
-    return in - 2 * in.dot(normal) * normal;
-}
-
-Vector randomDirection() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::normal_distribution<float> d(0, 1); 
-
-    return Vector(d(gen), d(gen), d(gen)).normalized();
-}
-
-float randZeroToOne() {
-    return (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
-}
-
-Vector2 randomInCircle() {
-    float angle = randZeroToOne() * 2 * M_PI;
-    float distance = randZeroToOne();
-
-    return Vector2(cos(angle), sin(angle)) * sqrt(distance);
-}
-
-Color clamp(Color input) {
-    float R = input(0) > 1 ? 1 : input(0);
-    float G = input(1) > 1 ? 1 : input(1);
-    float B = input(2) > 1 ? 1 : input(2);
-    return Color(R, G, B);
-}
 
 Light environmentLight(Ray ray) {
 

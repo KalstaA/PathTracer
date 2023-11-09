@@ -18,7 +18,7 @@ public:
     Scene() = default;
     Scene(Camera camera, std::list<Object*> objects) : camera_(camera), objects_(objects) {}
     
-    // Should release the list?
+    // Should release the list and the pointers?
     ~Scene() = default;
 
     // Default copying for now - list is copied (are the balls copied as well?)

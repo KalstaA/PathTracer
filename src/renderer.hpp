@@ -2,6 +2,7 @@
 
 #include "types.hpp"
 #include <vector>
+#include "randomgenerator.hpp"
 
 /**
  * @brief Implements the ray tracing algorithm.
@@ -13,6 +14,7 @@ private:
 
     Scene scene_;
     Camera camera_;
+    RandomGenerator rnd_;
 
     int resolution_x;
     int resolution_y;
@@ -32,6 +34,30 @@ private:
     Vector pixel_y;
 
     /**
+     * @brief Reflects a vector according to a surface normal.
+     * 
+     * @param in input vector to be reflected
+     * @param normal surface normal
+     * @return reflected vector
+     */
+    Vector reflect(Vector& in, Vector& normal) {
+        return in - 2 * in.dot(normal) * normal;
+    }
+
+    /**
+     * @brief Clamps the given color values, i.e., ensures that the maximum value for each R, G, B is 1.
+     * 
+     * @param input the color vector to be clamped
+     * @return Color with the values clamped
+     */
+    Color clamp(Color input) {
+        float R = input(0) > 1 ? 1 : input(0);
+        float G = input(1) > 1 ? 1 : input(1);
+        float B = input(2) > 1 ? 1 : input(2);
+        return Color(R, G, B);
+    }
+
+    /**
      * @brief Create a Ray structure pointing to a certain pixel from the camera.
      * 
      * The ray target will be slighty randomized for anti-aliasing.
@@ -44,12 +70,12 @@ private:
     Ray createRay(int x, int y) {
 
         // Depth of field effect randomizes the origin
-        Vector2 jiggle = randomInCircle() * depth_of_field;
+        Vector2 jiggle = rnd_.randomInCircle() * depth_of_field;
         Vector randomShift = jiggle(0) * pixel_x + jiggle(1) * pixel_y;
         Point origin = camera_.position + randomShift;
 
         // Anti-aliasing randomizes the target
-        jiggle = randomInCircle() * anti_alias_radius;
+        jiggle = rnd_.randomInCircle() * anti_alias_radius;
         randomShift = jiggle(0) * pixel_x + jiggle(1) * pixel_y;
         Vector target = topleft_pixel + pixel_y * y + pixel_x * x + randomShift;
 
@@ -92,7 +118,7 @@ private:
             if (hit.did_hit && hit.distance > 0.001) {
                 ray.origin = hit.point;
 
-                Vector diffuse_direction = (randomDirection() + hit.normal).normalized();
+                Vector diffuse_direction = (rnd_.randomDirection() + hit.normal).normalized();
                 Vector specular_direction = reflect(ray.direction, hit.normal);
 
                 ray.direction = diffuse_direction + hit.material.specularity * (specular_direction - diffuse_direction);
