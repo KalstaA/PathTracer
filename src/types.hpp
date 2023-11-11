@@ -1,6 +1,7 @@
 #pragma once
 
 #include <../libs/Eigen/Dense>
+#include <string>
 
 typedef Eigen::Vector3d Vector;
 typedef Eigen::Vector3d Point;
@@ -14,6 +15,7 @@ struct Material
     float emission_strength = 0.0;
     Color emission_color = Color(1.0, 1.0, 1.0);
     float specularity = 0.0;
+    std::string name = "[UNNAMED MATERIAL]";
 };
     
 struct Camera

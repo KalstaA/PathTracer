@@ -68,6 +68,6 @@ public:
  * @return std::ostream& the output stream
  */
 std::ostream &operator<<(std::ostream& out, const Ball& ball) {
-    out << "Ball at: (" << ball.getPosition().transpose() << ") with radius: " << ball.getRadius() << std::endl;
+    out << "Ball at: (" << ball.getPosition().transpose() << ") with radius: " << ball.getRadius() << ", with material: " << ball.getMaterial().name << std::endl;
     return out;
 }

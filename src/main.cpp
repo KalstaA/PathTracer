@@ -19,20 +19,21 @@ int main() {
     .focus_distance = 5
   };  
 
-  Material RED_DIFFUSE = { .color = Color(1, 0, 0) };
+  Material RED_DIFFUSE = { .color = Color(1, 0, 0), .name = "RED DIFFUSE" };
 
-  Material GREY_DIFFUSE = { .color = Color(0.5, 0.5, 0.5) };
+  Material GREY_DIFFUSE = { .color = Color(0.5, 0.5, 0.5), .name = "GREY DIFFUSE" };
 
-  Material GREEN_DIFFUSE = { .color = Color(0, 1, 0) };
+  Material GREEN_DIFFUSE = { .color = Color(0, 1, 0), .name = "GREEN DIFFUSE" };
 
-  Material BLUE_DIFFUSE = { .color = Color(0, 0, 1) };
+  Material BLUE_DIFFUSE = { .color = Color(0, 0, 1), .name = "BLUE DIFFUSE" };
 
-  Material MIRROR = { .specularity = 1.0 };
+  Material MIRROR = { .specularity = 1.0, .name = "MIRROR" };
 
   Material SUN = {
     .color = Color(1, 1, 0),
     .emission_color = Color(1, 1, 1),
-    .emission_strength = 0.5f,
+    .emission_strength = 0.5,
+    .name = "SUN"
   };
 
   Ball ball1(Vector(5, 0, 0), 1, RED_DIFFUSE);
