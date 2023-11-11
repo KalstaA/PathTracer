@@ -37,25 +37,9 @@ struct Ray
 
 struct Hit
 {
-    bool did_hit;
+    bool did_hit = false;
     Material material;
     Vector normal;
     Point point;
     float distance;
 };
-
-Light environmentLight(Ray ray) {
-
-    Color skyColor(0.2, 0.5, 1.0);
-    Color horizonColor(0.7, 0.8, 0.8);
-    Color groundColor(0.1, 0.1, 0.1);
-
-    if (ray.direction(2) >= 0)
-    {
-        return horizonColor + (skyColor - horizonColor) * pow(abs(ray.direction(2)), 0.8);
-    }
-    else
-    {
-        return horizonColor + (groundColor - horizonColor) * pow(abs(ray.direction(2)), 0.4);
-    }
-}

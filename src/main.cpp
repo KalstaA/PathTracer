@@ -52,6 +52,7 @@ int main() {
   testBalls.push_back(&ball6);
 
   Scene testScene(testCam, testBalls);
+  testScene.getEnvironment().setSky();
   std::cout << testScene;
 
   int resX = 500, resY = 400;

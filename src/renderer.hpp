@@ -130,7 +130,7 @@ private:
 
             else 
             {
-                ray.light += environmentLight(ray).cwiseProduct(ray.color);
+                ray.light += scene_.getEnvironment().getLight(ray).cwiseProduct(ray.color);
                 break;
             }
         }

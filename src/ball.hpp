@@ -14,11 +14,6 @@ private:
 public:
     Ball(Vector position, float radius, Material material) : Object(position, material), radius_(radius) {}
 
-    ~Ball() = default;
-    Ball& operator=(const Ball& that) = default;
-    Ball(const Ball& that) = default;
-
-
     /**
      * @brief Calculate whether a given ray collides with the ball.
      * 
