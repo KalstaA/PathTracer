@@ -15,11 +15,11 @@
 #include "scene.hpp"
 #include "renderer.hpp"
 #include "interface.hpp"
-//#include "FileLoader.hpp"
+#include "FileLoader.hpp"
 
 int main() { 
 
-  YAML::Parser parser;
+/*
   Camera testCam;
   testCam.position = Vector(0, 0, 0);
   testCam.direction = Vector(1, 0, 0);
@@ -45,10 +45,11 @@ int main() {
   std::list<Ball> testBalls;
   testBalls.push_back(ball1);
   testBalls.push_back(ball2);
+  */
 
-  Scene testScene(testCam, testBalls);
-  /*FileLoader test("scene.yaml");
-  Scene testScene = test.loadSceneFile();*/
+  FileLoader test("scene.yaml"); 
+  Scene testScene = test.loadSceneFile();
+  
 
   int resX = 300, resY = 170;
   Renderer testRenderer(resX, resY, testScene);

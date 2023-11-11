@@ -1,11 +1,3 @@
-/*#include <string>
-#include <fstream>  
-#include <iostream>
-#include <string>
-#include <../libs/Eigen/Dense>
-#include <yaml-cpp/yaml.h>
-#include "types.hpp"
-#include "ball.hpp"*/
 #pragma once
 
 
@@ -18,6 +10,7 @@ class FileLoader{
             int i = 0;
             for (YAML::const_iterator it=coords.begin(); it!=coords.end(); ++it) {
                 vector[i] = it->as<float>();
+                i++;
             }
             return vector;
         }
@@ -38,23 +31,21 @@ class FileLoader{
         std::list<Ball> LoadBalls() { //helper function to load balls
             YAML::Node objects = YAML::LoadFile(filepath_)["Objects"];
             std::list<Ball> ball_list;
-            int i = 1;
             for (YAML::const_iterator it=objects.begin(); it!=objects.end(); ++it) {
-                if(it->as<std::string>() == ("Ball" + std::to_string(i))) {
-                    ball_list.push_back(LoadBall(objects["Ball" + std::to_string(i)]));
+                if((*it)["Object"]["Type"].as<std::string>() == "Ball") {
+                    ball_list.push_back(LoadBall((*it)["Object"]));
                 }
-                i++;
             }
             return ball_list;
         } 
 
         Camera LoadCamera() {  //Loads the camera from YAML-file
-            YAML::Node params = YAML::LoadFile(filepath_);
+            YAML::Node params = YAML::LoadFile(filepath_)["Camera"];
             Camera camera;
             camera.position = LoadVector(params["Position"]);
-            camera.position = LoadVector(params["Direction"]);
-            camera.position = LoadVector(params["Up"]);
-            camera.position = LoadVector(params["Right"]);
+            camera.direction = LoadVector(params["Direction"]);
+            camera.up = LoadVector(params["Up"]);
+            camera.right = LoadVector(params["Right"]);
             camera.fov = M_PI * params["Fov"].as<float>();
             camera.focus_distance = params["FocusDistance"].as<float>();
             return camera;

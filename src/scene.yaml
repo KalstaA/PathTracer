@@ -23,7 +23,8 @@ Camera:
   FocusDistance: 5
   
 Objects:
-  - Ball1:
+  - Object:
+      Type: Ball
       Position:
         - 5
         - 0
@@ -41,7 +42,8 @@ Objects:
         EmissionStrength: 0.0
         Specularity: 0
 
-  - Ball2:
+  - Object:
+      Type: Ball
       Position:
         - -10
         - 3
@@ -58,6 +60,8 @@ Objects:
           - 0
         EmissionStrength: 1000.0
         Specularity: 0.5
+
+
 
     
 
