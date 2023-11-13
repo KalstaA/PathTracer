@@ -8,6 +8,7 @@
 #include "scene.hpp"
 #include "renderer.hpp"
 #include "interface.hpp"
+#include "FileLoader.hpp"
 
 int main() {
 
