@@ -130,3 +130,36 @@ Initial implementation of the program exists. The programmer can input scene par
 2. Eetu - create print methods, complete classes, fix includes, add environment lighting, optimize rendering code (and comment everything)
 3. Eemeli - start working on triangle meshes (.obj files)
 4. Henri - complete yaml scene input
+
+# Meeting 13.11.2023
+
+**Participants**: 
+1. Aleksi Kalsta
+2. Eetu Reijonen
+3. Henri-Mikael Suominen
+4. Eemeli Forsbom
+
+## Summary of works
+1. Eetu - Renderer improvements, RandomGenerator, Environment, print methods
+2. Aleksi - master merge
+3. Henri - FileLoader implementation
+4. Eemeli - .obj familiarization
+
+## Challenges
+* Use of external libraries (cross-platform)
+
+## Actions
+* Add support for triangle meshes and .obj files
+* Memory management amd object lifecycle (changes to Renderer, FileLoader, Main, etc.)
+* Start designing basic unit tests (testing libraries?)
+* CPU parallelization
+* "idiot-proofing" FileLoader
+
+## Project status 
+The programmer can input scene parameters into the code and then render the scene. FileLoader implemented.
+
+### TODOs
+1. Aleksi - start looking into unit testing, Python script for building the project
+2. Eetu - smart pointer implementation in Renderer and Scene, rendering parallelization
+3. Eemeli - triangle mesh (.obj files) implementation
+4. Henri - finalize FileLoader and integrate into main
