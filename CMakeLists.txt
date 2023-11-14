@@ -13,8 +13,8 @@ file(GLOB SOURCES src/*.cpp)
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
 # Link yaml-cpp library
-target_link_directories(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/yaml-cpp-master/buildlib)
-target_link_libraries(${EXECUTABLE_NAME} PRIVATE yaml-cpp)
+include_directories(${CMAKE_SOURCE_DIR}/libs/yaml/include)
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/yaml/lib/libyaml-cpp.a)
 
 # Get SFML library from github
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
@@ -34,13 +34,13 @@ elseif(APPLE)
     # OpenMP - works only for Mac for now
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -fopenmp")
     include_directories(${CMAKE_SOURCE_DIR}/libs/libomp/include)
-    target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/libomp/lib/libomp.dylib)
+    target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/libomp/lib/libomp.a)
 
 elseif(UNIX)
     message("You are using Linux")
 endif()
 
 # Eigen
-include_directories(${CMAKE_SOURCE_DIR}/libs)
+include_directories(${CMAKE_SOURCE_DIR}/libs/eigen/include)
 
 install(TARGETS PathTracer)
