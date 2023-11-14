@@ -1,13 +1,13 @@
 #include <yaml-cpp/parser.h>
 #include <yaml-cpp/yaml.h>
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
 
 #include "ball.hpp"
 #include "scene.hpp"
 #include "renderer.hpp"
 #include "interface.hpp"
+#include <iostream>
 
 int main() {
 
@@ -57,7 +57,8 @@ int main() {
 
   int resX = 500, resY = 400;
   Renderer testRenderer(resX, resY, testScene);
-  auto result = testRenderer.render();
+
+  auto result = testRenderer.parallelRender();
 
   Interface interface;
   interface.createImg(result);
@@ -73,4 +74,3 @@ int main() {
 
   return 0;
 }
-

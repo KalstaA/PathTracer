@@ -1,6 +1,6 @@
 #pragma once
 
-#include <../libs/Eigen/Dense>
+#include <Eigen/Dense>
 #include <string>
 
 typedef Eigen::Vector3d Vector;

@@ -50,3 +50,6 @@ build/
 
 # Others
 .vscode/
+
+# Apple folder data
+*.DS_Store

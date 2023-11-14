@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(CMakeSFMLProject LANGUAGES CXX)
+project(PathTracer LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 include_directories("src")
 
@@ -25,5 +25,22 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE sfml-graphics)
 
+# Detect platform
+if(WIN32)
+   message("You are using Windows - no parallelization for you")
+elseif(APPLE)
+   message("You are using MacOS")
+
+    # OpenMP - works only for Mac for now
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -fopenmp")
+    include_directories(${CMAKE_SOURCE_DIR}/libs/libomp/include)
+    target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/libomp/lib/libomp.dylib)
+
+elseif(UNIX)
+    message("You are using Linux")
+endif()
+
+# Eigen
+include_directories(${CMAKE_SOURCE_DIR}/libs)
 
 install(TARGETS PathTracer)
