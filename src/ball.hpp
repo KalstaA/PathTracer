@@ -53,16 +53,15 @@ public:
     }
 
     float getRadius() const { return radius_; }
-};
 
-/**
- * @brief Print ball info to the desired output stream.
- * 
- * @param out output stream
- * @param ball ball to be printed
- * @return std::ostream& the output stream
- */
-std::ostream &operator<<(std::ostream& out, const Ball& ball) {
-    out << "Ball at: (" << ball.getPosition().transpose() << ") with radius: " << ball.getRadius() << ", with material: " << ball.getMaterial().name << std::endl;
-    return out;
-}
+    /**
+     * @brief Print ball info to the desired output stream.
+     * 
+     * @param out output stream
+     * @return std::ostream& the output stream
+     */
+    void printInfo(std::ostream& out) const {
+        out << "Ball at: (" << this->getPosition().transpose() << ") with radius: " << this->getRadius() << ", with material: " << this->getMaterial().name << std::endl;
+    }
+
+};

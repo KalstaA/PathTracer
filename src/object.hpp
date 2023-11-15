@@ -36,4 +36,27 @@ public:
      * @param smallestDistance 
      */
     virtual void collision(Ray& ray, Hit &rayHit, float& smallestDistance) = 0;
+
+    /**
+     * @brief Print object info to the desired output stream.
+     * 
+     * @param out output stream
+     * @param object object to be printed
+     * @return std::ostream& the output stream
+     */
+    virtual void printInfo(std::ostream& out) const = 0;
 };
+
+/**
+ * @brief <<-operator overload for printing object info to the desired output stream.
+ * 
+ * printInfo-method for each of the objects is called.
+ * 
+ * @param out output stream
+ * @param object object to be printed
+ * @return std::ostream& the output stream
+ */
+std::ostream &operator<<(std::ostream& out, const Object& object) {
+    object.printInfo(out);
+    return out;
+}

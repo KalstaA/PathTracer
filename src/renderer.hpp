@@ -118,7 +118,7 @@ private:
         {
             Hit hit = rayCollision(ray);
 
-            if (hit.did_hit && hit.distance > 0.001) {
+            if (hit.did_hit && hit.distance > 0.0001) {
                 ray.origin = hit.point;
 
                 Vector diffuse_direction = (rnd_.randomDirection() + hit.normal).normalized();
