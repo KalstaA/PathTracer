@@ -8,6 +8,7 @@
 #include "scene.hpp"
 #include "renderer.hpp"
 #include "interface.hpp"
+#include "triangle.hpp"
 
 int main() {
 
@@ -42,6 +43,18 @@ int main() {
   Ball ball4(Vector(4, -0.5, -0.5), 0.5, GREEN_DIFFUSE);
   Ball ball5(Vector(6, 2, -0.5), 0.5, BLUE_DIFFUSE);
   Ball ball6(Vector(6, 1.5, 1), 0.7, MIRROR);
+  
+  Vertex v0 = {
+    .pos = Vector(3,0,0)
+  };
+  Vertex v1 = {
+    .pos = Vector(3,1,0)
+  };
+  Vertex v2 = {
+    .pos = Vector(3,0,1)
+  };
+
+  Triangle t1(v0, v1, v2, GREEN_DIFFUSE);
 
   std::list<Object*> testBalls;
   testBalls.push_back(&ball1);
@@ -50,6 +63,8 @@ int main() {
   testBalls.push_back(&ball4);
   testBalls.push_back(&ball5);
   testBalls.push_back(&ball6);
+  
+  testBalls.push_back(&t1);
 
   Scene testScene(testCam, testBalls);
   testScene.getEnvironment().setSky();
