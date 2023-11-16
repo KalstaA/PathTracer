@@ -1,5 +1,7 @@
 #pragma once
-/*
+
+#include "object.hpp"
+
 
 struct Vertex {
 public:
@@ -40,4 +42,3 @@ private:
     Vector2 uv_[3]
 };
 
-*/
