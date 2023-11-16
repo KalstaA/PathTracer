@@ -207,6 +207,8 @@ public:
         Light totalLight;
         Ray ray;
 
+        int numThreads = 0;
+
         std::cout << "Rendering started..." << std::endl;
 
         for (int sample = 0; sample < rays_per_pixel; ++sample)
@@ -217,6 +219,7 @@ public:
             #pragma omp parallel for private(totalLight, ray)
             for (int pixel = 0; pixel < resolution_x * resolution_y; ++pixel)
             {
+                if (pixel == 0) numThreads = omp_get_num_threads();
                 int x = pixel % resolution_x;
                 int y = pixel / resolution_x;
 
@@ -232,7 +235,9 @@ public:
 
         std::chrono::duration<float> duration = endTime - startTime; 
 
-        std::cout << "Rendering complete in " << duration.count() << " seconds." << std::endl;
+        std::cout << "Used " << numThreads << " threads.\n" << std::endl;
+
+        std::cout << "Rendering complete in " << duration.count() << " seconds.\n" << std::endl;
         
         return result;
     }
