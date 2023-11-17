@@ -8,7 +8,7 @@ struct Vertex
 {
 public:
     Vector pos;
-    Vector n;
+    Vector ng;
     Vector2 uv;
 };
 
@@ -30,9 +30,9 @@ public:
         uv[1] = v1.uv;
         uv[2] = v2.uv;
 
-        N[0] = v0.n;
-        N[1] = v1.n;
-        N[2] = v2.n;
+        N[0] = v0.ng;
+        N[1] = v1.ng;
+        N[2] = v2.ng;
     }
 
     void collision(Ray& ray, Hit &rayHit, float& smallestDistance) {
