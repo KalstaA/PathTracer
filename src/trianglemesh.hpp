@@ -1,7 +1,7 @@
 #pragma once
 
 #include "triangle.hpp"
-#include "../libs/tiny_obj_loader.h"
+#include "../libs/tiny_obj_loader/tiny_obj_loader.h"
 
 #include <iostream>
 #include <vector>
@@ -29,7 +29,7 @@ public:
             std::cout << "Error: " << errors << std::endl;
         }
 
-        if(!ret) {
+        if(!r) {
             std::cout << "Failed to load object file." << std::endl;
             exit(1);
         }
@@ -38,7 +38,7 @@ public:
         for(size_t o = 0; o < objects.size(); o++) {
             size_t o_offset = 0;
             //Loop over triangles (faces)
-            for(size_t t = 0; t < objects[i].mesh.num_face_vertices.size(); t++) {
+            for(size_t t = 0; t < objects[o].mesh.num_face_vertices.size(); t++) {
                 int fv = objects[o].mesh.num_face_vertices[t];
 
                 //Looping over vertices in this face
@@ -54,9 +54,9 @@ public:
                     tinyobj::real_t ty = attributes.texcoords[2*idx.texcoord_index+1];
 
                     Vertex vrt = {
-                        .pos = Vector(vx, vy, vz);
-                        .n = Vector(nx, ny, nz);
-                        .uv = Vector2(tx, ty);
+                        .pos = Vector(vx, vy, vz),
+                        .ng = Vector(nx, ny, nz),
+                        .uv = Vector2(tx, ty)
                     };
                     vertices.push_back(vrt);
                 }
@@ -69,7 +69,7 @@ public:
             triangles.push_back(std::make_shared<Triangle>(vertices[i*3], vertices[i*3+1], vertices[i*3+2], m));
         }
 
-        std::cout << "Object file: " << obj_filepath << "succesfully opened!" std::endl;
+        std::cout << "Object file: " << obj_filepath << "succesfully opened!" << std::endl;
 
         objects.clear();
         materials.clear();
@@ -78,7 +78,7 @@ public:
     void collision(Ray& ray, Hit& rayHit, float& smallestDistance) {
         long t_size = triangles.size();
         for(long t = 0; t < t_size; t++){
-            t.collision(ray, rayHit, smallestDistance)
+            triangles[t]->collision(ray, rayHit, smallestDistance);
         }
         return;
     }
@@ -86,5 +86,5 @@ public:
 public:
     std::vector<tinyobj::shape_t> objects;
     std::vector<tinyobj::material_t> materials;
-    std::vector<tinyobj::shared_ptr<Triangle> triangles;
+    std::vector<std::shared_ptr<Triangle>> triangles;
 };

@@ -9,6 +9,7 @@
 #include "renderer.hpp"
 #include "interface.hpp"
 #include "triangle.hpp"
+#include "trianglemesh.hpp"
 
 int main() {
 
@@ -65,6 +66,11 @@ int main() {
   testBalls.push_back(&ball6);
   
   testBalls.push_back(&t1);
+
+  std::string raptor_file = "../objects/Raptor_Obj.obj"
+  TriangleMesh raptor = TriangleMesh(raptor_file, RED_DIFFUSE)
+  std::list<Object*> testObj;
+  testObj.push_back(&raptor)
 
   Scene testScene(testCam, testBalls);
   testScene.getEnvironment().setSky();
