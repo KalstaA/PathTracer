@@ -45,13 +45,13 @@ int main() {
   Ball ball6(Vector(6, 1.5, 1), 0.7, MIRROR);
   
   Vertex v0 = {
-    .pos = Vector(3,0,0)
+    .pos = Vector(4,-1.5,0)
   };
   Vertex v1 = {
-    .pos = Vector(3,1,0)
+    .pos = Vector(5,-1,0)
   };
   Vertex v2 = {
-    .pos = Vector(3,0,1)
+    .pos = Vector(4,-1.5,1)
   };
 
   Triangle t1(v0, v1, v2, GREEN_DIFFUSE);

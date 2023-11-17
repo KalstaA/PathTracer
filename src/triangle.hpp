@@ -1,6 +1,7 @@
 #pragma once
 
 #include "object.hpp"
+#include <vector>
 
 
 struct Vertex 
@@ -25,13 +26,13 @@ public:
 
         n = e1.cross(e2).normalized();
 
-        uv_[0] = v0.uv;
-        uv_[1] = v1.uv;
-        uv_[2] = v2.uv;
+        uv[0] = v0.uv;
+        uv[1] = v1.uv;
+        uv[2] = v2.uv;
 
-        N_[0] = v0.n;
-        N_[1] = v1.n;
-        N_[2] = v2.n;
+        N[0] = v0.n;
+        N[1] = v1.n;
+        N[2] = v2.n;
     }
 
     void collision(Ray& ray, Hit &rayHit, float& smallestDistance) {
@@ -39,19 +40,6 @@ public:
         Vector A2 = a-c;
         Vector A3 = ray.direction;
         Vector b = a-ray.origin;
-        
-        /*
-        Matrix A {
-            {A1(0), A2(0), A3(0)},
-            {A1(1), A2(1), A3(1)},
-            {A1(2), A2(2), A3(2)}
-        };
-
-        Vector x = A.colPivHouseholderQr().solve(b);
-        double beta = x(0);
-        double gamma = x(1);
-        double t = x(2);
-        */
         
         Matrix A;
         A << A1, A2, A3;
@@ -70,7 +58,7 @@ public:
         double t = t_A.determinant()/detA;
         
 
-        if((beta + gamma < 1) && (beta > 0) && (gamma > 0) && (float)t < smallestDistance) {
+        if((beta + gamma < 1) && (beta > 0) && (gamma > 0) && t < smallestDistance) {
             smallestDistance = t;
             rayHit.distance = t;
             rayHit.material = this->getMaterial();
@@ -82,11 +70,28 @@ public:
         return;
     }
 
+    std::vector<Vector> getVertexPos() const {
+        std::vector<Vector> v;
+        v.push_back(a);
+        v.push_back(b);
+        v.push_back(c);
+        return v;
+    }
+
+    Vector getNormal() const {
+        return n;
+    }
+
 private:
     Vector a, b, c;
     Vector e1, e2;
     Vector n;
-    Vector N_[3];
-    Vector2 uv_[3];
+    Vector N[3];
+    Vector2 uv[3];
 };
 
+std::ostream &operator<<(std::ostream& out, const Triangle& triangle) {
+    std::vector<Vector> v = triangle.getVertexPos();
+    out << "Triangle at: (" << v[0].transpose() << "), (" << v[1].transpose() << "), (" << v[2].transpose() << "), with normal: (" << triangle.getNormal().transpose() << "), with material: " << triangle.getMaterial().name << std::endl;
+    return out;
+}

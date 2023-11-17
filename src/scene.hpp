@@ -2,6 +2,7 @@
 
 #include <list>
 #include "ball.hpp"
+#include "triangle.hpp"
 #include "types.hpp"
 #include "environment.hpp"
 
@@ -64,6 +65,10 @@ std::ostream &operator<<(std::ostream& out, const Scene& scene) {
         if (dynamic_cast<Ball*>(object))
         {
             out << *dynamic_cast<Ball*>(object);
+        }
+        if(dynamic_cast<Triangle*>(object))
+        {
+            out << *dynamic_cast<Triangle*>(object);
         }
     }
     out << std::endl;
