@@ -37,8 +37,10 @@ FetchContent_Declare(
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+set(TESTS unittests)
 enable_testing()
-add_executable(example_test tests/AllTests.cc)
-target_link_libraries(example_test gtest_main)
+add_executable(${TESTS} tests/AllTests.cc)
+target_link_libraries(${TESTS} PRIVATE gtest_main)
+target_link_libraries(${TESTS} PRIVATE sfml-graphics)
 include(GoogleTest)
-gtest_discover_tests(example_test)
+gtest_discover_tests(${TESTS})
