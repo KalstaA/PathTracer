@@ -1,8 +1,3 @@
-#include <yaml-cpp/parser.h>
-#include <yaml-cpp/yaml.h>
-
-#include <SFML/Graphics.hpp>
-
 #include "ball.hpp"
 #include "scene.hpp"
 #include "renderer.hpp"
