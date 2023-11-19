@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.19)
-project(CMakeSFMLProject LANGUAGES CXX)
+project(PathTracer LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
+
+# Include source files
 include_directories("src")
 
 # Set the name of the executable
@@ -27,3 +29,14 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE sfml-graphics)
 
 
 install(TARGETS PathTracer)
+
+project(Tests LANGUAGES C CXX)
+enable_testing()
+add_subdirectory(libs/googletest)
+set(testHeaders
+    src/ball.hpp
+)
+set(testSources
+    src/sources.cpp
+)
+add_library(Tests STATIC ${testSources} ${testHeaders})
