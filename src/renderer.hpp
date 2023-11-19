@@ -3,6 +3,9 @@
 #include "types.hpp"
 #include <vector>
 #include "randomgenerator.hpp"
+#include <iostream>
+#include <omp.h>
+#include <chrono>
 
 /**
  * @brief Implements the ray tracing algorithm.
@@ -115,7 +118,7 @@ private:
         {
             Hit hit = rayCollision(ray);
 
-            if (hit.did_hit && hit.distance > 0.001) {
+            if (hit.did_hit && hit.distance > 0.0001) {
                 ray.origin = hit.point;
 
                 Vector diffuse_direction = (rnd_.randomDirection() + hit.normal).normalized();
@@ -171,11 +174,11 @@ public:
         
         std::vector<std::vector<Color>> result(resolution_x, std::vector<Color> (resolution_y));
         
-        for (int x = 0; x < resolution_x; x++)
+        for (int x = 0; x < resolution_x; ++x)
         {
-            for (int y = 0; y < resolution_y; y++)
+            for (int y = 0; y < resolution_y; ++y)
             {
-                Light totalLight(0, 0, 0);
+                Light totalLight = Light(0, 0, 0);
 
                 for (int rayNum = 0; rayNum < rays_per_pixel; rayNum++)
                 {
@@ -190,6 +193,52 @@ public:
 
         std::cout << "Rendering complete." << std::endl;
 
+        return result;
+    }
+
+    auto parallelRender() {
+
+        auto startTime = std::chrono::high_resolution_clock::now();
+        
+        std::vector<std::vector<Color>> result(resolution_x, std::vector<Color> (resolution_y));
+
+        omp_set_num_threads(omp_get_max_threads());
+        
+        Light totalLight;
+        Ray ray;
+
+        int numThreads = 0;
+
+        std::cout << "Rendering started..." << std::endl;
+
+        for (int sample = 0; sample < rays_per_pixel; ++sample)
+        {
+
+            float weight = 1.0 / (sample + 1);
+
+            #pragma omp parallel for private(totalLight, ray)
+            for (int pixel = 0; pixel < resolution_x * resolution_y; ++pixel)
+            {
+                if (pixel == 0) numThreads = omp_get_num_threads();
+                int x = pixel % resolution_x;
+                int y = pixel / resolution_x;
+
+                ray = createRay(x, y);
+                totalLight = trace(ray);
+                result[x][y] = clamp(result[x][y] * (1 - weight) + weight * totalLight.cwiseSqrt());
+            }
+
+            std::cout << "Sample " << sample + 1 << "/" << rays_per_pixel << " completed." << std::endl;
+        }
+
+        auto endTime = std::chrono::high_resolution_clock::now();
+
+        std::chrono::duration<float> duration = endTime - startTime; 
+
+        std::cout << "Used " << numThreads << " threads.\n" << std::endl;
+
+        std::cout << "Rendering complete in " << duration.count() << " seconds.\n" << std::endl;
+        
         return result;
     }
 };
