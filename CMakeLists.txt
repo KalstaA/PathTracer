@@ -34,7 +34,8 @@ elseif(APPLE)
     # OpenMP - works only for Mac for now
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -fopenmp")
     include_directories(${CMAKE_SOURCE_DIR}/libs/libomp/include)
-    target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/libomp/lib/libomp.a)
+    target_link_libraries(${EXECUTABLE_NAME} PRIVATE /usr/local/Cellar/libomp/17.0.5/lib/libomp.a)
+    # target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/libomp/lib/libomp_arm64.a)
 
 elseif(UNIX)
     message("You are using Linux")
