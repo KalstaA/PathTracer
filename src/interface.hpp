@@ -42,4 +42,6 @@ public:
         return img.saveToFile(filename);
     }
 
+    sf::Image getImage() { return img; }
+
 };

@@ -56,4 +56,9 @@ public:
             return horizonColor_ + (groundColor_ - horizonColor_) * pow(abs(ray.direction(2)), 0.4);
         }
     }
+
+    // Getters
+    Color getHorizonColor() { return horizonColor_; }
+    Color getGroundColor() { return groundColor_; }
+    Color getSkyColor() { return skyColor_; }
 };
