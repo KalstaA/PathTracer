@@ -68,7 +68,7 @@ int main() {
   testBalls.push_back(&t1);
 
   std::string raptor_file = "../objects/Raptor_Obj.obj";
-  TriangleMesh raptor = TriangleMesh(raptor_file, RED_DIFFUSE);
+  TriangleMesh raptor = TriangleMesh(raptor_file, Vector(5,0,0), RED_DIFFUSE);
   //std::list<Object*> testObj;
   //testObj.push_back(&raptor);
 
