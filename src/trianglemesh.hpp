@@ -1,7 +1,8 @@
 #pragma once
 
 #include "triangle.hpp"
-#include "../libs/tiny_obj_loader/tiny_obj_loader.h"
+#include "../libs/tiny_obj_loader/tiny_obj_loader.cc"
+//#include "../libs/tiny_obj_loader/tiny_obj_loader.h"
 
 #include <iostream>
 #include <vector>
@@ -54,7 +55,7 @@ public:
                     tinyobj::real_t ty = attributes.texcoords[2*idx.texcoord_index+1];
 
                     Vertex vrt = {
-                        .pos = Vector(vx, vy, vz)+scenePos,
+                        .pos = Vector(vx, vy, vz)*0.01+scenePos,
                         .ng = Vector(nx, ny, nz),
                         .uv = Vector2(tx, ty)
                     };

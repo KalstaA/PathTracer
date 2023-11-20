@@ -69,14 +69,16 @@ int main() {
 
   std::string raptor_file = "../objects/Raptor_Obj.obj";
   TriangleMesh raptor = TriangleMesh(raptor_file, Vector(5,0,0), RED_DIFFUSE);
-  //std::list<Object*> testObj;
-  //testObj.push_back(&raptor);
+  std::list<Object*> testObj;
+  testObj.push_back(&raptor);
 
-  Scene testScene(testCam, testBalls);
+  //cene testScene(testCam, testBalls);
+  Scene testScene(testCam, testObj);
   testScene.getEnvironment().setSky();
   std::cout << testScene;
 
-  int resX = 500, resY = 400;
+  //int resX = 500, resY = 400;
+  int resX = 100, resY = 100;
   Renderer testRenderer(resX, resY, testScene);
   auto result = testRenderer.render();
 
