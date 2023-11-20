@@ -67,10 +67,10 @@ int main() {
   
   testBalls.push_back(&t1);
 
-  std::string raptor_file = "../objects/Raptor_Obj.obj"
-  TriangleMesh raptor = TriangleMesh(raptor_file, RED_DIFFUSE)
-  std::list<Object*> testObj;
-  testObj.push_back(&raptor)
+  std::string raptor_file = "../objects/Raptor_Obj.obj";
+  TriangleMesh raptor = TriangleMesh(raptor_file, RED_DIFFUSE);
+  //std::list<Object*> testObj;
+  //testObj.push_back(&raptor);
 
   Scene testScene(testCam, testBalls);
   testScene.getEnvironment().setSky();

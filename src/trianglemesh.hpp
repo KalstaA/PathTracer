@@ -10,7 +10,7 @@
 
 class TriangleMesh : public Object {
 public:
-    TriangleMesh(std::string obj_filepath, Material m) : Object(Vector(0,0,0), m) {
+    TriangleMesh(std::string obj_filepath, Vector scenePos, Material m) : Object(scenePos, m) {
         unsigned long pos = obj_filepath.find_last_of("/");
         std::string basepath = obj_filepath.substr(0, pos+1);
 
@@ -54,7 +54,7 @@ public:
                     tinyobj::real_t ty = attributes.texcoords[2*idx.texcoord_index+1];
 
                     Vertex vrt = {
-                        .pos = Vector(vx, vy, vz),
+                        .pos = Vector(vx, vy, vz)+scenePos,
                         .ng = Vector(nx, ny, nz),
                         .uv = Vector2(tx, ty)
                     };
