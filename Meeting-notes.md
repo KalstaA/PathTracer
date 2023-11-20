@@ -163,3 +163,41 @@ The programmer can input scene parameters into the code and then render the scen
 2. Eetu - smart pointer implementation in Renderer and Scene, rendering parallelization
 3. Eemeli - triangle mesh (.obj files) implementation
 4. Henri - finalize FileLoader and integrate into main
+
+# Meeting 20.11.2023
+
+**Participants**: 
+1. Aleksi Kalsta
+2. Eetu Reijonen
+3. Henri-Mikael Suominen
+4. Eemeli Forsbom
+
+## Summary of works
+1. Eetu - OpenMP implementation, cmake improvements - loading from GitHub
+2. Aleksi - unit testing system
+3. Henri - FileLoader implementation
+4. Eemeli - Triangle class and MeshLoader implementations
+
+## Challenges
+* TinyObjLoader header file producing errors
+
+## Actions
+* Implement better memory management with smart pointers
+* Finish triangle meshes
+* Exeption handling for FileLoader and Interface
+* Implement a graphical user interface
+
+## Timeline
+* Weeks 47-48: Implementing the rest of features
+* Weeks 49: Documentation and finishing the project
+
+## Project status 
+A working product already implemented. Scenes can be loaded from a file and rendered with the desired settings. CPU parallelization is supported.
+
+### TODOs
+1. Aleksi - smart pointer implementation in FileLoader, Scene, and Renderer, exception handling in FileLoader
+2. Eetu - glass and clearcoat material, box object implementation
+3. Eemeli - triangle mesh system optimization
+4. Henri - graphical user interface
+
+* Everybody - unit testing for own classes
