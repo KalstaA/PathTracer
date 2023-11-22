@@ -4,14 +4,18 @@
 #include "interface.hpp"
 #include "fileloader.hpp"
 #include <iostream>
+#include "gui.hpp"
 
 int main() {
+
+
+
 
   FileLoader test("../src/scene.yaml");
   Scene testScene = test.loadSceneFile();
   std::cout << testScene;
 
-  int resX = 500, resY = 400;
+  int resX = 1920, resY = 1080;
   Renderer testRenderer(resX, resY, testScene);
 
   auto result = testRenderer.parallelRender();
@@ -27,6 +31,9 @@ int main() {
   {
     std::cout << "Saving image failed" << std::endl;
   }
+
+  Gui testgui = Gui(resX, resY);
+  testgui.openwindow();
 
   return 0;
 }
