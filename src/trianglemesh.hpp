@@ -55,7 +55,7 @@ public:
                     tinyobj::real_t ty = attributes.texcoords[2*idx.texcoord_index+1];
 
                     Vertex vrt = {
-                        .pos = Vector(vx, vz, vy)*0.01+scenePos,
+                        .pos = Vector(vx, vz, vy)*1+scenePos,
                         .ng = Vector(nx, nz, ny),
                         .uv = Vector2(tx, ty)
                     };
