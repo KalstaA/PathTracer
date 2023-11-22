@@ -1,5 +1,6 @@
 #pragma once
 
+#include "types.hpp"
 #include "object.hpp"
 #include <vector>
 
@@ -70,6 +71,11 @@ public:
         return;
     }
 
+    void printInfo(std::ostream& out) const {
+        std::vector<Vector> v = getVertexPos();
+        out << "Triangle at: (" << v[0].transpose() << "), (" << v[1].transpose() << "), (" << v[2].transpose() << "), with normal: (" << getNormal().transpose() << "), with material: " << getMaterial().name << std::endl;
+    }
+
     std::vector<Vector> getVertexPos() const {
         std::vector<Vector> v;
         v.push_back(a);
@@ -90,8 +96,4 @@ private:
     Vector2 uv[3];
 };
 
-std::ostream &operator<<(std::ostream& out, const Triangle& triangle) {
-    std::vector<Vector> v = triangle.getVertexPos();
-    out << "Triangle at: (" << v[0].transpose() << "), (" << v[1].transpose() << "), (" << v[2].transpose() << "), with normal: (" << triangle.getNormal().transpose() << "), with material: " << triangle.getMaterial().name << std::endl;
-    return out;
-}
+

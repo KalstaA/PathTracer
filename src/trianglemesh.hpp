@@ -55,8 +55,8 @@ public:
                     tinyobj::real_t ty = attributes.texcoords[2*idx.texcoord_index+1];
 
                     Vertex vrt = {
-                        .pos = Vector(vx, vy, vz)*0.01+scenePos,
-                        .ng = Vector(nx, ny, nz),
+                        .pos = Vector(vx, vz, vy)*0.01+scenePos,
+                        .ng = Vector(nx, nz, ny),
                         .uv = Vector2(tx, ty)
                     };
                     vertices.push_back(vrt);
@@ -70,7 +70,7 @@ public:
             triangles.push_back(std::make_shared<Triangle>(vertices[i*3], vertices[i*3+1], vertices[i*3+2], m));
         }
 
-        std::cout << "Object file: " << obj_filepath << "succesfully opened!" << std::endl;
+        std::cout << "Object file: " << obj_filepath << " succesfully opened!" << std::endl;
 
         objects.clear();
         materials.clear();
@@ -82,6 +82,10 @@ public:
             triangles[t]->collision(ray, rayHit, smallestDistance);
         }
         return;
+    }
+
+    void printInfo(std::ostream& out) const {
+        out << "TriangleMesh" << std::endl;
     }
 
 public:

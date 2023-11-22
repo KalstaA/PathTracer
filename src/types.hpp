@@ -8,6 +8,7 @@ typedef Eigen::Vector3d Point;
 typedef Eigen::Vector3d Color;
 typedef Eigen::Vector3d Light;
 typedef Eigen::Vector2d Vector2;
+typedef Eigen::Matrix<double, 3, 3> Matrix;
 
 struct Material
 {
