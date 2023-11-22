@@ -70,7 +70,7 @@ public:
             triangles.push_back(std::make_shared<Triangle>(vertices[i*3], vertices[i*3+1], vertices[i*3+2], m));
         }
 
-        std::cout << "Object file: " << obj_filepath << "succesfully opened!" << std::endl;
+        std::cout << "Object file: " << obj_filepath << " succesfully opened!" << std::endl;
 
         objects.clear();
         materials.clear();

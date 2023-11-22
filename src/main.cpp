@@ -60,6 +60,7 @@ int main() {
   TriangleMesh raptor = TriangleMesh(raptor_file, Vector(5,0,0), RED_DIFFUSE);
   std::list<Object*> testObj;
   testObj.push_back(&raptor);
+  testObj.push_back(&ball3);
 
   //cene testScene(testCam, testBalls);
   Scene testScene(testCam, testObj);
