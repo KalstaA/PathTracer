@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <iostream>
 #include "ball.hpp"
 #include "types.hpp"
 #include "environment.hpp"
@@ -31,12 +32,17 @@ public:
      */
     Scene(Camera camera, std::list<Object*> objects) : camera_(camera), objects_(objects) {}
     
-    /* Object pointers cannot be simply deleted since they are not always allocated with new.
-    * However, sometimes they can be dynamically allocated and not deleting them leads to a memory leak.
-    * A possible solution is to use smart pointers and allow Object construction only using them.
-    */
 
-    ~Scene() { }
+    /**
+     * @brief Destructor for Scene object. Deletes all the object in the scene.
+     * 
+     */
+    ~Scene() {
+        for (auto it = objects_.begin(); it != objects_.end(); ++it)
+        {
+            delete *it;
+        }
+    }
 
     // Default copying for now - list is copied (are the objects copied as well?)
     Scene& operator=(const Scene& that) = default;

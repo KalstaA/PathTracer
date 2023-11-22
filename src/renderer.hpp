@@ -15,7 +15,7 @@ class Renderer
 {
 private:
 
-    Scene scene_;
+    Scene* scene_;
     Camera camera_;
     RandomGenerator rnd_;
 
@@ -100,7 +100,7 @@ private:
         float closestHit = INFINITY;
         Hit rayHit = { .did_hit = false };
 
-        for (auto object : scene_.getObjects()) {
+        for (auto object : (*scene_).getObjects()) {
             object->collision(ray, rayHit, closestHit);
         }
 
@@ -133,7 +133,7 @@ private:
 
             else 
             {
-                ray.light += scene_.getEnvironment().getLight(ray).cwiseProduct(ray.color);
+                ray.light += (*scene_).getEnvironment().getLight(ray).cwiseProduct(ray.color);
                 break;
             }
         }
@@ -149,11 +149,11 @@ public:
      * @param res_y vertical resolution of the rendering area
      * @param sceneToRender Scene object to be renderer
      */
-    Renderer(int res_x, int res_y, Scene sceneToRender) {
+    Renderer(int res_x, int res_y, Scene* sceneToRender) {
         resolution_x = res_x;
         resolution_y = res_y;
         scene_ = sceneToRender;
-        camera_ = scene_.getCamera();
+        camera_ = (*scene_).getCamera();
         view_width = focusDistance * tan(camera_.fov / 2);
         view_height = view_width * (resolution_y - 1) / (resolution_x - 1);
         pixel_x = 2 * view_width / (resolution_x - 1) * camera_.direction.cross(camera_.up);

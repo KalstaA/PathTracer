@@ -8,10 +8,10 @@
 int main() {
 
   FileLoader test("../src/scene.yaml");
-  Scene testScene = test.loadSceneFile();
-  std::cout << testScene;
+  Scene* testScene = test.loadSceneFile();
+  std::cout << (*testScene);
 
-  int resX = 500, resY = 400;
+  int resX = 400, resY = 300;
   Renderer testRenderer(resX, resY, testScene);
 
   auto result = testRenderer.parallelRender();

@@ -22,37 +22,58 @@ class FileLoader{
 
         FileLoader(std::string filepath) : filepath_(filepath) {} 
 
+        /*
+        Problem in the memory management was that in the loadSceneFile we create a Scene object locally and return it by copy, meaning we
+        can not directly delete objects in Scene destructor, since it will destroy objects immediately after leaving loadSceneFile
+        function scope (and delete the objects where copied pointers are pointing). Also in renderer we used a default operator= which will
+        perform member wise assignment for all the object members (including all ready deleted Objects). Similarly "MyClass a = b" performs
+        a member wise copy constructor for b, which by default takes the pointers pointing to the objects that will be deleted after
+        leaving the function scope.
+
+        Solution:
+        Created scene object with "new" command and save/use the pointer to scene object instead of the object itself (also changed the code
+        from other places accordingly). Then scene_ needs to be deleted when FileLoader is deleted.
+
+        Other possible solution:
+        Define operator overloads to copy and assignment for Scene and Object classes, such that the copying works correctly.
+        */
+
         /**
-         * @brief Loads a scene from the file specified in filepath and returns an unique pointer to this scene.
+         * @brief Loads a scene from the file specified in filepath and returns a pointer to this scene.
          * 
-         * @return A scene object
+         * @return A pointer to scene object
          */
-        Scene loadSceneFile() {
+        Scene* loadSceneFile() {
             YAML::Node params = YAML::LoadFile(filepath_);
             Camera camera = LoadCamera();
             std::list<Object*> objects = LoadObjects();
-            Scene loadedScene = Scene(camera, objects);
-            LoadEnvironment(loadedScene);
-            return loadedScene;
+            scene_ = new Scene(camera, objects);
+            LoadEnvironment(scene_);
+            return scene_;
         }
 
-        ~FileLoader() = default;
+        /**
+         * @brief Destructor for FileLoader object
+         */
+        ~FileLoader() {
+            delete scene_;
+        }
 
         /**
-         * @brief Takes a reference to a scene object as an input and sets the environment of the scene to values specified in
+         * @brief Takes a pointer to a scene object as an input and sets the environment of the scene to values specified in
          * scene file. If scene file has no "Environment" node, the environment is set to default values.
          * 
          * @param scene A  reference to a scene object
          */
-        void LoadEnvironment(Scene &scene) {
+        void LoadEnvironment(Scene* scene) {
             if(YAML::LoadFile(filepath_)["Environment"]) {
                 YAML::Node environment_node = YAML::LoadFile(filepath_)["Environment"];
                 Eigen::Vector3d skyColor = LoadVector(environment_node["SkyColor"]);
                 Eigen::Vector3d horizonColor = LoadVector(environment_node["HorizonColor"]);
                 Eigen::Vector3d groundColor = LoadVector(environment_node["GroundColor"]); 
-                scene.getEnvironment().setSky(skyColor, horizonColor, groundColor);
+                (*scene).getEnvironment().setSky(skyColor, horizonColor, groundColor);
             }else {
-                scene.getEnvironment().setSky();
+                (*scene).getEnvironment().setSky();
             }
             
         }
@@ -146,4 +167,5 @@ class FileLoader{
 
 
         std::string filepath_;
+        Scene* scene_;
 };
