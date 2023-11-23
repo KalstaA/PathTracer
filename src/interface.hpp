@@ -9,18 +9,22 @@ class Interface {
 private:
     sf::Image img;
 
-    /*
-    * Scales rendered value from float [0, 1] to int [0, 255]
-    */
+    /**
+     * @brief Scale the input from [0, 1] to [0, 255]
+     * 
+     * @param x
+     */
     sf::Uint8 scale(float x) {
         return floor(255*x);
     }
 
 public:
 
-    /*
-    * Gets rendered pixel values and creates sf::Color objects for img
-    */
+    /**
+     * @brief Create a sf::Image from the matrix of RGB values
+     * 
+     * @param pixels
+     */
     void createImg(std::vector<std::vector<Color>> pixels) {
         int width = pixels.size(); 
         int height = pixels[0].size();
@@ -35,9 +39,11 @@ public:
         }
     }
 
-    /*
-    * Saves the image with given filename
-    */
+    /**
+     * @brief Save the image with given filename
+     * 
+     * @param filename
+     */
     bool saveImage(const std::string &filename) {
         return img.saveToFile(filename);
     }
