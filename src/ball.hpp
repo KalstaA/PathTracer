@@ -1,6 +1,7 @@
 #pragma once
 
 #include "object.hpp"
+#include "fileloader_ex.hpp"
 
 /**
  * @brief Representation of a mathematical ball object in the scene.

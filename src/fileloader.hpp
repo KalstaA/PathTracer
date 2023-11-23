@@ -1,10 +1,15 @@
 #pragma once
 
 #include <yaml-cpp/yaml.h>
+#include <string>
+#include <exception>
+#include <memory>
+#include <sys/stat.h>
 
 #include "ball.hpp"
 #include "scene.hpp"
 #include "types.hpp"
+#include "fileloader_ex.hpp"
 
 /**
  * @brief Implements a class for reading yaml scene files.
@@ -20,34 +25,45 @@ class FileLoader{
          * @param filepath Filepath to the yaml file that contains properties of the scene
          */
 
-        FileLoader(std::string filepath) : filepath_(filepath) {} 
+        FileLoader(std::string filepath) {
+            // Check the existence of the given file
+            struct stat buf;
+            if (stat(filepath.c_str(), &buf) == 0)
+            {
+                filepath_ = filepath;
+            }
+            else
+            {
+                throw InvalidFilepathException(filepath);
+            }
+        } 
 
         /*
         Problem in the memory management was that in the loadSceneFile we create a Scene object locally and return it by copy, meaning we
         can not directly delete objects in Scene destructor, since it will destroy objects immediately after leaving loadSceneFile
         function scope (and delete the objects where copied pointers are pointing). Also in renderer we used a default operator= which will
-        perform member wise assignment for all the object members (including all ready deleted Objects). Similarly "MyClass a = b" performs
+        perform member wise assignment for all the object members (including all the pointers of deleted Objects). Similarly "MyClass a = b" performs
         a member wise copy constructor for b, which by default takes the pointers pointing to the objects that will be deleted after
         leaving the function scope.
 
         Solution:
-        Created scene object with "new" command and save/use the pointer to scene object instead of the object itself (also changed the code
-        from other places accordingly). Then scene_ needs to be deleted when FileLoader is deleted.
+        Created scene object with "std::make_shared<Scene>" command and save/use the pointer to scene object instead of the object itself (also changed the code
+        from other places accordingly). Then *scene_ is not destroyed after exiting a loadSceneFile function scope and used shared_ptr so that we don't need to
+        delete scene object manually (It might not be generated in the case of exception, which creates a segfault and it can be shared with renderer)
 
         Other possible solution:
         Define operator overloads to copy and assignment for Scene and Object classes, such that the copying works correctly.
         */
 
         /**
-         * @brief Loads a scene from the file specified in filepath and returns a pointer to this scene.
+         * @brief Loads a scene from the file specified in filepath and returns a shared pointer to this scene.
          * 
-         * @return A pointer to scene object
+         * @return A shared pointer to scene object
          */
-        Scene* loadSceneFile() {
-            YAML::Node params = YAML::LoadFile(filepath_);
+        std::shared_ptr<Scene> loadSceneFile() {
             Camera camera = LoadCamera();
             std::list<Object*> objects = LoadObjects();
-            scene_ = new Scene(camera, objects);
+            scene_ = std::make_shared<Scene>(camera, objects);
             LoadEnvironment(scene_);
             return scene_;
         }
@@ -55,9 +71,7 @@ class FileLoader{
         /**
          * @brief Destructor for FileLoader object
          */
-        ~FileLoader() {
-            delete scene_;
-        }
+        ~FileLoader() {}
 
         /**
          * @brief Takes a pointer to a scene object as an input and sets the environment of the scene to values specified in
@@ -65,7 +79,7 @@ class FileLoader{
          * 
          * @param scene A  reference to a scene object
          */
-        void LoadEnvironment(Scene* scene) {
+        void LoadEnvironment(std::shared_ptr<Scene> scene) {
             if(YAML::LoadFile(filepath_)["Environment"]) {
                 YAML::Node environment_node = YAML::LoadFile(filepath_)["Environment"];
                 Eigen::Vector3d skyColor = LoadVector(environment_node["SkyColor"]);
@@ -87,6 +101,11 @@ class FileLoader{
          */
         Eigen::Vector3d LoadVector(YAML::Node coords) { 
             Eigen::Vector3d vector;
+            // Throw exception if incorrect size
+            size_t size = coords.size();
+            if (size != 3) {
+                throw InvalidSizeVectorException(filepath_, size, coords.Mark().line);
+            }
             int i = 0;
             for (YAML::const_iterator it=coords.begin(); it!=coords.end(); ++it) {
                 vector[i] = it->as<float>();
@@ -128,9 +147,17 @@ class FileLoader{
          * @param ball Yaml node that contains properties of ball object
          * @return A pointer to a ball object 
          */
-        Object* LoadBall(YAML::Node ball) { 
-            Ball* ball_ptr = new Ball(LoadVector(ball["Position"]), ball["Radius"].as<float>(), LoadMaterial(ball["Material"]));
-            return ball_ptr;
+        Object* LoadBall(YAML::Node ball) {
+            float radius = ball["Radius"].as<float>();
+            if (radius < 0)
+            {
+                throw NegativeRadiusException(filepath_, radius, ball.Mark().line);
+            }
+            else
+            {
+                Ball* ball_ptr = new Ball(LoadVector(ball["Position"]), radius, LoadMaterial(ball["Material"]));
+                return ball_ptr;
+            }
         }
 
         /**
@@ -139,7 +166,7 @@ class FileLoader{
          * @return A list of pointers to objects
          */
         std::list<Object*> LoadObjects() { 
-            YAML::Node objects = YAML::LoadFile(filepath_)["Objects"];
+            YAML::Node objects = loadParams("Objects");
             std::list<Object*> object_list;
             for (YAML::const_iterator it=objects.begin(); it!=objects.end(); ++it) {
                 if((*it)["Object"]["Type"].as<std::string>() == "Ball") {
@@ -155,17 +182,43 @@ class FileLoader{
          * @return A camera struct 
          */
         Camera LoadCamera() {  
-            YAML::Node params = YAML::LoadFile(filepath_)["Camera"];
+            YAML::Node params = loadParams("Camera");
+            float fow = params["Fov"].as<float>();
+            float focus = params["FocusDistance"].as<float>();
+            if (fow < 0)
+            {
+                throw NegativeFOVException(filepath_, fow, params["Fov"].Mark().line);
+            }
+            else if (focus < 0)
+            {
+                throw NegativeFocusException(filepath_, focus, params["FocusDistance"].Mark().line);
+            }
             Camera camera;
             camera.position = LoadVector(params["Position"]);
             camera.direction = LoadVector(params["Direction"]);
             camera.up = LoadVector(params["Up"]);
-            camera.fov = M_PI * params["Fov"].as<float>();
-            camera.focus_distance = params["FocusDistance"].as<float>();
+            camera.fov = M_PI * fow;
+            camera.focus_distance = focus;
             return camera;
-        } 
+        }
+
+        /**
+         * @brief Loads parameters from YAML file and throws exception if the key do not exist
+         * 
+         * @return parameters corresponding to key in the YAML file
+         */
+        YAML::Node loadParams(std::string key) {
+            YAML::Node params = YAML::LoadFile(filepath_)[key];
+            if (!params.IsDefined()) {
+                throw InvalidKeyException(filepath_, key);
+            }
+            else
+            {
+                return params;
+            }
+        }
 
 
         std::string filepath_;
-        Scene* scene_;
+        std::shared_ptr<Scene> scene_;
 };

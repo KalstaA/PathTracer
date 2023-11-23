@@ -15,7 +15,7 @@ class Renderer
 {
 private:
 
-    Scene* scene_;
+    std::shared_ptr<Scene> scene_;
     Camera camera_;
     RandomGenerator rnd_;
 
@@ -149,7 +149,7 @@ public:
      * @param res_y vertical resolution of the rendering area
      * @param sceneToRender Scene object to be renderer
      */
-    Renderer(int res_x, int res_y, Scene* sceneToRender) {
+    Renderer(int res_x, int res_y, std::shared_ptr<Scene> sceneToRender) {
         resolution_x = res_x;
         resolution_y = res_y;
         scene_ = sceneToRender;
