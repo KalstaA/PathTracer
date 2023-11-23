@@ -45,5 +45,10 @@ int main() {
     return EXIT_FAILURE;
 
   }
+  catch (...)
+  {
+    std::cout << "Unknown exception" << std::endl;
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
 }
