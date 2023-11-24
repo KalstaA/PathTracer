@@ -67,7 +67,7 @@ int main() {
   testScene.getEnvironment().setSky();
 
 
-  int resX = 500, resY = 500;
+  int resX = 1080, resY = 1080;
   Renderer testRenderer(resX, resY, testScene);
 
   auto result = testRenderer.parallelRender();

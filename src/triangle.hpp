@@ -11,6 +11,14 @@
 class Triangle : public Object
 {
 public:
+    /**
+     * @brief Construct a new Triangle object
+     * 
+     * @param v0 Vertex 1
+     * @param v1 Vertex 2
+     * @param v2 Vertex 3
+     * @param m Material of the triangle
+     */
     Triangle(Vector v0, Vector v1, Vector v2, Material m) : Object(v0, m) {
         //Vectors pointing at the vertices
         a = v0;

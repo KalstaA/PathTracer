@@ -7,14 +7,26 @@
 #include <vector>
 #include <string>
 
-
+/**
+ * @brief Trianglemesh object consiting of Triangles, loaded from .obj file
+ * 
+ */
 class TriangleMesh : public Object {
 public:
+    /**
+     * @brief Construct a new Triangle Mesh object
+     * 
+     * @param obj_filepath Filepath string
+     * @param scenePos Position of the object in the scene
+     * @param m Material of the object
+     * @param scale Scaling of the object size
+     */
     TriangleMesh(std::string obj_filepath, Vector scenePos, Material m, int scale) : Object(scenePos, m) {
         unsigned long pos = obj_filepath.find_last_of("/");
         std::string basepath = obj_filepath.substr(0, pos+1);
         std::string obj_name = obj_filepath.substr(pos+1, obj_filepath.length());
         
+        //Name of the object wihthout .obj
         name = obj_name.substr(0, obj_name.length()-4);
 
         tinyobj::attrib_t attributes;
@@ -22,12 +34,13 @@ public:
         std::string errors;
         std::vector<Vector> vertices;
 
+        //Load data from object file
         bool r = tinyobj::LoadObj(&attributes, &objects, &materials, &warnings, &errors, obj_filepath.c_str(), basepath.c_str());
 
+        //Check for errors in loading the data
         if(!errors.empty()) {
             std::cout << "Error: " << errors << std::endl;
         }
-
         if(!r) {
             std::cout << "Failed to load object file." << std::endl;
             exit(1);
@@ -47,6 +60,7 @@ public:
                     tinyobj::real_t vy = attributes.vertices[3*idx.vertex_index+1];
                     tinyobj::real_t vz = attributes.vertices[3*idx.vertex_index+2];
 
+                    //Creating one vertex
                     Vector vertex = Vector(vx, vz, vy)*scale+scenePos;
                     vertices.push_back(vertex);
                 }
@@ -65,6 +79,13 @@ public:
         materials.clear();
     }
 
+    /**
+     * @brief Calclute whether a given ray collides with the TriangleMesh
+     * 
+     * @param ray ray whose collision will be checked
+     * @param rayHit address of a Hit data structure
+     * @param smallestDistance current smallest distance
+     */
     void collision(Ray& ray, Hit& rayHit, float& smallestDistance) {
         long t_size = triangles.size();
         for(long t = 0; t < t_size; t++){
@@ -73,6 +94,11 @@ public:
         return;
     }
 
+    /**
+     * @brief Print TriangleMesh info to the desired output stream
+     * 
+     * @param out output stream
+     */
     void printInfo(std::ostream& out) const {
         out << "TriangleMesh object: " << name << ", at :" << this->getPosition().transpose() << ", with material: " << this-> getMaterial().name << std::endl;
     }
