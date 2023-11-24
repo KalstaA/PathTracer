@@ -5,32 +5,17 @@
 #include <vector>
 
 /**
- * @brief Data strucure for the vertex of a triangle
- * 
- */
-struct Vertex 
-{
-public:
-    Vector pos;
-    /*
-    Vector ng;
-    Vector2 uv;
-    */
-};
-
-
-/**
  * @brief Representation of a mathematical triangle object in the scene
  * 
  */
 class Triangle : public Object
 {
 public:
-    Triangle(Vertex v0, Vertex v1, Vertex v2, Material m) : Object(v0.pos, m) {
+    Triangle(Vector v0, Vector v1, Vector v2, Material m) : Object(v0, m) {
         //Vectors pointing at the vertices
-        a = v0.pos;
-        b = v1.pos;
-        c = v2.pos;
+        a = v0;
+        b = v1;
+        c = v2;
 
         //Vectors on the triangle plane
         e1 = b-a;
@@ -39,15 +24,6 @@ public:
         //Normal vector of the triangle
         n = e1.cross(e2).normalized();
 
-        /*
-        uv[0] = v0.uv;
-        uv[1] = v1.uv;
-        uv[2] = v2.uv;
-
-        N[0] = v0.ng;
-        N[1] = v1.ng;
-        N[2] = v2.ng;
-        */
     }
 
     void collision(Ray& ray, Hit &rayHit, float& smallestDistance) {
@@ -124,10 +100,6 @@ private:
     Vector a, b, c;
     Vector e1, e2;
     Vector n;
-    /*
-    Vector N[3];
-    Vector2 uv[3];
-    */
 };
 
 

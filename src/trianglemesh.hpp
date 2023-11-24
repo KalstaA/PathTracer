@@ -20,7 +20,7 @@ public:
         tinyobj::attrib_t attributes;
         std::string warnings;
         std::string errors;
-        std::vector<Vertex> vertices;
+        std::vector<Vector> vertices;
 
         bool r = tinyobj::LoadObj(&attributes, &objects, &materials, &warnings, &errors, obj_filepath.c_str(), basepath.c_str());
 
@@ -46,22 +46,9 @@ public:
                     tinyobj::real_t vx = attributes.vertices[3*idx.vertex_index+0];
                     tinyobj::real_t vy = attributes.vertices[3*idx.vertex_index+1];
                     tinyobj::real_t vz = attributes.vertices[3*idx.vertex_index+2];
-                    /*
-                    tinyobj::real_t nx = attributes.normals[3*idx.normal_index+0];
-                    tinyobj::real_t ny = attributes.normals[3*idx.normal_index+1];
-                    tinyobj::real_t nz = attributes.normals[3*idx.normal_index+2];
-                    tinyobj::real_t tx = attributes.texcoords[2*idx.texcoord_index+0];
-                    tinyobj::real_t ty = attributes.texcoords[2*idx.texcoord_index+1];
-                    */
 
-                    Vertex vrt = {
-                        .pos = Vector(vx, vz, vy)*scale+scenePos,
-                        /*
-                        .ng = Vector(nx, nz, ny),
-                        .uv = Vector2(tx, ty)
-                        */
-                    };
-                    vertices.push_back(vrt);
+                    Vector vertex = Vector(vx, vz, vy)*scale+scenePos;
+                    vertices.push_back(vertex);
                 }
                 o_offset += fv;
             }
