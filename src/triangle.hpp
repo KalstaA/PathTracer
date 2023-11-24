@@ -4,29 +4,42 @@
 #include "object.hpp"
 #include <vector>
 
-
+/**
+ * @brief Data strucure for the vertex of a triangle
+ * 
+ */
 struct Vertex 
 {
 public:
     Vector pos;
+    /*
     Vector ng;
     Vector2 uv;
+    */
 };
 
 
+/**
+ * @brief Representation of a mathematical triangle object in the scene
+ * 
+ */
 class Triangle : public Object
 {
 public:
     Triangle(Vertex v0, Vertex v1, Vertex v2, Material m) : Object(v0.pos, m) {
+        //Vectors pointing at the vertices
         a = v0.pos;
         b = v1.pos;
         c = v2.pos;
 
+        //Vectors on the triangle plane
         e1 = b-a;
         e2 = c-a;
 
+        //Normal vector of the triangle
         n = e1.cross(e2).normalized();
 
+        /*
         uv[0] = v0.uv;
         uv[1] = v1.uv;
         uv[2] = v2.uv;
@@ -34,9 +47,28 @@ public:
         N[0] = v0.ng;
         N[1] = v1.ng;
         N[2] = v2.ng;
+        */
     }
 
     void collision(Ray& ray, Hit &rayHit, float& smallestDistance) {
+        
+        Vector p = ray.direction.cross(e2);
+        double x = e1.dot(p);
+        if(x == 0) {
+            return;
+        }
+        double inv_x = 1/x;
+        Vector t_ = ray.origin - a;
+        double u = t_.dot(p)*inv_x;
+        if(u < 0 || u > 1) {
+            return;
+        }
+        Vector q = t_.cross(e1);
+        double v = ray.direction.dot(q)*inv_x;
+        if(v < 0 || u+v > 1) {
+            return;
+        }
+        
         Vector A1 = a-b;
         Vector A2 = a-c;
         Vector A3 = ray.direction;
@@ -92,8 +124,10 @@ private:
     Vector a, b, c;
     Vector e1, e2;
     Vector n;
+    /*
     Vector N[3];
     Vector2 uv[3];
+    */
 };
 
 

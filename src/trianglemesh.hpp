@@ -2,7 +2,6 @@
 
 #include "triangle.hpp"
 #include "../libs/tiny_obj_loader/tiny_obj_loader.cc"
-//#include "../libs/tiny_obj_loader/tiny_obj_loader.h"
 
 #include <iostream>
 #include <vector>
@@ -11,9 +10,12 @@
 
 class TriangleMesh : public Object {
 public:
-    TriangleMesh(std::string obj_filepath, Vector scenePos, Material m) : Object(scenePos, m) {
+    TriangleMesh(std::string obj_filepath, Vector scenePos, Material m, int scale) : Object(scenePos, m) {
         unsigned long pos = obj_filepath.find_last_of("/");
         std::string basepath = obj_filepath.substr(0, pos+1);
+        std::string obj_name = obj_filepath.substr(pos+1, obj_filepath.length());
+        
+        name = obj_name.substr(0, obj_name.length()-4);
 
         tinyobj::attrib_t attributes;
         std::string warnings;
@@ -21,10 +23,6 @@ public:
         std::vector<Vertex> vertices;
 
         bool r = tinyobj::LoadObj(&attributes, &objects, &materials, &warnings, &errors, obj_filepath.c_str(), basepath.c_str());
-
-        if(!warnings.empty()) {
-            std::cout << "Warning: " << warnings << std::endl;
-        }
 
         if(!errors.empty()) {
             std::cout << "Error: " << errors << std::endl;
@@ -48,16 +46,20 @@ public:
                     tinyobj::real_t vx = attributes.vertices[3*idx.vertex_index+0];
                     tinyobj::real_t vy = attributes.vertices[3*idx.vertex_index+1];
                     tinyobj::real_t vz = attributes.vertices[3*idx.vertex_index+2];
+                    /*
                     tinyobj::real_t nx = attributes.normals[3*idx.normal_index+0];
                     tinyobj::real_t ny = attributes.normals[3*idx.normal_index+1];
                     tinyobj::real_t nz = attributes.normals[3*idx.normal_index+2];
                     tinyobj::real_t tx = attributes.texcoords[2*idx.texcoord_index+0];
                     tinyobj::real_t ty = attributes.texcoords[2*idx.texcoord_index+1];
+                    */
 
                     Vertex vrt = {
-                        .pos = Vector(vx, vz, vy)*1+scenePos,
+                        .pos = Vector(vx, vz, vy)*scale+scenePos,
+                        /*
                         .ng = Vector(nx, nz, ny),
                         .uv = Vector2(tx, ty)
+                        */
                     };
                     vertices.push_back(vrt);
                 }
@@ -70,7 +72,7 @@ public:
             triangles.push_back(std::make_shared<Triangle>(vertices[i*3], vertices[i*3+1], vertices[i*3+2], m));
         }
 
-        std::cout << "Object file: " << obj_filepath << " succesfully opened!" << std::endl;
+        std::cout << "Object file: " << obj_name << ", succesfully opened!" << std::endl;
 
         objects.clear();
         materials.clear();
@@ -85,11 +87,12 @@ public:
     }
 
     void printInfo(std::ostream& out) const {
-        out << "TriangleMesh" << std::endl;
+        out << "TriangleMesh object: " << name << ", at :" << this->getPosition().transpose() << ", with material: " << this-> getMaterial().name << std::endl;
     }
 
 public:
     std::vector<tinyobj::shape_t> objects;
     std::vector<tinyobj::material_t> materials;
     std::vector<std::shared_ptr<Triangle>> triangles;
+    std::string name;
 };

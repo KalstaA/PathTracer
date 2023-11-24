@@ -56,10 +56,10 @@ int main() {
   testBalls.push_back(&ball6);
 
 
-  std::string raptor_file = "../objects/knight.obj";
-  TriangleMesh raptor = TriangleMesh(raptor_file, Vector(5,0,-1.5), RED_DIFFUSE);
+  std::string knight_file = "../objects/knight.obj";
+  TriangleMesh knight = TriangleMesh(knight_file, Vector(5,0,-1.5), RED_DIFFUSE, 1);
   std::list<Object*> testObj;
-  testObj.push_back(&raptor);
+  testObj.push_back(&knight);
   testObj.push_back(&ball3);
 
   //cene testScene(testCam, testBalls);
@@ -67,7 +67,7 @@ int main() {
   testScene.getEnvironment().setSky();
 
 
-  int resX = 400, resY = 400;
+  int resX = 500, resY = 500;
   Renderer testRenderer(resX, resY, testScene);
 
   auto result = testRenderer.parallelRender();
