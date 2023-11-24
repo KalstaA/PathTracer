@@ -27,7 +27,7 @@ public:
     }
 
     /**
-     * @brief Calculate whether a given ray collides with the triangle.
+     * @brief Calculate whether a given ray collides with the triangle using the Möller-Trumbore algorithm
      * 
      * If the ray collides with the triangle and the collision is closer than the current smallest distance,
      * the "rayHit" data structure will be updated according to the collision.
@@ -37,55 +37,34 @@ public:
      * @param smallestDistance current smallest distance
      */
     void collision(Ray& ray, Hit &rayHit, float& smallestDistance) {
-        //Check if the ray is on the same plane as the triangle
+        //Compute determinant
         Vector p = ray.direction.cross(e2);
-        double x = e1.dot(p);
-        if(x == 0) {
-            return;
-        }
+        double det = e1.dot(p);
 
-        //Check
-        double inv_x = 1/x;
+        //Check if the ray is on the same plane as the triangle
+        if(det == 0) return;
+
+        double invDet = 1 / det;
+
+        //Compute beta
         Vector s = ray.origin - a;
-        double y = s.dot(p)*inv_x;
-        if(y < 0 || y > 1) {
-            return;
-        }
+        double beta = s.dot(p)*invDet;
 
-        //Check
+        //If beta < 0 or beta > 1 the ray does not intersect the triangle
+        if(beta < 0 || beta > 1) return;
+
+        //Compute gamma
         Vector q = s.cross(e1);
-        double z = ray.direction.dot(q)*inv_x;
-        if(z < 0 || y+z > 1) {
-            return;
-        }
-        
-        //Calculate matrix columns 
-        Vector A1 = a-b;
-        Vector A2 = a-c;
-        Vector A3 = ray.direction;
-        Vector b = a-ray.origin;
-        
-        //Construct the matrix
-        Matrix A;
-        A << A1, A2, A3;
-        double detA = A.determinant();
+        double gamma = ray.direction.dot(q)*invDet;
 
-        //Use Cramer's rule to solve for beta, gamma and t
+        //If gamma < 0 or beta + gamma > 1 the ray does not intersect the triangle
+        if(gamma < 0 || beta + gamma > 1) return;
 
-        Matrix beta_A;
-        beta_A << b, A2, A3;
-        double beta = beta_A.determinant()/detA;
+        //Compute t
+        double t = e2.dot(q)*invDet;
 
-        Matrix gamma_A;
-        gamma_A << A1, b, A3;
-        double gamma = gamma_A.determinant()/detA;
-
-        Matrix t_A;
-        t_A << A1, A2, b;
-        double t = t_A.determinant()/detA;
-        
-        //Check if ray collided with the triangle and t is smaller than current smallest distance
-        if((beta + gamma < 1) && (beta > 0) && (gamma > 0) && t < smallestDistance) {
+        //If t < smallestDistance the ray intersects the triangle
+        if(t < smallestDistance) {
             smallestDistance = t;
             rayHit.distance = t;
             rayHit.material = this->getMaterial();
@@ -93,7 +72,7 @@ public:
             rayHit.point = ray.origin + ray.direction*t;
             rayHit.normal = this->n;
         }
-
+        
         return;
     }
 
