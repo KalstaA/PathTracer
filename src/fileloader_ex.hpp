@@ -111,5 +111,10 @@ class InvalidKeyException : public FileLoaderException {
 
 };
 
+/* TODO:
+LoadVector: Key do not exist, VectorKeyException
+Color: Invalid color parameters, InvalidColorException
+*/
+
 
 #endif
