@@ -89,8 +89,9 @@ class FileLoader{
             }else {
                 (*scene).getEnvironment().setSky();
             }
-            
         }
+
+        std::string getFilepath() { return filepath_; }
 
     private:
         /**
