@@ -32,6 +32,8 @@ public:
         //Normal vector of the triangle
         n = e1.cross(e2).normalized();
 
+        //Centroid of the triangle
+        centroid = Vector(v0.mean(), v1.mean(), v2.mean());
     }
 
     /**
@@ -47,29 +49,29 @@ public:
     void collision(Ray& ray, Hit &rayHit, float& smallestDistance) {
         //Compute determinant
         Vector p = ray.direction.cross(e2);
-        double det = e1.dot(p);
+        float det = e1.dot(p);
 
         //Check if the ray is on the same plane as the triangle
         if(det == 0) return;
 
-        double invDet = 1 / det;
+        float invDet = 1 / det;
 
         //Compute beta
         Vector s = ray.origin - a;
-        double beta = s.dot(p)*invDet;
+        float beta = s.dot(p)*invDet;
 
         //If beta < 0 or beta > 1 the ray does not intersect the triangle
         if(beta < 0 || beta > 1) return;
 
         //Compute gamma
         Vector q = s.cross(e1);
-        double gamma = ray.direction.dot(q)*invDet;
+        float gamma = ray.direction.dot(q)*invDet;
 
         //If gamma < 0 or beta + gamma > 1 the ray does not intersect the triangle
         if(gamma < 0 || beta + gamma > 1) return;
 
         //Compute t
-        double t = e2.dot(q)*invDet;
+        float t = e2.dot(q)*invDet;
 
         //If t < smallestDistance the ray intersects the triangle
         if(t < smallestDistance) {
@@ -130,10 +132,20 @@ public:
         return n;
     }
 
+    /**
+     * @brief Get the centroid of the triangle
+     * 
+     * @return The centroid vector of the triangle
+     */
+    Vector getCentroid() const {
+        return centroid;
+    }
+
 private:
     Vector a, b, c;
     Vector e1, e2;
     Vector n;
+    Vector centroid;
 };
 
 

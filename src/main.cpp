@@ -4,6 +4,7 @@
 #include "interface.hpp"
 #include "fileloader.hpp"
 #include "trianglemesh.hpp"
+#include "bvh.hpp"
 #include <iostream>
 
 int main() {
@@ -57,7 +58,7 @@ int main() {
 
 
   std::string knight_file = "../objects/knight.obj";
-  TriangleMesh knight = TriangleMesh(knight_file, Vector(5,0,-1.5), RED_DIFFUSE, 1);
+  TriangleMesh knight(knight_file, Vector(5,0,-1.5), RED_DIFFUSE, 1);
   std::list<Object*> testObj;
   testObj.push_back(&knight);
   testObj.push_back(&ball3);
@@ -66,8 +67,7 @@ int main() {
   Scene testScene(testCam, testObj);
   testScene.getEnvironment().setSky();
 
-
-  int resX = 1080, resY = 1080;
+  int resX = 500, resY = 500;
   Renderer testRenderer(resX, resY, testScene);
 
   auto result = testRenderer.parallelRender();

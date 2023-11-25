@@ -1,6 +1,7 @@
 #pragma once
 
 #include "triangle.hpp"
+#include "bvh.hpp"
 #include "../libs/tiny_obj_loader/tiny_obj_loader.cc"
 
 #include <iostream>
@@ -30,6 +31,9 @@ public:
         name = obj_name.substr(0, obj_name.length()-4);
 
         tinyobj::attrib_t attributes;
+        std::vector<Triangle> triangles;
+        std::vector<tinyobj::shape_t> objects;
+        std::vector<tinyobj::material_t> materials;
         std::string warnings;
         std::string errors;
         std::vector<Vector> vertices;
@@ -70,11 +74,14 @@ public:
 
         //Loops over vertices and creates triangles
         for(int i = 0; i < vertices.size()/3; ++i) {
-            triangles.push_back(std::make_shared<Triangle>(vertices[i*3], vertices[i*3+1], vertices[i*3+2], m));
+            triangles.push_back(Triangle(vertices[i*3], vertices[i*3+1], vertices[i*3+2], m));
         }
+
+        bvh = BVH(triangles);
 
         std::cout << "Object file: " << obj_name << ", succesfully opened!" << std::endl;
 
+        triangles.clear();
         objects.clear();
         materials.clear();
     }
@@ -87,10 +94,9 @@ public:
      * @param smallestDistance current smallest distance
      */
     void collision(Ray& ray, Hit& rayHit, float& smallestDistance) {
-        long t_size = triangles.size();
-        for(long t = 0; t < t_size; t++){
-            triangles[t]->collision(ray, rayHit, smallestDistance);
-        }
+        
+        bvh.BVHCollision(ray, rayHit, smallestDistance, bvh.getRootNodeIdx());
+        
         return;
     }
 
@@ -103,9 +109,7 @@ public:
         out << "TriangleMesh object: " << name << ", at :" << this->getPosition().transpose() << ", with material: " << this-> getMaterial().name << std::endl;
     }
 
-public:
-    std::vector<tinyobj::shape_t> objects;
-    std::vector<tinyobj::material_t> materials;
-    std::vector<std::shared_ptr<Triangle>> triangles;
+private:
+    BVH bvh;
     std::string name;
 };

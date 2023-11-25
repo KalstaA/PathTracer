@@ -27,7 +27,7 @@ private:
     float focusDistance = 5;
 
     int max_bounces = 2;
-    int rays_per_pixel = 8;
+    int rays_per_pixel = 5;
 
     float view_width;
     float view_height;
