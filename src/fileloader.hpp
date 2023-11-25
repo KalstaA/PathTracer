@@ -62,7 +62,7 @@ class FileLoader{
          */
         std::shared_ptr<Scene> loadSceneFile() {
             Camera camera = LoadCamera();
-            std::list<Object*> objects = LoadObjects();
+            std::list<std::shared_ptr<Object>> objects = LoadObjects();
             scene_ = std::make_shared<Scene>(camera, objects);
             LoadEnvironment(scene_);
             return scene_;
@@ -155,7 +155,7 @@ class FileLoader{
          * @param ball Yaml node that contains properties of ball object
          * @return A pointer to a ball object 
          */
-        Object* LoadBall(YAML::Node ball) {
+        std::shared_ptr<Ball> LoadBall(YAML::Node ball) {
             YAML::Node radius_node = ball["Radius"];
             if (!radius_node.IsDefined()) {
                 throw RadiusNotFoundException(filepath_, ball.Mark().line);
@@ -167,7 +167,7 @@ class FileLoader{
             }
             else
             {
-                Ball* ball_ptr = new Ball(LoadVector(ball, "Position"), radius, LoadMaterial(ball));
+                std::shared_ptr<Ball> ball_ptr = std::make_shared<Ball>(LoadVector(ball, "Position"), radius, LoadMaterial(ball));
                 return ball_ptr;
             }
         }
@@ -177,9 +177,9 @@ class FileLoader{
          * 
          * @return A list of pointers to objects
          */
-        std::list<Object*> LoadObjects() { 
+        std::list<std::shared_ptr<Object>> LoadObjects() { 
             YAML::Node objects = loadParams("Objects");
-            std::list<Object*> object_list;
+            std::list<std::shared_ptr<Object>> object_list;
             for (YAML::const_iterator it=objects.begin(); it!=objects.end(); ++it) {
                 if((*it)["Object"]["Type"].as<std::string>() == "Ball") {
                     object_list.push_back(LoadBall((*it)["Object"]));

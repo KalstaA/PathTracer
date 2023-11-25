@@ -13,7 +13,7 @@
 class Scene
 {
 private:
-    std::list<Object*> objects_;
+    std::list<std::shared_ptr<Object>> objects_;
     Camera camera_;
     Environment environment_;
 
@@ -30,19 +30,14 @@ public:
      * @param camera 
      * @param objects 
      */
-    Scene(Camera camera, std::list<Object*> objects) : camera_(camera), objects_(objects) {}
+    Scene(Camera camera, std::list<std::shared_ptr<Object>> objects) : camera_(camera), objects_(objects) {}
     
 
     /**
      * @brief Destructor for Scene object. Deletes all the object in the scene.
      * 
      */
-    ~Scene() {
-        for (auto it = objects_.begin(); it != objects_.end(); ++it)
-        {
-            delete *it;
-        }
-    }
+    ~Scene() {}
 
     // Default copying for now - list is copied (are the objects copied as well?)
     Scene& operator=(const Scene& that) = default;
@@ -52,7 +47,7 @@ public:
 
     Environment& getEnvironment() { return environment_; }
 
-    std::list<Object*> getObjects() const { return objects_; }
+    std::list<std::shared_ptr<Object>> getObjects() const { return objects_; }
 
     /**
      * @brief Print scene info to the desired output stream.
