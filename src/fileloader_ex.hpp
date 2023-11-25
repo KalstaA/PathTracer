@@ -7,24 +7,19 @@
 
 class FileLoaderException : public std::exception {
     public:
-        FileLoaderException(std::string filepath) : filepath_(filepath) {}
+        FileLoaderException() {}
 
         // Pure virtual functions for getting the error message
         virtual const char* what() const noexcept = 0;
 
-        std::string getFilePath() const { return filepath_; }
-
         virtual ~FileLoaderException() = default;
-
-    private:
-        std::string filepath_;
 
 };
 
 class InvalidFilepathException : public FileLoaderException {
     public:
-        InvalidFilepathException(std::string filepath) : FileLoaderException(filepath) {
-            msg_ = "Exception caught:\nInvalid filepath: " + filepath;
+        InvalidFilepathException(std::string filepath) : FileLoaderException() {
+            msg_ = "FileLoader exception caught:\nInvalid filepath: " + filepath;
         }
 
         virtual const char* what() const noexcept {
@@ -38,8 +33,10 @@ class InvalidFilepathException : public FileLoaderException {
 
 class NegativeRadiusException : public FileLoaderException {
     public:
-        NegativeRadiusException(std::string filepath, float radius, int line) : FileLoaderException(filepath) {
-            msg_ = "Exception caught:\nNegative radius (" + std::to_string(radius) + ") in file: " + filepath + ", on line: " + std::to_string(line);
+        NegativeRadiusException(std::string filepath, float radius, int line) : FileLoaderException() {
+            msg_ = "FileLoader exception caught:\nNegative radius (" +
+                    std::to_string(radius) + ") in file: " +
+                    filepath + ", on line: " + std::to_string(line);
         }
 
         virtual const char* what() const noexcept {
@@ -53,8 +50,10 @@ class NegativeRadiusException : public FileLoaderException {
 
 class InvalidSizeVectorException : public FileLoaderException {
     public:
-        InvalidSizeVectorException(std::string filepath, size_t size, int line) : FileLoaderException(filepath) {
-            msg_ = "Exception caught:\nInvalid vector of size " + std::to_string(size) + " in file: " + filepath + ", on line: " + std::to_string(line);
+        InvalidSizeVectorException(std::string filepath, size_t size, int line) : FileLoaderException() {
+            msg_ = "FileLoader exception caught:\nInvalid vector of size " +
+                    std::to_string(size) + " in file: " + filepath +
+                    ", on line: " + std::to_string(line);
         }
 
         virtual const char* what() const noexcept {
@@ -68,8 +67,9 @@ class InvalidSizeVectorException : public FileLoaderException {
 
 class NegativeFOVException : public FileLoaderException {
     public:
-        NegativeFOVException(std::string filepath, float fow, int line) : FileLoaderException(filepath) {
-            msg_ = "Exception caught:\nNegative FOW: " + std::to_string(fow) + ", in file: " + filepath + ", on line: " + std::to_string(line);
+        NegativeFOVException(std::string filepath, float fow, int line) : FileLoaderException() {
+            msg_ = "FileLoader exception caught:\nNegative FOW: " + std::to_string(fow) +
+                    ", in file: " + filepath + ", on line: " + std::to_string(line);
         }
 
         virtual const char* what() const noexcept {
@@ -83,8 +83,10 @@ class NegativeFOVException : public FileLoaderException {
 
 class NegativeFocusException : public FileLoaderException {
     public:
-        NegativeFocusException(std::string filepath, float focus, int line) : FileLoaderException(filepath) {
-            msg_ = "Exception caught:\nNegative focus distance: " + std::to_string(focus) + " in file: " + filepath + ", on line: " + std::to_string(line);
+        NegativeFocusException(std::string filepath, float focus, int line) : FileLoaderException() {
+            msg_ = "FileLoader exception caught:\nNegative focus distance: " +
+                    std::to_string(focus) + " in file: " + filepath +
+                    ", on line: " + std::to_string(line);
         }
 
         virtual const char* what() const noexcept {
@@ -98,8 +100,8 @@ class NegativeFocusException : public FileLoaderException {
 
 class InvalidKeyException : public FileLoaderException {
     public:
-        InvalidKeyException(std::string filepath, std::string key) : FileLoaderException(filepath) {
-            msg_ = "Exception caught:\nInvalid key: " + key + " for file: " + filepath;
+        InvalidKeyException(std::string filepath, std::string key) : FileLoaderException() {
+            msg_ = "FileLoader exception caught:\nInvalid key: " + key + ", for file: " + filepath;
         }
 
         virtual const char* what() const noexcept {
@@ -111,8 +113,37 @@ class InvalidKeyException : public FileLoaderException {
 
 };
 
-/* TODO:
-LoadVector: Key do not exist, VectorKeyException
+class MaterialNotFoundException : public FileLoaderException {
+    public:
+        MaterialNotFoundException(std::string filepath, int line) : FileLoaderException() {
+            msg_ = "FileLoader exception caught:\nMaterial not defined for object at line: " +
+                    std::to_string(line) + ", in file: " + filepath + ".";
+        }
+
+        virtual const char* what() const noexcept {
+            return msg_.c_str();
+        }
+
+    private:
+        std::string msg_;
+};
+
+class RadiusNotFoundException : public FileLoaderException {
+    public:
+        RadiusNotFoundException(std::string filepath, int line) : FileLoaderException() {
+            msg_ = "FileLoader exception caught:\nRadius not defined for ball at line: " +
+                    std::to_string(line) + ", in file: " + filepath + ".";
+        }
+
+        virtual const char* what() const noexcept {
+            return msg_.c_str();
+        }
+
+    private:
+        std::string msg_;
+};
+
+/* Need eny more exceptions?:
 Color: Invalid color parameters, InvalidColorException
 */
 

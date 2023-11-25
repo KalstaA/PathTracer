@@ -81,10 +81,10 @@ class FileLoader{
          */
         void LoadEnvironment(std::shared_ptr<Scene> scene) {
             if(YAML::LoadFile(filepath_)["Environment"]) {
-                YAML::Node environment_node = YAML::LoadFile(filepath_)["Environment"];
-                Eigen::Vector3d skyColor = LoadVector(environment_node["SkyColor"]);
-                Eigen::Vector3d horizonColor = LoadVector(environment_node["HorizonColor"]);
-                Eigen::Vector3d groundColor = LoadVector(environment_node["GroundColor"]); 
+                YAML::Node environment_node = loadParams("Environment");
+                Eigen::Vector3d skyColor = LoadVector(environment_node, "SkyColor");
+                Eigen::Vector3d horizonColor = LoadVector(environment_node, "HorizonColor");
+                Eigen::Vector3d groundColor = LoadVector(environment_node, "GroundColor"); 
                 (*scene).getEnvironment().setSky(skyColor, horizonColor, groundColor);
             }else {
                 (*scene).getEnvironment().setSky();
@@ -99,10 +99,14 @@ class FileLoader{
          * @param coords An yaml node that points to a key that has a sequence as a value 
          * @return A vector based on values in node
          */
-        Eigen::Vector3d LoadVector(YAML::Node coords) { 
+        Eigen::Vector3d LoadVector(YAML::Node node, std::string key) { 
             Eigen::Vector3d vector;
-            // Throw exception if incorrect size
+            YAML::Node coords = node[key];
+            // Throw exception if incorrect size or if not defined
             size_t size = coords.size();
+            if (!coords.IsDefined()) {
+                throw InvalidKeyException(filepath_, key);
+            }
             if (size != 3) {
                 throw InvalidSizeVectorException(filepath_, size, coords.Mark().line);
             }
@@ -121,13 +125,17 @@ class FileLoader{
          * material values 
          * @return A material struct  
          */
-        Material LoadMaterial(YAML::Node material_node) { 
+        Material LoadMaterial(YAML::Node node) {
             Material material;
+            YAML::Node material_node = node["Material"];
+            if (!material_node.IsDefined()) {
+                throw MaterialNotFoundException(filepath_, node.Mark().line);
+            }
             if(material_node["Color"]) {
-                material.color = LoadVector(material_node["Color"]);
+                material.color = LoadVector(material_node, "Color");
             }
             if(material_node["EmissionColor"]) {
-             material.emission_color = LoadVector(material_node["EmissionColor"]);
+             material.emission_color = LoadVector(material_node, "EmissionColor");
             }
             if(material_node["EmissionStrength"]) {
                 material.emission_strength = material_node["EmissionStrength"].as<float>();
@@ -148,14 +156,18 @@ class FileLoader{
          * @return A pointer to a ball object 
          */
         Object* LoadBall(YAML::Node ball) {
-            float radius = ball["Radius"].as<float>();
+            YAML::Node radius_node = ball["Radius"];
+            if (!radius_node.IsDefined()) {
+                throw RadiusNotFoundException(filepath_, ball.Mark().line);
+            }
+            float radius = radius_node.as<float>();
             if (radius < 0)
             {
-                throw NegativeRadiusException(filepath_, radius, ball.Mark().line);
+                throw NegativeRadiusException(filepath_, radius, radius_node.Mark().line);
             }
             else
             {
-                Ball* ball_ptr = new Ball(LoadVector(ball["Position"]), radius, LoadMaterial(ball["Material"]));
+                Ball* ball_ptr = new Ball(LoadVector(ball, "Position"), radius, LoadMaterial(ball));
                 return ball_ptr;
             }
         }
@@ -194,9 +206,9 @@ class FileLoader{
                 throw NegativeFocusException(filepath_, focus, params["FocusDistance"].Mark().line);
             }
             Camera camera;
-            camera.position = LoadVector(params["Position"]);
-            camera.direction = LoadVector(params["Direction"]);
-            camera.up = LoadVector(params["Up"]);
+            camera.position = LoadVector(params, "Position");
+            camera.direction = LoadVector(params, "Direction");
+            camera.up = LoadVector(params, "Up");
             camera.fov = M_PI * fow;
             camera.focus_distance = focus;
             return camera;

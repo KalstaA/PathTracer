@@ -4,7 +4,6 @@
 #include "interface.hpp"
 #include "fileloader.hpp"
 #include "fileloader_ex.hpp"
-// #include <yaml-cpp/exception.h>
 
 #include <iostream>
 #include <exception>
@@ -40,10 +39,15 @@ int main() {
   }
   catch (YAML::Exception& ex)
   {
-    std::cout << "Exception caught:" << std::endl;
+    std::cout << "YAML exception caught:" << std::endl;
     std::cout << ex.what() << std::endl;
     return EXIT_FAILURE;
 
+  }
+  catch (std::exception& ex)
+  {
+    std::cout << "Standard library exception caught: " << std::endl;
+    std::cout << ex.what() << std::endl;
   }
   catch (...)
   {
