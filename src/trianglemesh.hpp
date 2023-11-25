@@ -17,12 +17,13 @@ public:
     /**
      * @brief Construct a new Triangle Mesh object
      * 
-     * @param obj_filepath Filepath string
-     * @param scenePos Position of the object in the scene
-     * @param m Material of the object
-     * @param scale Scaling of the object size
+     * @param obj_filepath filepath string
+     * @param scenePos position of the object in the scene
+     * @param m material of the object
+     * @param scale scaling of the object size
+     * @param angle counterclockwise rotation of the object in radians
      */
-    TriangleMesh(std::string obj_filepath, Vector scenePos, Material m, int scale) : Object(scenePos, m) {
+    TriangleMesh(std::string obj_filepath, Vector scenePos, Material m, double scale, double angle) : Object(scenePos, m) {
         unsigned long pos = obj_filepath.find_last_of("/");
         std::string basepath = obj_filepath.substr(0, pos+1);
         std::string obj_name = obj_filepath.substr(pos+1, obj_filepath.length());
@@ -61,11 +62,15 @@ public:
                 for(size_t v = 0; v < fv; v++) {
                     tinyobj::index_t idx = objects[o].mesh.indices[o_offset + v];
                     tinyobj::real_t vx = attributes.vertices[3*idx.vertex_index+0];
-                    tinyobj::real_t vy = attributes.vertices[3*idx.vertex_index+1];
-                    tinyobj::real_t vz = attributes.vertices[3*idx.vertex_index+2];
+                    tinyobj::real_t vz = attributes.vertices[3*idx.vertex_index+1];
+                    tinyobj::real_t vy = attributes.vertices[3*idx.vertex_index+2];
+
+                    //Orienting the x and y coordinates
+                    tinyobj::real_t x = vx*cos(angle) + vy*sin(angle);
+                    tinyobj::real_t y = -vx*sin(angle) + vy*cos(angle);
 
                     //Creating one vertex
-                    Vector vertex = Vector(vx, vz, vy)*scale+scenePos;
+                    Vector vertex = Vector(x, y, vz)*scale+scenePos;
                     vertices.push_back(vertex);
                 }
                 o_offset += fv;

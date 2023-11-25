@@ -6,6 +6,7 @@
 #include "trianglemesh.hpp"
 #include "bvh.hpp"
 #include <iostream>
+#include <math.h>
 
 int main() {
 
@@ -45,7 +46,7 @@ int main() {
   Ball ball3(Vector(10, -30, 20), 20, SUN);
   Ball ball4(Vector(4, -0.5, -0.5), 0.5, GREEN_DIFFUSE);
   Ball ball5(Vector(6, 2, -0.5), 0.5, BLUE_DIFFUSE);
-  Ball ball6(Vector(6, 1.5, 1), 0.7, MIRROR);
+  Ball ball6(Vector(6, 2, 1), 0.7, MIRROR);
   
 
   std::list<Object*> testBalls;
@@ -56,18 +57,34 @@ int main() {
   testBalls.push_back(&ball5);
   testBalls.push_back(&ball6);
 
+  //Knight, tree, mirror ball test
 
   std::string knight_file = "../objects/knight.obj";
-  TriangleMesh knight(knight_file, Vector(5,0,-1.5), RED_DIFFUSE, 1);
-  std::list<Object*> testObj;
-  testObj.push_back(&knight);
-  testObj.push_back(&ball3);
+  TriangleMesh knight(knight_file, Vector(5,0,-1.5), RED_DIFFUSE, 1, 7*M_PI/4);
 
-  //cene testScene(testCam, testBalls);
-  Scene testScene(testCam, testObj);
+  std::string tree_file = "../objects/tree.obj";
+  TriangleMesh tree(tree_file, Vector(8,-3,-1), GREEN_DIFFUSE, 0.05, 7*M_PI/4);
+
+  std::list<Object*> testList;
+  testList.push_back(&tree);
+  testList.push_back(&knight);
+  testList.push_back(&ball3);
+  testList.push_back(&ball6);
+
+  //Hippo test
+  /*
+  std::string hippo_file = "../objects/hippo.obj";
+  TriangleMesh hippo(hippo_file, Vector(5,0.75,-1), BLUE_DIFFUSE, 0.4, M_PI/5);
+
+  std::list<Object*> testList;
+  testList.push_back(&hippo);
+  */
+
+
+  Scene testScene(testCam, testList);
   testScene.getEnvironment().setSky();
 
-  int resX = 500, resY = 500;
+  int resX = 600, resY = 600;
   Renderer testRenderer(resX, resY, testScene);
 
   auto result = testRenderer.parallelRender();
