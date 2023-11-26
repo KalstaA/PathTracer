@@ -17,8 +17,9 @@ int main() {
   };  
 
   Material RED_DIFFUSE = { .color = Color(1, 0, 0), .name = "RED DIFFUSE" };
+  Material CLEARCOAT = { .color = Color(1, 0, 0), .clearcoat = 0.5, .name = "CLEARCOAT" };
 
-  Box box1(Vector(3, 0, 0), 1, 1, 1, RED_DIFFUSE);
+  Box box1(Vector(3, 0, 0), 1, 1, 1, CLEARCOAT);
   box1.rotate(M_PI / 4, Vector::UnitZ());
   box1.rotate(-M_PI / 8, Vector::UnitY());
 
