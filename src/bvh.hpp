@@ -197,6 +197,25 @@ public:
         return rootNodeIdx;
     }
 
+    /**
+     * @brief Get the triangles vector
+     * 
+     * @return std::vector<Triangle> 
+     */
+    std::vector<Triangle> getTriangles() const {
+        return triangles;
+    }
+
+    /**
+     * @brief Get the nodes vector
+     * 
+     * @return std::vector<Node> 
+     */
+    std::vector<Node> getNodes() const {
+        return nodes;
+    }
+
+
 private:
     std::vector<Triangle> triangles;
     std::vector<int> triIdx;
