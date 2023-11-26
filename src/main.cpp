@@ -33,7 +33,7 @@ int main() {
   int resX = 500, resY = 400;
   Renderer testRenderer(resX, resY, testScene);
 
-  auto result = testRenderer.parallelRender();
+  auto result = testRenderer.parallelRender(20);
 
   Interface interface;
   interface.createImg(result);
