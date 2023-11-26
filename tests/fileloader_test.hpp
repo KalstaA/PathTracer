@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <memory>
+#include <Eigen/Dense>
 
 #include "fileloader.hpp"
 #include "fileloader_ex.hpp"
@@ -14,6 +15,14 @@
 std::string PATH = "../tests/yaml_testfiles/";
 // Pi
 #define M_PI 3.14159265358979323846264338327950288
+
+// Define new macro that checks the given value is in range
+#define EXPECT_IN_RANGE(VAL, MIN, MAX) \
+    EXPECT_GE((VAL), (MIN));           \
+    EXPECT_LE((VAL), (MAX))
+
+// Helper function to compute distance between two vectors
+float distance(Eigen::Vector3d v1, Eigen::Vector3d v2) { return (v1 - v2).norm(); }
 
 // Test FileLoader constructor
 TEST(FILELOADER, Constructor) {
@@ -68,40 +77,216 @@ TEST(FILELOADER, CorrectLoadScene) {
     Material material1 = (**obj).getMaterial();
     //float rad1 = (**obj).getRadius();
 
-    ++obj;
+    std::advance(obj, 1);
     Vector position2 = (**obj).getPosition();
     Vector up2 = (**obj).getUp();
     Vector forw2 = (**obj).getForward();
     Material material2 = (**obj).getMaterial();
     //float rad2 = (**obj).getRadius();
 
-    EXPECT_TRUE(position1 == Vector(5, 0, 0));
-    EXPECT_TRUE(up1 == Vector(0, 0, 1));
-    EXPECT_TRUE(forw1 == Vector(1, 0, 0));
-    EXPECT_TRUE(position2 == Vector(6, 0, -31));
-    EXPECT_TRUE(up2 == Vector(0, 0, 1));
-    EXPECT_TRUE(forw2 == Vector(1, 0, 0));
+    EXPECT_LE(distance(position1, Vector(5, 0, 0)), 0.001);
+    EXPECT_LE(distance(up1, Vector(0, 0, 1)), 0.001);
+    EXPECT_LE(distance(forw1, Vector(1, 0, 0)), 0.001);
+    EXPECT_LE(distance(position2, Vector(6, 0, -31)), 0.001);
+    EXPECT_LE(distance(up2, Vector(0, 0, 1)), 0.001);
+    EXPECT_LE(distance(forw2, Vector(1, 0, 0)), 0.001);
 
     //EXPECT_EQ(1.299, rad1);
     //EXPECT_GE(1.301, rad1);
     //EXPECT_EQ(29.999, rad2);
     //EXPECT_GE(30.001, rad2);
 
-    EXPECT_TRUE((material1.color - Color(1, 0, 0)).norm() < 0.001);
-    EXPECT_EQ((material1.emission_color - Color(0.3, 0.3, 0.3)).norm(), 0.001);
-    EXPECT_LE(0.499, material1.emission_strength);
-    EXPECT_GE(0.501, material1.emission_strength);
-    EXPECT_LE(0.989, material1.specularity);
-    EXPECT_GE(0.991, material1.specularity);
+    EXPECT_LE(distance(material1.color, Color(1, 0, 0)), 0.001);
+    EXPECT_LE(distance(material1.emission_color, Color(0.3, 0.3, 0.3)), 0.001);
+    EXPECT_IN_RANGE(material1.emission_strength, 0.499, 0.501);
+    EXPECT_IN_RANGE(material1.specularity, 0.989, 0.991);
     EXPECT_STREQ(material1.name.c_str(), "RED DIFFUSE");
 
-    EXPECT_TRUE((material2.color - Color(0.5, 0.5, 0.5)).norm() < 0.001);
-    EXPECT_TRUE((material2.emission_color - Color(1, 1, 1)).norm() < 0.001);
-    EXPECT_LE(-0.001, material2.emission_strength);
-    EXPECT_GE(0.001, material2.emission_strength);
-    EXPECT_LE(0.320, material2.specularity);
-    EXPECT_GE(0.322, material2.specularity);
+    EXPECT_LE(distance(material2.color, Color(0.5, 0.5, 0.5)), 0.001);
+    EXPECT_LE(distance(material2.emission_color, Color(1, 1, 1)), 0.001);
+    EXPECT_IN_RANGE(material2.emission_strength, 0.099, 0.101);
+    EXPECT_IN_RANGE(material2.specularity, 0.320, 0.322);
     EXPECT_STREQ(material2.name.c_str(), "GREY DIFFUSE");
+}
+
+TEST(FILELOADER, InvalidKey) {
+    // Initialize filepaths and file loaders
+    std::string fpath1 = PATH + "expect_invalid_key1.yaml";
+    std::string fpath2 = PATH + "expect_invalid_key2.yaml";
+    FileLoader fileloader1(fpath1);
+    FileLoader fileloader2(fpath2);
+
+    // Desired error messages
+    std::string msg1 = "FileLoader exception caught:\nInvalid key: Objects, for file: " + fpath1;
+    std::string msg2 = "FileLoader exception caught:\nInvalid key: Direction, for file: " + fpath2;
+
+    // Should throw invalid key exception
+    EXPECT_THROW({
+        try
+        {
+            std::shared_ptr<Scene> scene = fileloader1.loadSceneFile();
+        }
+        catch(const InvalidKeyException& e)
+        {
+            EXPECT_STREQ(msg1.c_str(), e.what());
+            throw;
+        }
+        
+    }, InvalidKeyException);
+
+    // Should throw invalid key exception
+    EXPECT_THROW({
+        try
+        {
+            std::shared_ptr<Scene> scene = fileloader2.loadSceneFile();
+        }
+        catch(const InvalidKeyException& e)
+        {
+            EXPECT_STREQ(msg2.c_str(), e.what());
+            throw;
+        }
+        
+    }, InvalidKeyException);
+}
+
+TEST(FILELOADER, NegativeRadius) {
+    // Initialize filepaths and file loaders
+    std::string fpath1 = PATH + "negative_radius.yaml";
+    FileLoader fileloader1(fpath1);
+
+    // Desired error message
+    std::string msg1 = "FileLoader exception caught:\nNegative radius (" +
+                        std::to_string(-1.3) + ") in file: " +
+                        fpath1 + ", on line: 37";
+
+    // Should throw negative radius exception
+    EXPECT_THROW({
+        try
+        {
+            std::shared_ptr<Scene> scene = fileloader1.loadSceneFile();
+        }
+        catch(const NegativeRadiusException& e)
+        {
+            EXPECT_STREQ(msg1.c_str(), e.what());
+            throw;
+        }
+        
+    }, NegativeRadiusException);
+}
+
+TEST(FILELOADER, InvalidSizeVector) {
+    // Initialize filepaths and file loaders
+    std::string fpath1 = PATH + "invalid_size_vector.yaml";
+    FileLoader fileloader1(fpath1);
+
+    // Desired error message
+    std::string msg1 = "FileLoader exception caught:\nInvalid vector of size " +
+                        std::to_string(2) + " in file: " + fpath1 + ", on line: 34";
+
+    // Should throw negative radius exception
+    EXPECT_THROW({
+        try
+        {
+            std::shared_ptr<Scene> scene = fileloader1.loadSceneFile();
+        }
+        catch(const InvalidSizeVectorException& e)
+        {
+            EXPECT_STREQ(msg1.c_str(), e.what());
+            throw;
+        }
+        
+    }, InvalidSizeVectorException);
+}
+
+TEST(FILELOADER, InvalidCamera) {
+    // Initialize filepaths and file loaders
+    std::string fpath1 = PATH + "invalid_fow.yaml";
+    std::string fpath2 = PATH + "invalid_focus.yaml";
+    FileLoader fileloader1(fpath1);
+    FileLoader fileloader2(fpath2);
+
+    // Desired error messages
+    std::string msg1 = "FileLoader exception caught:\nNegative FOW: " + std::to_string(-0.33) +
+                        ", in file: " + fpath1 + ", on line: " + std::to_string(13);
+    std::string msg2 = "FileLoader exception caught:\nNegative focus distance: " +
+                        std::to_string(-5.0) + " in file: " + fpath2 +
+                        ", on line: " + std::to_string(14);
+
+    // Should throw invalid key exception
+    EXPECT_THROW({
+        try
+        {
+            std::shared_ptr<Scene> scene = fileloader1.loadSceneFile();
+        }
+        catch(const NegativeFOVException& e)
+        {
+            EXPECT_STREQ(msg1.c_str(), e.what());
+            throw;
+        }
+        
+    }, NegativeFOVException);
+
+    // Should throw invalid key exception
+    EXPECT_THROW({
+        try
+        {
+            std::shared_ptr<Scene> scene = fileloader2.loadSceneFile();
+        }
+        catch(const NegativeFocusException& e)
+        {
+            EXPECT_STREQ(msg2.c_str(), e.what());
+            throw;
+        }
+        
+    }, NegativeFocusException);
+}
+
+TEST(FILELOADER, NoMaterial) {
+    // Initialize filepaths and file loaders
+    std::string fpath1 = PATH + "no_material.yaml";
+    FileLoader fileloader1(fpath1);
+
+    // Desired error message
+    std::string msg1 = "FileLoader exception caught:\nMaterial not defined for object at line: " +
+                        std::to_string(32) + ", in file: " + fpath1 + ".";
+
+    // Should throw negative radius exception
+    EXPECT_THROW({
+        try
+        {
+            std::shared_ptr<Scene> scene = fileloader1.loadSceneFile();
+        }
+        catch(const MaterialNotFoundException& e)
+        {
+            EXPECT_STREQ(msg1.c_str(), e.what());
+            throw;
+        }
+        
+    }, MaterialNotFoundException);
+}
+
+TEST(FILELOADER, NoRadius) {
+    // Initialize filepaths and file loaders
+    std::string fpath1 = PATH + "no_radius.yaml";
+    FileLoader fileloader1(fpath1);
+
+    // Desired error message
+    std::string msg1 = "FileLoader exception caught:\nRadius not defined for ball at line: " +
+                        std::to_string(52) + ", in file: " + fpath1 + ".";
+
+    // Should throw negative radius exception
+    EXPECT_THROW({
+        try
+        {
+            std::shared_ptr<Scene> scene = fileloader1.loadSceneFile();
+        }
+        catch(const RadiusNotFoundException& e)
+        {
+            EXPECT_STREQ(msg1.c_str(), e.what());
+            throw;
+        }
+        
+    }, RadiusNotFoundException);
 }
 
 #endif

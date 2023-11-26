@@ -73,6 +73,12 @@ class FileLoader{
          */
         ~FileLoader() {}
 
+        // Getter for filepath
+        std::string getFilepath() { return filepath_; }
+
+
+    private:
+
         /**
          * @brief Takes a pointer to a scene object as an input and sets the environment of the scene to values specified in
          * scene file. If scene file has no "Environment" node, the environment is set to default values.
@@ -91,9 +97,6 @@ class FileLoader{
             }
         }
 
-        std::string getFilepath() { return filepath_; }
-
-    private:
         /**
          * @brief A helper function to create vectors from yaml sequences.
          * 
@@ -104,10 +107,10 @@ class FileLoader{
             Eigen::Vector3d vector;
             YAML::Node coords = node[key];
             // Throw exception if incorrect size or if not defined
-            size_t size = coords.size();
             if (!coords.IsDefined()) {
                 throw InvalidKeyException(filepath_, key);
             }
+            size_t size = coords.size();
             if (size != 3) {
                 throw InvalidSizeVectorException(filepath_, size, coords.Mark().line);
             }

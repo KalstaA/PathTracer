@@ -12,7 +12,7 @@ Camera:
     - 0
     - 1
   Fov: 0.33
-  FocusDistance: 5
+  FocusDistance: -5
 
 Environment: 
   SkyColor:

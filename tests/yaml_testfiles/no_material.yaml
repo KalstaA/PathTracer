@@ -36,18 +36,6 @@ Objects:
         - 0
         - 0
       Radius: 1.3
-      Material: 
-        Color: 
-          - 1
-          - 0
-          - 0
-        Name: RED DIFFUSE
-        EmissionStrength: 0.5
-        Specularity: 0.99
-        EmissionColor:
-          - 0.3
-          - 0.3
-          - 0.3
 
   - Object:
       Type: Ball

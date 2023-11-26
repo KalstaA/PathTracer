@@ -28,7 +28,7 @@ Environment:
     - 0.1
     - 0.1
 
-Objects:
+Objets:
   - Object:
       Type: Ball
       Position:

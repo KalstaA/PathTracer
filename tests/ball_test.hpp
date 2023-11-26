@@ -15,3 +15,8 @@ TEST(BALL, GetRadius) {
   EXPECT_LE(1.51999, ball2.getRadius());
   EXPECT_EQ(-1, ball3.getRadius());
 }
+
+// Test collision method
+TEST(BALL, Collision) {
+  // TODO
+}
