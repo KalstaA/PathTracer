@@ -4,11 +4,27 @@
 #include "interface.hpp"
 #include "fileloader.hpp"
 #include <iostream>
+#include "box.hpp"
 
 int main() {
 
-  FileLoader test("../src/scene.yaml");
-  Scene testScene = test.loadSceneFile();
+  Camera testCam = {
+    .position = Vector(0, 2, 0),
+    .direction = Vector(3, -1, 0).normalized(),
+    .fov = M_PI / 3,
+    .up = Vector(0, 0, 1),
+    .focus_distance = 5
+  };  
+
+  Material RED_DIFFUSE = { .color = Color(1, 0, 0), .name = "RED DIFFUSE" };
+
+  Box box1(Vector(3, 0, 0), 1, 1, 1, RED_DIFFUSE);
+
+  std::list<Object*> testBoxes;
+  testBoxes.push_back(&box1);
+
+  Scene testScene(testCam, testBoxes);
+  testScene.getEnvironment().setSky();
   std::cout << testScene;
 
   int resX = 500, resY = 400;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "object.hpp"
+#include <vector>
 
 /**
  * @brief Representation of a box (rectangular cuboid) object in the scene.
@@ -15,13 +16,47 @@ private:
     float height_; /* Associated with z direction */
     float depth_; /* Associated with x direction */
 
+    std::vector<Vector> corners_;
+    /*
+    *       4.......7
+    *     / :     / :
+    *   0-------3   :
+    *   |   :   |   :
+    *   |   5...|...6
+    *   | /     | /
+    *   1-------2
+    * 
+    * When looking towards positive x-direction
+    */
+
+   std::list<std::vector<int>> sides_;
+
 public:
-    Box(Vector position, float width, float height, float depth, Material material) : Object(position, material), width_(width), height_(height), depth_(depth) {}
+    Box(Vector position, float width, float height, float depth, Material material) 
+            : Object(position, material), width_(width), height_(height), depth_(depth) {
+
+        corners_.push_back(Vector(-depth_/2, width_/2, height_/2) + position);
+        corners_.push_back(Vector(-depth_/2, width_/2, -height_/2) + position);
+        corners_.push_back(Vector(-depth_/2, -width_/2, -height_/2) + position);
+        corners_.push_back(Vector(-depth_/2, -width_/2, height_/2) + position);
+
+        corners_.push_back(Vector(depth_/2, width_/2, height_/2) + position);
+        corners_.push_back(Vector(depth_/2, width_/2, -height_/2) + position);
+        corners_.push_back(Vector(depth_/2, -width_/2, -height_/2) + position);
+        corners_.push_back(Vector(depth_/2, -width_/2, height_/2) + position);
+
+        sides_.push_back({0, 1, 2});
+        sides_.push_back({3, 2, 6});
+        sides_.push_back({7, 6, 5});
+        sides_.push_back({4, 5, 1});
+        sides_.push_back({4, 0, 3});
+        sides_.push_back({1, 5, 6});
+    }
 
     /**
      * @brief Calculate whether a given ray collides with the box.
      * 
-     * If the ray collides with the ball and the collision is closer than the current smallest distance,
+     * If the ray collides with the box and the collision is closer than the current smallest distance,
      * the "rayHit" data structure will be updated according to the collision.
      * 
      * @param ray ray whose collision will be checked
@@ -30,39 +65,42 @@ public:
      */
     void collision(Ray& ray, Hit &rayHit, float& smallestDistance) {
 
-        Vector bottomLeft = Vector(-depth_/2, width_/2, -height_/2) + this->getPosition();
-        Vector topLeft = Vector(-depth_/2, width_/2, height_/2) + this->getPosition();
-        Vector bottomRight = Vector(-depth_/2, -width_/2, -height_/2) + this->getPosition();
+        for (auto side : sides_) {
 
-        Vector s1 = -bottomLeft + bottomRight;
-        Vector s2 = -bottomLeft + topLeft
+            Vector topLeft = corners_[side[0]];
+            Vector bottomLeft = corners_[side[1]];
+            Vector bottomRight = corners_[side[2]];
 
-        Vector normal = s1.crossP(s2).normalized();
+            Vector s1 = -bottomLeft + bottomRight;
+            Vector s2 = -bottomLeft + topLeft;
 
-        float distance = (bottomLeft - ray.origin).dot(normal) / ray.direction.dot(normal);
-        Vector intersection = -bottomLeft + ray.origin + ray.direction * distance;
+            Vector normal = s1.cross(s2).normalized();
 
-        if (intersection.dot(s1) <= s1.squaredNorm() 
-            && intersection.dot(s1) >= 0 
-            && intersection.dot(s2) <= s2.squaredNorm() 
-            && intersection.dot(s2) >= 0
-        ) 
-        {
-            if (distance < smallestDistance)
+            float distance = (bottomLeft - ray.origin).dot(normal) / ray.direction.dot(normal);
+            Vector intersection = -bottomLeft + ray.origin + ray.direction * distance;
+
+            if (intersection.dot(s1) <= s1.squaredNorm() 
+                && intersection.dot(s1) >= 0 
+                && intersection.dot(s2) <= s2.squaredNorm() 
+                && intersection.dot(s2) >= 0
+            ) 
             {
-                smallestDistance = distance;
-                rayHit.distance = distance;
-                rayHit.material = this->getMaterial();
-                rayHit.did_hit = true;
-                rayHit.point = ray.origin + ray.direction * distance;
-                rayHit.normal = normal;
+                if (distance < smallestDistance)
+                {
+                    smallestDistance = distance;
+                    rayHit.distance = distance;
+                    rayHit.material = this->getMaterial();
+                    rayHit.did_hit = true;
+                    rayHit.point = ray.origin + ray.direction * distance;
+                    rayHit.normal = normal;
+                }
             }
         }
-
     }
 
     float getWidth() const { return width_; }
     float getHeight() const { return height_; }
+    float getDepth() const { return depth_; }
 
     /**
      * @brief Print box info to the desired output stream.
@@ -71,7 +109,7 @@ public:
      * @return std::ostream& the output stream
      */
     void printInfo(std::ostream& out) const {
-        out << "Box at: (" << this->getPosition().transpose() << ") with dimensions: " << width_ << "x" << height_ << ", with material: " << this->getMaterial().name << std::endl;
+        out << "Box at: (" << this->getPosition().transpose() << ") with dimensions: " << width_ << "x" << height_ << "x" << depth_ << ", with material: " << this->getMaterial().name << std::endl;
     }
 
 };
