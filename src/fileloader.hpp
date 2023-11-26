@@ -20,7 +20,17 @@ class FileLoader{
          * @param filepath Filepath to the yaml file that contains properties of the scene
          */
 
-        FileLoader(std::string filepath) : filepath_(filepath) {} 
+        FileLoader(std::string filepath) : filepath_(filepath) {}
+
+        FileLoader() : filepath_("Empty") {}
+
+        FileLoader(FileLoader &f) {
+            filepath_ = f.filepath_;
+        } 
+
+        void setFilepath(std::string filepath) {
+            filepath_ = filepath;
+        }
 
         /**
          * @brief Loads a scene from the file specified in filepath and returns an unique pointer to this scene.
@@ -143,6 +153,7 @@ class FileLoader{
             camera.focus_distance = params["FocusDistance"].as<float>();
             return camera;
         } 
+
 
 
         std::string filepath_;

@@ -15,9 +15,13 @@ int main() {
   Scene testScene = test.loadSceneFile();
   std::cout << testScene;
 
-  int resX = 1920, resY = 1080;
+  int resX = 500, resY = 400;
   Renderer testRenderer(resX, resY, testScene);
 
+  Gui testgui(resX, resY, testRenderer);
+  testgui.opensettings();
+  //testgui.openwindow("image.png");
+/*
   auto result = testRenderer.parallelRender();
 
   Interface interface;
@@ -30,10 +34,8 @@ int main() {
   else
   {
     std::cout << "Saving image failed" << std::endl;
-  }
+  }*/
 
-  Gui testgui = Gui(resX, resY);
-  testgui.openwindow();
 
   return 0;
 }

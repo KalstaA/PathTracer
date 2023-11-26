@@ -21,13 +21,14 @@ private:
 
     int resolution_x;
     int resolution_y;
+    std::vector<std::vector<Color>> result;
 
     float anti_alias_radius = 1;
     float depth_of_field = 0;
     float focusDistance = 5;
 
-    int max_bounces = 3;
-    int rays_per_pixel = 5;
+    int max_bounces = 2;
+    int rays_per_pixel = 3;
 
     float view_width;
     float view_height;
@@ -152,6 +153,7 @@ public:
     Renderer(int res_x, int res_y, Scene sceneToRender) {
         resolution_x = res_x;
         resolution_y = res_y;
+        result = std::vector<std::vector<Color>>(resolution_x, std::vector<Color> (resolution_y));
         scene_ = sceneToRender;
         camera_ = scene_.getCamera();
         view_width = focusDistance * tan(camera_.fov / 2);
@@ -162,6 +164,28 @@ public:
     }
 
     ~Renderer() = default;
+    
+    Renderer(Renderer &r) {
+        resolution_x = r.resolution_x;
+        resolution_y = r.resolution_y;
+        result = r.result;
+        scene_ = r.scene_;
+        camera_ = r.camera_;
+        view_width = r.view_width;
+        view_height = r.view_height;
+        pixel_x = r.pixel_x;
+        pixel_y = r.pixel_y;
+        topleft_pixel = r.topleft_pixel;
+    }
+    
+    Renderer& operator=(Renderer &r) {
+        return r;
+    }
+
+    std::vector<std::vector<Color>> Getpixels() {
+        return result;
+    }
+    
 
     // TO-DO copy constructor and copy assigment
 
@@ -172,7 +196,6 @@ public:
     */
     auto render() {
         
-        std::vector<std::vector<Color>> result(resolution_x, std::vector<Color> (resolution_y));
         
         for (int x = 0; x < resolution_x; ++x)
         {
