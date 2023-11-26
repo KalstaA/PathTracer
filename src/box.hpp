@@ -103,6 +103,20 @@ public:
     float getDepth() const { return depth_; }
 
     /**
+     * @brief Rotates the box around a given axis.
+     * 
+     * @param angle rotation in radians
+     * @param axis axis of rotation (has to be normalized)
+     */
+    void rotate(float angle, Vector axis) {
+        Eigen::AngleAxisd rotation(angle, axis);
+
+        for (auto& corner : corners_) {
+            corner = (rotation * (corner - this->getPosition())) + this->getPosition();
+        }
+    }
+
+    /**
      * @brief Print box info to the desired output stream.
      * 
      * @param out output stream

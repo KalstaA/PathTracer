@@ -9,8 +9,8 @@
 int main() {
 
   Camera testCam = {
-    .position = Vector(0, 2, 0),
-    .direction = Vector(3, -1, 0).normalized(),
+    .position = Vector(0, 0, 0),
+    .direction = Vector(1, 0, 0).normalized(),
     .fov = M_PI / 3,
     .up = Vector(0, 0, 1),
     .focus_distance = 5
@@ -19,6 +19,8 @@ int main() {
   Material RED_DIFFUSE = { .color = Color(1, 0, 0), .name = "RED DIFFUSE" };
 
   Box box1(Vector(3, 0, 0), 1, 1, 1, RED_DIFFUSE);
+  box1.rotate(M_PI / 4, Vector::UnitZ());
+  box1.rotate(-M_PI / 8, Vector::UnitY());
 
   std::list<Object*> testBoxes;
   testBoxes.push_back(&box1);
