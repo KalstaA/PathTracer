@@ -63,6 +63,16 @@ public:
      */
     void collision(Ray& ray, Hit &rayHit, float& smallestDistance) {
 
+        // Check first whether ray collides with the bounding ball
+        Vector toBall = ray.origin - this->getPosition();
+        float radius = width_ * width_ + height_ * height_ + depth_ * depth_;
+        float a = ray.direction.dot(ray.direction);
+        float b = 2 * ray.direction.dot(toBall);
+        float c = toBall.dot(toBall) - radius;
+        float discriminant = b*b - 4*a*c;
+        if (discriminant < 0) return;
+
+        // If inside ball, check sides
         for (auto side : sides_) {
 
             Vector topLeft = corners_[side[0]];
