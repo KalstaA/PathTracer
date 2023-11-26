@@ -29,7 +29,12 @@ private:
     * When looking towards positive x-direction
     */
 
-   std::list<std::vector<int>> sides_;
+   std::list<std::vector<int>> sides_ = {   {0, 1, 2},
+                                            {3, 2, 6},
+                                            {7, 6, 5},
+                                            {4, 5, 1},
+                                            {4, 0, 3},
+                                            {1, 5, 6}};
 
 public:
     Box(Vector position, float width, float height, float depth, Material material) 
@@ -44,13 +49,6 @@ public:
         corners_.push_back(Vector(depth_/2, width_/2, -height_/2) + position);
         corners_.push_back(Vector(depth_/2, -width_/2, -height_/2) + position);
         corners_.push_back(Vector(depth_/2, -width_/2, height_/2) + position);
-
-        sides_.push_back({0, 1, 2});
-        sides_.push_back({3, 2, 6});
-        sides_.push_back({7, 6, 5});
-        sides_.push_back({4, 5, 1});
-        sides_.push_back({4, 0, 3});
-        sides_.push_back({1, 5, 6});
     }
 
     /**
@@ -104,6 +102,8 @@ public:
 
     /**
      * @brief Rotates the box around a given axis.
+     * 
+     * The center of rotation is the box's center of mass.
      * 
      * @param angle rotation in radians
      * @param axis axis of rotation (has to be normalized)
