@@ -19,7 +19,7 @@ int main() {
   Renderer testRenderer(resX, resY, testScene);
 
   Gui testgui(resX, resY, testRenderer);
-  testgui.opensettings();
+  testgui.titleScreen();
   //testgui.openwindow("image.png");
 /*
   auto result = testRenderer.parallelRender();
