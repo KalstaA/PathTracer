@@ -15,7 +15,7 @@ public:
         sf::Font arial;   
         arial.loadFromFile("../src/Arial.ttf");
         sf::Font comic;
-        comic.loadFromFile("../src/Comic Sans MS.ttf");
+        comic.loadFromFile("../src/ComicSansMS.ttf");
         sf::RenderWindow window(sf::VideoMode(700, 400), "Path Tracer", sf::Style::Titlebar | sf::Style::Close);
 
         sf::Text title;
