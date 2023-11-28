@@ -1,35 +1,51 @@
 #pragma once
 
 #include "triangle.hpp"
+#include "bvh.hpp"
 #include "../libs/tiny_obj_loader/tiny_obj_loader.cc"
-//#include "../libs/tiny_obj_loader/tiny_obj_loader.h"
 
 #include <iostream>
 #include <vector>
 #include <string>
 
-
+/**
+ * @brief Trianglemesh object consiting of Triangles, loaded from .obj file
+ * 
+ */
 class TriangleMesh : public Object {
 public:
-    TriangleMesh(std::string obj_filepath, Vector scenePos, Material m) : Object(scenePos, m) {
+    /**
+     * @brief Construct a new Triangle Mesh object
+     * 
+     * @param obj_filepath filepath string
+     * @param scenePos position of the object in the scene
+     * @param m material of the object
+     * @param scale scaling of the object size
+     * @param angle counterclockwise rotation of the object in radians
+     */
+    TriangleMesh(std::string obj_filepath, Vector scenePos, Material m, double scale, double angle) : Object(scenePos, m) {
         unsigned long pos = obj_filepath.find_last_of("/");
         std::string basepath = obj_filepath.substr(0, pos+1);
+        std::string obj_name = obj_filepath.substr(pos+1, obj_filepath.length());
+        
+        //Name of the object wihthout .obj
+        name = obj_name.substr(0, obj_name.length()-4);
 
         tinyobj::attrib_t attributes;
+        std::vector<Triangle> triangles;
+        std::vector<tinyobj::shape_t> objects;
+        std::vector<tinyobj::material_t> materials;
         std::string warnings;
         std::string errors;
-        std::vector<Vertex> vertices;
+        std::vector<Vector> vertices;
 
+        //Load data from object file
         bool r = tinyobj::LoadObj(&attributes, &objects, &materials, &warnings, &errors, obj_filepath.c_str(), basepath.c_str());
 
-        if(!warnings.empty()) {
-            std::cout << "Warning: " << warnings << std::endl;
-        }
-
+        //Check for errors in loading the data
         if(!errors.empty()) {
             std::cout << "Error: " << errors << std::endl;
         }
-
         if(!r) {
             std::cout << "Failed to load object file." << std::endl;
             exit(1);
@@ -46,20 +62,16 @@ public:
                 for(size_t v = 0; v < fv; v++) {
                     tinyobj::index_t idx = objects[o].mesh.indices[o_offset + v];
                     tinyobj::real_t vx = attributes.vertices[3*idx.vertex_index+0];
-                    tinyobj::real_t vy = attributes.vertices[3*idx.vertex_index+1];
-                    tinyobj::real_t vz = attributes.vertices[3*idx.vertex_index+2];
-                    tinyobj::real_t nx = attributes.normals[3*idx.normal_index+0];
-                    tinyobj::real_t ny = attributes.normals[3*idx.normal_index+1];
-                    tinyobj::real_t nz = attributes.normals[3*idx.normal_index+2];
-                    tinyobj::real_t tx = attributes.texcoords[2*idx.texcoord_index+0];
-                    tinyobj::real_t ty = attributes.texcoords[2*idx.texcoord_index+1];
+                    tinyobj::real_t vz = attributes.vertices[3*idx.vertex_index+1];
+                    tinyobj::real_t vy = attributes.vertices[3*idx.vertex_index+2];
 
-                    Vertex vrt = {
-                        .pos = Vector(vx, vz, vy)*0.01+scenePos,
-                        .ng = Vector(nx, nz, ny),
-                        .uv = Vector2(tx, ty)
-                    };
-                    vertices.push_back(vrt);
+                    //Orienting the x and y coordinates
+                    tinyobj::real_t x = vx*cos(angle) + vy*sin(angle);
+                    tinyobj::real_t y = -vx*sin(angle) + vy*cos(angle);
+
+                    //Creating one vertex
+                    Vector vertex = Vector(x, y, vz)*scale+scenePos;
+                    vertices.push_back(vertex);
                 }
                 o_offset += fv;
             }
@@ -67,29 +79,42 @@ public:
 
         //Loops over vertices and creates triangles
         for(int i = 0; i < vertices.size()/3; ++i) {
-            triangles.push_back(std::make_shared<Triangle>(vertices[i*3], vertices[i*3+1], vertices[i*3+2], m));
+            triangles.push_back(Triangle(vertices[i*3], vertices[i*3+1], vertices[i*3+2], m));
         }
 
-        std::cout << "Object file: " << obj_filepath << " succesfully opened!" << std::endl;
+        bvh = BVH(triangles);
 
+        std::cout << "Object file: " << obj_name << ", succesfully opened!" << std::endl;
+
+        triangles.clear();
         objects.clear();
         materials.clear();
     }
 
+    /**
+     * @brief Calclute whether a given ray collides with the TriangleMesh
+     * 
+     * @param ray ray whose collision will be checked
+     * @param rayHit address of a Hit data structure
+     * @param smallestDistance current smallest distance
+     */
     void collision(Ray& ray, Hit& rayHit, float& smallestDistance) {
-        long t_size = triangles.size();
-        for(long t = 0; t < t_size; t++){
-            triangles[t]->collision(ray, rayHit, smallestDistance);
-        }
+        
+        bvh.BVHCollision(ray, rayHit, smallestDistance, bvh.getRootNodeIdx());
+        
         return;
     }
 
+    /**
+     * @brief Print TriangleMesh info to the desired output stream
+     * 
+     * @param out output stream
+     */
     void printInfo(std::ostream& out) const {
-        out << "TriangleMesh" << std::endl;
+        out << "TriangleMesh object: " << name << ", at :" << this->getPosition().transpose() << ", with material: " << this-> getMaterial().name << std::endl;
     }
 
-public:
-    std::vector<tinyobj::shape_t> objects;
-    std::vector<tinyobj::material_t> materials;
-    std::vector<std::shared_ptr<Triangle>> triangles;
+private:
+    BVH bvh;
+    std::string name;
 };
