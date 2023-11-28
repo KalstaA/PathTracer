@@ -30,6 +30,13 @@ public:
     }
 
     /**
+     * @brief Returns a random real number between 0 and 1
+     * 
+     * @return float
+     */
+    float randomZeroToOne() { return randZeroToOne(randomInt); }
+
+    /**
      * @brief Creates a random point inside the unit disk.
      * 
      * @return 2-dimensional vector inside of the unit disk.

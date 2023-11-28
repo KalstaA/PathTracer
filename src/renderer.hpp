@@ -26,8 +26,7 @@ private:
     float depth_of_field = 0;
     float focusDistance = 5;
 
-    int max_bounces = 5;
-    int rays_per_pixel = 6;
+    int max_bounces = 3;
 
     float view_width;
     float view_height;
@@ -123,12 +122,13 @@ private:
 
                 Vector diffuse_direction = (rnd_.randomDirection() + hit.normal).normalized();
                 Vector specular_direction = reflect(ray.direction, hit.normal);
+                bool clearcoatBounce = hit.material.clearcoat >= rnd_.randomZeroToOne();
 
-                ray.direction = diffuse_direction + hit.material.specularity * (specular_direction - diffuse_direction);
+                ray.direction = diffuse_direction + hit.material.specularity * clearcoatBounce * (specular_direction - diffuse_direction);
                 Light emitted_light = hit.material.emission_strength * hit.material.emission_color;
                 
                 ray.light += emitted_light.cwiseProduct(ray.color);
-                ray.color = ray.color.cwiseProduct(hit.material.color);
+                ray.color = ray.color.cwiseProduct(clearcoatBounce ? hit.material.clearcoat_color : hit.material.color);
             }
 
             else 
@@ -161,45 +161,9 @@ public:
         topleft_pixel = camera_.direction * focusDistance - view_width * camera_.direction.cross(camera_.up) + view_height * camera_.up;
     }
 
-    ~Renderer() = default;
+    auto parallelRender(int samples) {
 
-    // TO-DO copy constructor and copy assigment
-
-    /**
-    * Get the result of the rendering. Takes no input parameters.
-    *
-    * @return a vector of vectors containing the colors of each pixel in the output image
-    */
-    auto render() {
-        
-        std::vector<std::vector<Color>> result(resolution_x, std::vector<Color> (resolution_y));
-        
-        for (int x = 0; x < resolution_x; ++x)
-        {
-            for (int y = 0; y < resolution_y; ++y)
-            {
-                Light totalLight = Light(0, 0, 0);
-
-                for (int rayNum = 0; rayNum < rays_per_pixel; rayNum++)
-                {
-                    Ray ray = createRay(x, y);
-                    totalLight += trace(ray);
-                }
-
-                // Clamp for safety, sqrt for gamma correction
-                result[x][y] = clamp(totalLight / rays_per_pixel).cwiseSqrt();
-            }   
-        }
-
-        std::cout << "Rendering complete." << std::endl;
-
-        return result;
-    }
-
-    auto parallelRender() {
-
-        auto startTime = std::chrono::high_resolution_clock::now();
-        
+        auto startTime = std::chrono::high_resolution_clock::now();        
         std::vector<std::vector<Color>> result(resolution_x, std::vector<Color> (resolution_y));
 
         omp_set_num_threads(omp_get_max_threads());
@@ -211,7 +175,7 @@ public:
 
         std::cout << "Rendering started..." << std::endl;
 
-        for (int sample = 0; sample < rays_per_pixel; ++sample)
+        for (int sample = 0; sample < samples; ++sample)
         {
 
             float weight = 1.0 / (sample + 1);
@@ -228,15 +192,12 @@ public:
                 result[x][y] = clamp(result[x][y] * (1 - weight) + weight * totalLight.cwiseSqrt());
             }
 
-            std::cout << "Sample " << sample + 1 << "/" << rays_per_pixel << " completed." << std::endl;
+            std::cout << "Sample " << sample + 1 << "/" << samples << " completed." << std::endl;
         }
 
         auto endTime = std::chrono::high_resolution_clock::now();
-
         std::chrono::duration<float> duration = endTime - startTime; 
-
         std::cout << "Used " << numThreads << " threads.\n" << std::endl;
-
         std::cout << "Rendering complete in " << duration.count() << " seconds.\n" << std::endl;
         
         return result;

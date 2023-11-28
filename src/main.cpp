@@ -18,7 +18,7 @@ int main() {
     int resX = 400, resY = 300;
     Renderer testRenderer(resX, resY, testScene);
 
-    auto result = testRenderer.parallelRender();
+    auto result = testRenderer.parallelRender(5);
 
     Interface interface;
     interface.createImg(result);
