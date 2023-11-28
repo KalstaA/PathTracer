@@ -8,9 +8,6 @@
 
 class Gui : public Interface {
 public:
-    Gui(int res_x, int res_y, Renderer &gui_fileloader) : res_x_(res_x), res_y_(res_y), gui_fileloader_(gui_fileloader) {}
-
-
     void titleScreen() {
         sf::Font arial;   
         arial.loadFromFile("../src/Arial.ttf");
@@ -82,10 +79,24 @@ public:
         preview.setFont(arial);
         preview.setPos({0, 300});
 
-        Textbox fovbox(20, sf::Color::White, false, 3, "FOV");
-        fovbox.setFont(arial);
-        fovbox.setPos({100, 100});
-            
+        Textbox resXbox(20, sf::Color::White, false, 4, "ResX: ");
+        resXbox.setFont(arial);
+        resXbox.setPos({0, 0});
+
+        Textbox resYbox(20, sf::Color::White, false, 4, "ResY: ");
+        resYbox.setFont(arial);
+        resYbox.setPos({0, 50});
+
+        Textbox fovBox(20, sf::Color::White, false, 3, "Fov: ");
+        fovBox.setFont(arial);
+        fovBox.setPos({0, 100});
+
+        Textbox dofBox(20, sf::Color::White, false, 3, "Fodus Distance: ");
+        dofBox.setFont(arial);
+        dofBox.setPos({0, 150});
+
+
+        Textbox* selectedBox = nullptr;    
         sf::Event event; 
 
 
@@ -108,7 +119,13 @@ public:
                     case sf::Event::MouseButtonPressed:
                         if(preview.onButton(window)) {
                             std::cout << "Clicker" << std::endl;
-                            sceneLoader.setFilepath("../src/scene.yaml");
+                            if(checkIfPosNum(fovBox.getInput()) && fovBox.getInput() != ""){
+                                loadedScene.setFov((M_PI * std::stof(fovBox.getInput()) / 180));
+                            }
+
+                            if(checkIfPosNum(dofBox.getInput()) && dofBox.getInput() != ""){
+                                loadedScene.setDof(std::stof(dofBox.getInput()));
+                            }
                             Renderer previewCreator(500, 400, loadedScene);
                             createImg(previewCreator.render());
                             saveImage("preview.png");
@@ -117,33 +134,104 @@ public:
                             sprite.setTexture(texture);
                             sprite.setPosition(200, 0);
                             }
-                        if(fovbox.onButton(window)) {
-                            fovbox.setSelected();
+                        if(fovBox.onButton(window)) {
+                            if(selectedBox) {
+                                selectedBox->setUnselected();
+                                selectedBox->setColor(sf::Color::White);
+                            }
+                            fovBox.setSelected();
+                            fovBox.setColor(sf::Color::Red);
+                            selectedBox = &fovBox;
                             std::cout << "Click" << std::endl;
                         }
+                        if(resXbox.onButton(window)) {
+                            if(selectedBox) {
+                                selectedBox->setUnselected();
+                                selectedBox->setColor(sf::Color::White);
+                            }
+                            resXbox.setSelected();
+                            resXbox.setColor(sf::Color::Red);
+                            selectedBox = &resXbox;
+                            std::cout << "Click" << std::endl;
+                        }
+                        if(resYbox.onButton(window)) {
+                            if(selectedBox) {
+                                selectedBox->setUnselected();
+                                selectedBox->setColor(sf::Color::White);
+                            }
+                            resYbox.setSelected();
+                            resYbox.setColor(sf::Color::Red);
+                            selectedBox = &resYbox;
+                            
+                        }
+                        if(dofBox.onButton(window)) {
+                            if(selectedBox) {
+                                selectedBox->setUnselected();
+                                selectedBox->setColor(sf::Color::White);
+                            }
+                            dofBox.setSelected();
+                            dofBox.setColor(sf::Color::Red);
+                            selectedBox = &dofBox;
+                            
+                        }
                     case sf::Event::TextEntered:
-                        fovbox.typedOn(event);
+                        fovBox.typedOn(event);
+                        resXbox.typedOn(event);
+                        resYbox.typedOn(event);
+                        dofBox.typedOn(event);
+
+                    case sf::Event::KeyPressed:
+                        if(event.key.code == sf::Keyboard::Enter){
+                            int resX;
+                            int resY;
+                            
+                            if(checkIfPosNum(fovBox.getInput()) && fovBox.getInput() != ""){
+                                loadedScene.setFov((M_PI * std::stof(fovBox.getInput()) / 180));
+                            }
+
+                            if(checkIfPosNum(dofBox.getInput()) && dofBox.getInput() != ""){
+                                loadedScene.setDof(std::stof(dofBox.getInput()));
+                            }
+
+                            if(checkIfPosNum(resXbox.getInput()) && resXbox.getInput() != ""){
+                                resX = std::stof(resXbox.getInput());
+                            }else {
+                                break;
+                            }
+
+                            if(checkIfPosNum(resYbox.getInput()) && resYbox.getInput() != ""){
+                                resY = std::stof(resYbox.getInput());
+                            }else {
+                                break;
+                            }
+
+                            openRender(resX, resY, loadedScene);
+                        }
                 }
                 }
 
             window.clear();
             preview.draw(window);
             window.draw(sprite);
-            fovbox.draw(window);
+            fovBox.draw(window);
+            resXbox.draw(window);
+            resYbox.draw(window);
+            dofBox.draw(window);
             window.display();
 
             }
 
         }
 
-    void openwindow(std::string filename) {
-        sf::RenderWindow window(sf::VideoMode(res_x_, res_y_), "Path Tracer", sf::Style::Close);
-        window.setSize(sf::Vector2u(res_x_, res_y_));
+    void openRender(int resX, int resY, Scene loadedScene) {
+        sf::RenderWindow window(sf::VideoMode(resX, resY), "Path Tracer", sf::Style::Close);
+        window.setSize(sf::Vector2u(resX, resY));
         window.setFramerateLimit(0);
         sf::Image image; 
         sf::Sprite sprite;
         sf::Texture texture;
-        auto result = gui_fileloader_.parallelRender();
+        Renderer sceneRenderer(resX, resY, loadedScene);
+        auto result = sceneRenderer.parallelRender();
 
         while (window.isOpen())
         {
@@ -154,9 +242,9 @@ public:
                     case sf::Event::Closed:
                         window.close();
                     case sf::Event::KeyPressed:
-                        createImg(gui_fileloader_.Getpixels());
+                        createImg(result);
                         saveImage("image.png");
-                        image.loadFromFile(filename);
+                        image.loadFromFile("image.png");
                         texture.loadFromImage(image);  
                         sprite.setTexture(texture);
                         window.clear();
@@ -168,7 +256,7 @@ public:
             }
         createImg(result);
         saveImage("image.png");
-        image.loadFromFile(filename);
+        image.loadFromFile("image.png");
         texture.loadFromImage(image);  
         sprite.setTexture(texture);
         window.clear();
@@ -178,7 +266,14 @@ public:
         }
 
 private:
-    int res_x_;
-    int res_y_;
-    Renderer gui_fileloader_;
+    std::string name;
+
+    bool checkIfPosNum(std::string text) {
+        for(auto i : text) {
+            if(!std::isdigit(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
 };

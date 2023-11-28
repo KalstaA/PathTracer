@@ -18,7 +18,7 @@ int main() {
   int resX = 500, resY = 400;
   Renderer testRenderer(resX, resY, testScene);
 
-  Gui testgui(resX, resY, testRenderer);
+  Gui testgui;
   testgui.titleScreen();
   //testgui.openwindow("image.png");
 /*

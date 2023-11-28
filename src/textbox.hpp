@@ -38,6 +38,10 @@ public:
         textbox_.setPosition(pos);
     }
 
+    void setColor(sf::Color textColor) {
+        textbox_.setFillColor(textColor);
+    }
+
     void draw(sf::RenderWindow &window) {
         window.draw(textbox_);
     }
