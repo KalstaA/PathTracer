@@ -202,7 +202,7 @@ A working product already implemented. Scenes can be loaded from a file and rend
 
 * Everybody - unit testing for own classes
 
-# Meeting 20.11.2023
+# Meeting 28.11.2023
 
 **Participants**: 
 1. Aleksi Kalsta
