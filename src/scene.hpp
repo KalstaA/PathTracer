@@ -49,6 +49,14 @@ public:
 
     std::list<std::shared_ptr<Object>> getObjects() const { return objects_; }
 
+    void setFov(float fov) {
+        camera_.fov = fov;
+    }
+
+    void setDof(float dof) {
+        camera_.focus_distance = dof;
+    }
+
     /**
      * @brief Print scene info to the desired output stream.
      * 

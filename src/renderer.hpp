@@ -21,6 +21,7 @@ private:
 
     int resolution_x;
     int resolution_y;
+    std::vector<std::vector<Color>> result;
 
     float anti_alias_radius = 1;
     float depth_of_field = 0;
@@ -152,6 +153,7 @@ public:
     Renderer(int res_x, int res_y, std::shared_ptr<Scene> sceneToRender) {
         resolution_x = res_x;
         resolution_y = res_y;
+        result = std::vector<std::vector<Color>>(resolution_x, std::vector<Color> (resolution_y));
         scene_ = sceneToRender;
         camera_ = (*scene_).getCamera();
         view_width = focusDistance * tan(camera_.fov / 2);
