@@ -114,6 +114,24 @@ public:
         out << "TriangleMesh object: " << name << ", at :" << this->getPosition().transpose() << ", with material: " << this-> getMaterial().name << std::endl;
     }
 
+    /**
+     * @brief Get the BVH of the trianglemesh object
+     * 
+     * @return BVH 
+     */
+    BVH getBVH() const {
+        return bvh;
+    }
+
+    /**
+     * @brief Get the name of the trianglemesh object
+     * 
+     * @return std::string 
+     */
+    std::string getName() const {
+        return name;
+    }
+
 private:
     BVH bvh;
     std::string name;
