@@ -201,3 +201,41 @@ A working product already implemented. Scenes can be loaded from a file and rend
 4. Henri - graphical user interface
 
 * Everybody - unit testing for own classes
+
+# Meeting 20.11.2023
+
+**Participants**: 
+1. Aleksi Kalsta
+2. Eetu Reijonen
+3. Henri-Mikael Suominen
+4. Eemeli Forsbom
+
+## Summary of works
+1. Eetu - box object and clearcoat material
+2. Aleksi - added unit tests for Fileloader, FileLoader exceptions, memory management
+3. Henri - working GUI
+4. Eemeli - BVH for triangle meshes and triangle collision optimization
+
+## Challenges
+* Clearcoat and specular materials not working properly
+
+## Actions
+* Add boxes and object files to FileLoader
+* Create beautiful test render scenes
+* Final documentation
+* (Glass material)
+
+## Timeline
+* Weeks 47-48: Implementing the rest of features
+* Weeks 49: Documentation and finishing the project
+
+## Project status 
+All desired features are implemented. Branches need to be integrated and new materials/object types added to FileLoader.
+
+### TODOs
+1. Aleksi - glass material or physically accurate lights or GPU parallelization
+2. Eetu - fix materials, design presentation scenes, implement LoadBox, change LoadMaterial
+3. Eemeli - LoadObject, start working on documentation, rotation method for TriangleMesh
+4. Henri - get GUI working with new memory management system
+
+* Everybody - unit testing for own classes
