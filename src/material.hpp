@@ -187,6 +187,7 @@ class Mirror : public Material {
         * @param ray ray that did hit the material
         */
         void updateRay(Ray& ray, Hit& hit) {
+            ray.origin = hit.point;
             Vector reflectedRay = reflectionDir(ray, hit);
             Vector diffusedRay = diffuseDir(ray, hit);
             // Weight direction of the reflection based on specularity
