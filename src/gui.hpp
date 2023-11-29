@@ -47,7 +47,8 @@ public:
                             std::cout << filepath << std::endl;
                             FileLoader loader(filepath);
                             window.close();
-                            openSettings(loader.loadSceneFile());
+                            std::shared_ptr<Scene> loadedScene = loader.loadSceneFile();
+                            openSettings(loadedScene);
                         }
                         
                 }
@@ -61,8 +62,7 @@ public:
         }
     }
 
-    void openSettings(Scene loadedScene) {
-        FileLoader sceneLoader("Empty");
+    void openSettings(std::shared_ptr<Scene> loadedScene) {
         sf::Image image; 
         sf::Sprite sprite;
         sf::Texture texture;
@@ -95,6 +95,10 @@ public:
         dofBox.setFont(arial);
         dofBox.setPos({0, 150});
 
+        Textbox sampleBox(20, sf::Color::White, false, 3, "Fodus Distance: ");
+        sampleBox.setFont(arial);
+        sampleBox.setPos({0, 200});
+
 
         Textbox* selectedBox = nullptr;    
         sf::Event event; 
@@ -120,14 +124,14 @@ public:
                         if(preview.onButton(window)) {
                             std::cout << "Clicker" << std::endl;
                             if(checkIfPosNum(fovBox.getInput()) && fovBox.getInput() != ""){
-                                loadedScene.setFov((M_PI * std::stof(fovBox.getInput()) / 180));
+                                loadedScene->setFov((M_PI * std::stof(fovBox.getInput()) / 180));
                             }
 
                             if(checkIfPosNum(dofBox.getInput()) && dofBox.getInput() != ""){
-                                loadedScene.setDof(std::stof(dofBox.getInput()));
+                                loadedScene->setDof(std::stof(dofBox.getInput()));
                             }
                             Renderer previewCreator(500, 400, loadedScene);
-                            createImg(previewCreator.render());
+                            createImg(previewCreator.parallelRender(1));
                             saveImage("preview.png");
                             image.loadFromFile("preview.png");
                             texture.loadFromImage(image);  
@@ -184,13 +188,14 @@ public:
                         if(event.key.code == sf::Keyboard::Enter){
                             int resX;
                             int resY;
+                            int sampleSize;
                             
                             if(checkIfPosNum(fovBox.getInput()) && fovBox.getInput() != ""){
-                                loadedScene.setFov((M_PI * std::stof(fovBox.getInput()) / 180));
+                                loadedScene->setFov((M_PI * std::stof(fovBox.getInput()) / 180));
                             }
 
                             if(checkIfPosNum(dofBox.getInput()) && dofBox.getInput() != ""){
-                                loadedScene.setDof(std::stof(dofBox.getInput()));
+                                loadedScene->setDof(std::stof(dofBox.getInput()));
                             }
 
                             if(checkIfPosNum(resXbox.getInput()) && resXbox.getInput() != ""){
@@ -205,7 +210,12 @@ public:
                                 break;
                             }
 
-                            openRender(resX, resY, loadedScene);
+                            if(checkIfPosNum(sampleBox.getInput()) && sampleBox.getInput() != ""){
+                                sampleSize = std::stoi(sampleBox.getInput());
+                            }else {
+                                break;
+                            }
+                            openRender(resX, resY, loadedScene, sampleSize);
                         }
                 }
                 }
@@ -223,7 +233,7 @@ public:
 
         }
 
-    void openRender(int resX, int resY, Scene loadedScene) {
+    void openRender(int resX, int resY, std::shared_ptr<Scene> loadedScene, int sampleSize) {
         sf::RenderWindow window(sf::VideoMode(resX, resY), "Path Tracer", sf::Style::Close);
         window.setSize(sf::Vector2u(resX, resY));
         window.setFramerateLimit(0);
@@ -231,7 +241,7 @@ public:
         sf::Sprite sprite;
         sf::Texture texture;
         Renderer sceneRenderer(resX, resY, loadedScene);
-        auto result = sceneRenderer.parallelRender();
+        auto result = sceneRenderer.parallelRender(sampleSize);
 
         while (window.isOpen())
         {

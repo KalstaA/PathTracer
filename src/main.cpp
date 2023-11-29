@@ -4,7 +4,7 @@
 #include "interface.hpp"
 #include "fileloader.hpp"
 #include "fileloader_ex.hpp"
-//#include "gui.hpp"
+#include "gui.hpp"
 #include "triangle.hpp"
 #include "trianglemesh.hpp"
 
@@ -12,10 +12,11 @@
 #include <exception>
 
 int main() {
+
   try
   {
-    //Gui gui;
-    //gui.titleScreen();
+    Gui gui;
+    gui.titleScreen();
     FileLoader test("../src/scene.yaml");
     std::shared_ptr<Scene> testScene = test.loadSceneFile();
     std::cout << (*testScene);

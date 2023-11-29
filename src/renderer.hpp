@@ -6,6 +6,7 @@
 #include <iostream>
 #include <omp.h>
 #include <chrono>
+#include <memory>
 
 /**
  * @brief Implements the ray tracing algorithm.
