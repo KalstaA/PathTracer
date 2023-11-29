@@ -6,6 +6,7 @@
 #include <memory>
 #include <sys/stat.h>
 
+#include "box.hpp"
 #include "ball.hpp"
 #include "scene.hpp"
 #include "types.hpp"
@@ -177,6 +178,60 @@ class FileLoader{
         }
 
         /**
+         * @brief Creates a pointer to a box object from yaml node.
+         * 
+         * @param box Yaml node that contains properties of box object
+         * @return A pointer to a box object 
+         */
+        std::shared_ptr<Box> LoadBox(YAML::Node box) {
+            YAML::Node width_node = box["Width"];
+            YAML::Node height_node = box["Height"];
+            YAML::Node depth_node = box["Depth"];
+
+            if (!width_node.IsDefined() || !height_node.IsDefined() || !depth_node.IsDefined()) {
+                throw ParameterNotFoundException(filepath_, box.Mark().line);
+            }
+            
+            float width = width_node.as<float>();
+            float height = height_node.as<float>();
+            float depth = depth_node.as<float>();
+
+            if (width < 0)
+            {
+                throw NegativeDimensionException(filepath_, width, width_node.Mark().line);
+            }
+
+            if (height < 0)
+            {
+                throw NegativeDimensionException(filepath_, height, height_node.Mark().line);
+            }
+
+            if (depth < 0)
+            {
+                throw NegativeDimensionException(filepath_, depth, depth_node.Mark().line);
+            }
+            
+            std::shared_ptr<Box> box_ptr = std::make_shared<Box>(LoadVector(box, "Position"), width, height, depth, LoadMaterial(box));
+            
+            Vector rotation;
+            try
+            {
+                rotation = LoadVector(box, "Rotation");
+            }
+            catch(const InvalidKeyException& e)
+            {
+                std::cout << e.what() << std::endl;
+                std::cout << "Standard rotation (0, 0, 0) will be used." << std::endl;
+                rotation = Vector(0, 0, 0);
+            }
+            box_ptr->rotate(rotation[0], Vector::UnitX());
+            box_ptr->rotate(rotation[1], Vector::UnitY());
+            box_ptr->rotate(rotation[2], Vector::UnitZ());
+            
+            return box_ptr;
+        }
+
+        /**
          * @brief Loads all objects from yaml file 
          * 
          * @return A list of pointers to objects
@@ -187,6 +242,10 @@ class FileLoader{
             for (YAML::const_iterator it=objects.begin(); it!=objects.end(); ++it) {
                 if((*it)["Object"]["Type"].as<std::string>() == "Ball") {
                     object_list.push_back(LoadBall((*it)["Object"]));
+                }
+
+                if((*it)["Object"]["Type"].as<std::string>() == "Box") {
+                    object_list.push_back(LoadBox((*it)["Object"]));
                 }
             }
             return object_list;

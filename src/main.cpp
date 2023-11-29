@@ -16,7 +16,7 @@ int main() {
   {
     //Gui gui;
     //gui.titleScreen();
-    FileLoader test("../src/scene.yaml");
+    FileLoader test("../src/scene2.yaml");
     std::shared_ptr<Scene> testScene = test.loadSceneFile();
     std::cout << (*testScene);
 

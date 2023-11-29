@@ -143,6 +143,38 @@ class RadiusNotFoundException : public FileLoaderException {
         std::string msg_;
 };
 
+class ParameterNotFoundException : public FileLoaderException {
+    public:
+        ParameterNotFoundException(std::string filepath, int line) : FileLoaderException() {
+            msg_ = "FileLoader exception caught:\nMissing parameters in line: " +
+                    std::to_string(line) + ", in file: " + filepath + ".";
+        }
+
+        virtual const char* what() const noexcept {
+            return msg_.c_str();
+        }
+
+    private:
+        std::string msg_;
+};
+
+class NegativeDimensionException : public FileLoaderException {
+    public:
+        NegativeDimensionException(std::string filepath, float value, int line) : FileLoaderException() {
+            msg_ = "FileLoader exception caught:\nNegative dimension: " +
+                    std::to_string(value) + " in file: " + filepath +
+                    ", on line: " + std::to_string(line);
+        }
+
+        virtual const char* what() const noexcept {
+            return msg_.c_str();
+        }
+
+    private:
+        std::string msg_;
+
+};
+
 /* Need eny more exceptions?:
 Color: Invalid color parameters, InvalidColorException
 */
