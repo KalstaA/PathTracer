@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 
 #include "box.hpp"
+#include "rectangle.hpp"
 #include "ball.hpp"
 #include "scene.hpp"
 #include "types.hpp"
@@ -224,11 +225,62 @@ class FileLoader{
                 std::cout << "Standard rotation (0, 0, 0) will be used." << std::endl;
                 rotation = Vector(0, 0, 0);
             }
+            rotation = (rotation / 180.0) * M_PI;
+
             box_ptr->rotate(rotation[0], Vector::UnitX());
             box_ptr->rotate(rotation[1], Vector::UnitY());
             box_ptr->rotate(rotation[2], Vector::UnitZ());
             
             return box_ptr;
+        }
+
+        /**
+         * @brief Creates a pointer to a rectangle object from yaml node.
+         * 
+         * @param rect Yaml node that contains properties of rectangle object
+         * @return A pointer to a rectangle object 
+         */
+        std::shared_ptr<Rectangle> LoadRectangle(YAML::Node rect) {
+            YAML::Node width_node = rect["Width"];
+            YAML::Node height_node = rect["Height"];
+
+            if (!width_node.IsDefined() || !height_node.IsDefined()) {
+                throw ParameterNotFoundException(filepath_, rect.Mark().line);
+            }
+            
+            float width = width_node.as<float>();
+            float height = height_node.as<float>();
+
+            if (width < 0)
+            {
+                throw NegativeDimensionException(filepath_, width, width_node.Mark().line);
+            }
+
+            if (height < 0)
+            {
+                throw NegativeDimensionException(filepath_, height, height_node.Mark().line);
+            }
+            
+            std::shared_ptr<Rectangle> rect_ptr = std::make_shared<Rectangle>(LoadVector(rect, "Position"), width, height, LoadMaterial(rect));
+            
+            Vector rotation;
+            try
+            {
+                rotation = LoadVector(rect, "Rotation");
+            }
+            catch(const InvalidKeyException& e)
+            {
+                std::cout << e.what() << std::endl;
+                std::cout << "Standard rotation (0, 0, 0) will be used." << std::endl;
+                rotation = Vector(0, 0, 0);
+            }
+            rotation = (rotation / 180.0) * M_PI;
+
+            rect_ptr->rotate(rotation[0], Vector::UnitX());
+            rect_ptr->rotate(rotation[1], Vector::UnitY());
+            rect_ptr->rotate(rotation[2], Vector::UnitZ());
+            
+            return rect_ptr;
         }
 
         /**
@@ -246,6 +298,10 @@ class FileLoader{
 
                 if((*it)["Object"]["Type"].as<std::string>() == "Box") {
                     object_list.push_back(LoadBox((*it)["Object"]));
+                }
+
+                if((*it)["Object"]["Type"].as<std::string>() == "Rectangle") {
+                    object_list.push_back(LoadRectangle((*it)["Object"]));
                 }
             }
             return object_list;

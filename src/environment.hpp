@@ -53,7 +53,7 @@ public:
         }
         else
         {
-            return horizonColor_ + (groundColor_ - horizonColor_) * pow(abs(ray.direction(2)), 0.4);
+            return horizonColor_ + (groundColor_ - horizonColor_) * pow(abs(ray.direction(2)), 0.1);
         }
     }
 

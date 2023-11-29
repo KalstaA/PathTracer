@@ -1,0 +1,188 @@
+Camera: 
+  Position: 
+    - 2.5
+    - 0
+    - 0
+  Direction:
+    - 1
+    - 0
+    - 0
+  Up:
+    - 0
+    - 0
+    - 1
+  Fov: 0.33
+  FocusDistance: 5
+
+Environment: 
+  SkyColor:
+    - 0.0
+    - 0.0
+    - 0.0
+  HorizonColor: 
+    - 0.0
+    - 0.0
+    - 0.0
+  GroundColor:
+    - 0.0 
+    - 0.0
+    - 0.0
+
+Objects:
+  - Object:
+      Type: Rectangle
+      Position:
+        - 5
+        - 0
+        - -2.5
+      Width: 5
+      Height: 5
+      Rotation:
+        - 0
+        - 90
+        - 0
+      Material: 
+        Specularity: 0.2
+        Color: 
+          - 1.0
+          - 1.0
+          - 1.0
+        Name: FLOOR
+
+  - Object:
+      Type: Rectangle
+      Position:
+        - 7.5
+        - 0
+        - 0
+      Width: 5
+      Height: 5
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Material: 
+        Specularity: 0.2
+        Color: 
+          - 1.0
+          - 1.0
+          - 1.0
+        Name: BACK WALL
+
+  - Object:
+      Type: Rectangle
+      Position:
+        - 5
+        - 2.5
+        - 0
+      Width: 5
+      Height: 5
+      Rotation:
+        - 0
+        - 0
+        - 90
+      Material: 
+        Specularity: 0.2
+        Color: 
+          - 1.0
+          - 1.0
+          - 1.0
+        Name: LEFT WALL
+
+  - Object:
+      Type: Rectangle
+      Position:
+        - 5
+        - -2.5
+        - 0
+      Width: 5
+      Height: 5
+      Rotation:
+        - 0
+        - 0
+        - -90
+      Material: 
+        Specularity: 0.2
+        Color: 
+          - 1.0
+          - 1.0
+          - 1.0
+        Name: RIGHT WALL
+
+  - Object:
+      Type: Rectangle
+      Position:
+        - 2.5
+        - 0
+        - 0
+      Width: 5
+      Height: 5
+      Rotation:
+        - 0
+        - 0
+        - 180
+      Material: 
+        Specularity: 0.2
+        Color: 
+          - 1.0
+          - 1.0
+          - 1.0
+        Name: FRONT WALL
+
+  - Object:
+      Type: Rectangle
+      Position:
+        - 5
+        - 0
+        - 2.5
+      Width: 5
+      Height: 5
+      Rotation:
+        - 0
+        - -90
+        - 0
+      Material: 
+        Specularity: 0.2
+        Color: 
+          - 1.0
+          - 1.0
+          - 1.0
+        Name: CEILING
+
+
+  - Object:
+      Type: Box
+      Position:
+        - 5
+        - 0
+        - 2
+      Width: 4
+      Height: 0.5
+      Depth: 2
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Material: 
+        EmissionStrength: 1.0
+        EmissionColor:  
+          - 1
+          - 1
+          - 1
+        Name: LIGHT
+
+  - Object:
+      Type: Ball
+      Position:
+        - 5
+        - 0
+        - 0
+      Radius: 1
+      Material: 
+        Color: 
+          - 1
+          - 0
+          - 0
+        Name: RED BALL
+
+

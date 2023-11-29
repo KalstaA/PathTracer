@@ -93,7 +93,7 @@ public:
                 && intersection.dot(s2) >= 0
             ) 
             {
-                if (distance < smallestDistance)
+                if (distance > 0 && distance < smallestDistance)
                 {
                     smallestDistance = distance;
                     rayHit.distance = distance;
