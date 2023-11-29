@@ -7,6 +7,7 @@
 //#include "gui.hpp"
 #include "triangle.hpp"
 #include "trianglemesh.hpp"
+#include "types.hpp"
 
 #include <iostream>
 #include <exception>
@@ -16,14 +17,15 @@ int main() {
   {
     //Gui gui;
     //gui.titleScreen();
-    FileLoader test("../src/scene2.yaml");
+    FileLoader test("../src/scenes/test.yaml");
     std::shared_ptr<Scene> testScene = test.loadSceneFile();
     std::cout << (*testScene);
+    int rays_per_pixel = 5;
 
     int resX = 400, resY = 300;
     Renderer testRenderer(resX, resY, testScene);
 
-    auto result = testRenderer.parallelRender(5);
+    auto result = testRenderer.parallelRender(rays_per_pixel);
 
     Interface interface;
     interface.createImg(result);

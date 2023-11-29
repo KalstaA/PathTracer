@@ -2,6 +2,9 @@
 
 #include "object.hpp"
 #include "fileloader_ex.hpp"
+#include "material.hpp"
+
+#include <memory>
 
 /**
  * @brief Representation of a mathematical ball object in the scene.
@@ -13,7 +16,7 @@ private:
     float radius_;
 
 public:
-    Ball(Vector position, float radius, Material material) : Object(position, material), radius_(radius) {}
+    Ball(Vector position, float radius, std::shared_ptr<Material> material) : Object(position, material), radius_(radius) {}
 
     /**
      * @brief Calculate whether a given ray collides with the ball.
@@ -62,7 +65,7 @@ public:
      * @return std::ostream& the output stream
      */
     void printInfo(std::ostream& out) const {
-        out << "Ball at: (" << this->getPosition().transpose() << ") with radius: " << this->getRadius() << ", with material: " << this->getMaterial().name << std::endl;
+        out << "Ball at: (" << this->getPosition().transpose() << ") with radius: " << this->getRadius() << ", with material: " << (*getMaterial()).getName() << std::endl;
     }
 
 };

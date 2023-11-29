@@ -119,17 +119,19 @@ private:
             Hit hit = rayCollision(ray);
 
             if (hit.did_hit && hit.distance > 0.0001) {
-                ray.origin = hit.point;
 
-                Vector diffuse_direction = (rnd_.randomDirection() + hit.normal).normalized();
-                Vector specular_direction = reflect(ray.direction, hit.normal);
-                bool clearcoatBounce = hit.material.clearcoat >= rnd_.randomZeroToOne();
+                (*hit.material).updateRay(ray, hit);
+                //ray.origin = hit.point;
 
-                ray.direction = diffuse_direction + hit.material.specularity * clearcoatBounce * (specular_direction - diffuse_direction);
-                Light emitted_light = hit.material.emission_strength * hit.material.emission_color;
+                //Vector diffuse_direction = (rnd_.randomDirection() + hit.normal).normalized();
+                //Vector specular_direction = reflect(ray.direction, hit.normal);
+                //bool clearcoatBounce = hit.material.clearcoat >= rnd_.randomZeroToOne();
+
+                //ray.direction = diffuse_direction + hit.material.specularity * /*clearcoatBounce * */(specular_direction - diffuse_direction);
+                //Light emitted_light = hit.material.emission_strength * hit.material.emission_color;
                 
-                ray.light += emitted_light.cwiseProduct(ray.color);
-                ray.color = ray.color.cwiseProduct(clearcoatBounce ? hit.material.clearcoat_color : hit.material.color);
+                //ray.light += emitted_light.cwiseProduct(ray.color);
+                //ray.color = ray.color.cwiseProduct(/*clearcoatBounce ? hit.material.clearcoat_color : */hit.material.color);
             }
 
             else 

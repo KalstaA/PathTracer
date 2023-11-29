@@ -37,7 +37,7 @@ private:
                                             {1, 5, 6}};
 
 public:
-    Box(Vector position, float width, float height, float depth, Material material) 
+    Box(Vector position, float width, float height, float depth, std::shared_ptr<Material> material) 
             : Object(position, material), width_(width), height_(height), depth_(depth) {
 
         corners_.push_back(Vector(-depth_/2, width_/2, height_/2) + position);
@@ -133,7 +133,7 @@ public:
      * @return std::ostream& the output stream
      */
     void printInfo(std::ostream& out) const {
-        out << "Box at: (" << this->getPosition().transpose() << ") with dimensions: " << width_ << "x" << height_ << "x" << depth_ << ", with material: " << this->getMaterial().name << std::endl;
+        out << "Box at: (" << this->getPosition().transpose() << ") with dimensions: " << width_ << "x" << height_ << "x" << depth_ << ", with material: " << (*getMaterial()).getName() << std::endl;
     }
 
 };

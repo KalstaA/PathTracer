@@ -11,6 +11,7 @@
 #include "scene.hpp"
 #include "types.hpp"
 #include "fileloader_ex.hpp"
+#include "material.hpp"
 
 /**
  * @brief Implements a class for reading yaml scene files.
@@ -37,24 +38,7 @@ class FileLoader{
             {
                 throw InvalidFilepathException(filepath);
             }
-        } 
-
-        /*
-        Problem in the memory management was that in the loadSceneFile we create a Scene object locally and return it by copy, meaning we
-        can not directly delete objects in Scene destructor, since it will destroy objects immediately after leaving loadSceneFile
-        function scope (and delete the objects where copied pointers are pointing). Also in renderer we used a default operator= which will
-        perform member wise assignment for all the object members (including all the pointers of deleted Objects). Similarly "MyClass a = b" performs
-        a member wise copy constructor for b, which by default takes the pointers pointing to the objects that will be deleted after
-        leaving the function scope.
-
-        Solution:
-        Created scene object with "std::make_shared<Scene>" command and save/use the pointer to scene object instead of the object itself (also changed the code
-        from other places accordingly). Then *scene_ is not destroyed after exiting a loadSceneFile function scope and used shared_ptr so that we don't need to
-        delete scene object manually (It might not be generated in the case of exception, which creates a segfault and it can be shared with renderer)
-
-        Other possible solution:
-        Define operator overloads to copy and assignment for Scene and Object classes, such that the copying works correctly.
-        */
+        }
 
         /**
          * @brief Loads a scene from the file specified in filepath and returns a shared pointer to this scene.
@@ -130,28 +114,48 @@ class FileLoader{
          * material values 
          * @return A material struct  
          */
-        Material LoadMaterial(YAML::Node node) {
-            Material material;
+        std::shared_ptr<Material> LoadMaterial(YAML::Node node) {
+            //Material material
             YAML::Node material_node = node["Material"];
             if (!material_node.IsDefined()) {
                 throw MaterialNotFoundException(filepath_, node.Mark().line);
             }
+
+            // Initialize default values
+            Color color = Color(1.0, 1.0, 1.0);
+            Color emission_color = Color(1.0, 1.0, 1.0);
+            float emission_strength = 0.0;
+            std::string name = "UNDEFINED";
+            float specularity = 1.0;
+
+            // Take values from node if they exist
             if(material_node["Color"]) {
-                material.color = LoadVector(material_node, "Color");
+                color = LoadVector(material_node, "Color");
             }
             if(material_node["EmissionColor"]) {
-             material.emission_color = LoadVector(material_node, "EmissionColor");
+                emission_color = LoadVector(material_node, "EmissionColor");
             }
             if(material_node["EmissionStrength"]) {
-                material.emission_strength = material_node["EmissionStrength"].as<float>();
+                emission_strength = material_node["EmissionStrength"].as<float>();
             }
             if(material_node["Specularity"]) {
-                material.specularity = material_node["Specularity"].as<float>();
+                specularity = material_node["Specularity"].as<float>();
             }
             if(material_node["Name"]) {
-                material.name = material_node["Name"].as<std::string>();
+                name = material_node["Name"].as<std::string>();
             }
-            return material;
+
+            // Return shared pointer to correct type of material or throw exception
+            std::string type = material_node["Type"].as<std::string>();
+            if (type == "Diffuse") {
+                return std::make_shared<Diffuse>(color, name, emission_strength, emission_color);
+            }
+            else if (type == "Mirror") {
+                return std::make_shared<Diffuse>(color, name, specularity);
+            }
+            else {
+                throw MaterialNotFoundException(filepath_, node.Mark().line); // Should be changed to InvalidTypeException
+            }
         }
 
         /**

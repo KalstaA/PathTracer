@@ -23,7 +23,7 @@ public:
      * @param scale scaling of the object size
      * @param angle counterclockwise rotation of the object in radians
      */
-    TriangleMesh(std::string obj_filepath, Vector scenePos, Material m, double scale, double angle) : Object(scenePos, m) {
+    TriangleMesh(std::string obj_filepath, Vector scenePos, std::shared_ptr<Material> m, double scale, double angle) : Object(scenePos, m) {
         unsigned long pos = obj_filepath.find_last_of("/");
         std::string basepath = obj_filepath.substr(0, pos+1);
         std::string obj_name = obj_filepath.substr(pos+1, obj_filepath.length());
@@ -111,7 +111,7 @@ public:
      * @param out output stream
      */
     void printInfo(std::ostream& out) const {
-        out << "TriangleMesh object: " << name << ", at :" << this->getPosition().transpose() << ", with material: " << this-> getMaterial().name << std::endl;
+        out << "TriangleMesh object: " << name << ", at :" << this->getPosition().transpose() << ", with material: " << (*getMaterial()).getName() << std::endl;
     }
 
     /**
