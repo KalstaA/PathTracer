@@ -118,7 +118,7 @@ public:
      * @param out output stream
      */
     void printInfo(std::ostream& out) const {
-        out << "TriangleMesh object: " << name << ", at :" << this->getPosition().transpose() << ", with material: " << this-> getMaterial().name << std::endl;
+        out << "TriangleMesh: " << name << ", at :" << this->getPosition().transpose() << ", with material: " << this-> getMaterial().name << std::endl;
     }
 
     /**

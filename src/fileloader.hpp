@@ -6,6 +6,7 @@
 #include <memory>
 #include <sys/stat.h>
 
+#include "trianglemesh.hpp"
 #include "box.hpp"
 #include "ball.hpp"
 #include "scene.hpp"
@@ -231,6 +232,46 @@ class FileLoader{
             return box_ptr;
         }
 
+        std::shared_ptr<TriangleMesh> LoadTriangleMesh(YAML::Node tmesh) {
+            YAML::Node filepath_node = tmesh["Filepath"];
+            YAML::Node scale_node = tmesh["Scale"];
+
+            if (!filepath_node.IsDefined() || !scale_node.IsDefined()) {
+                throw ParameterNotFoundException(filepath_, tmesh.Mark().line);
+            }
+            
+            std::string tmesh_filepath = filepath_node.as<std::string>();
+
+            struct stat buf;
+            if (stat(tmesh_filepath.c_str(), &buf) != 0)
+            {
+                throw InvalidFilepathException(tmesh_filepath);
+            }
+
+            double scale = scale_node.as<double>();
+
+            if (scale < 0)
+            {
+                throw NegativeDimensionException(filepath_, scale, scale_node.Mark().line);
+            }
+
+            Vector rotation;
+            try
+            {
+                rotation = LoadVector(tmesh, "Rotation");
+            }
+            catch(const InvalidKeyException& e)
+            {
+                std::cout << e.what() << std::endl;
+                std::cout << "Standard rotation (0, 0, 0) will be used." << std::endl;
+                rotation = Vector(0, 0, 0);
+            }
+            
+            std::shared_ptr<TriangleMesh> tmesh_ptr = std::make_shared<TriangleMesh>(tmesh_filepath, LoadVector(tmesh, "Position"), LoadMaterial(tmesh), rotation, scale);
+            
+            return tmesh_ptr;
+        }
+
         /**
          * @brief Loads all objects from yaml file 
          * 
@@ -246,6 +287,10 @@ class FileLoader{
 
                 if((*it)["Object"]["Type"].as<std::string>() == "Box") {
                     object_list.push_back(LoadBox((*it)["Object"]));
+                }
+
+                if((*it)["Object"]["Type"].as<std::string>() == "TriangleMesh") {
+                    object_list.push_back(LoadTriangleMesh((*it)["Object"]));
                 }
             }
             return object_list;

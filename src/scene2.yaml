@@ -51,6 +51,26 @@ Objects:
         Name: RED DIFFUSE
 
   - Object:
+      Type: TriangleMesh
+      Filepath: ../objects/knight.obj
+      Position:
+        - 5
+        - -2
+        - -1.3
+      Scale: 1
+      Rotation:
+        - 0
+        - 0
+        - 0.785
+      Material: 
+        Specularity: 0.8
+        Color: 
+          - 1
+          - 0
+          - 0
+        Name: RED DIFFUSE
+
+  - Object:
       Type: Ball
       Position:
         - 6
