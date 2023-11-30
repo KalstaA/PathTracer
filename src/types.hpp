@@ -46,6 +46,7 @@ struct Ray
 struct Hit
 {
     bool did_hit = false;
+    bool inside_material = false;
     std::shared_ptr<Material> material; // Has to be pointer, since compiler do not yet know anything about Material class
     Vector normal;
     Point point;

@@ -127,6 +127,9 @@ class FileLoader{
             float emission_strength = 0.0;
             std::string name = "UNDEFINED";
             float specularity = 1.0;
+            float clearcoat = 0.5;
+            float refraction_ratio = 1.0;
+            Color clearCoat_color = Color(1.0, 1.0, 1.0);
 
             // Take values from node if they exist
             if(material_node["Color"]) {
@@ -144,14 +147,29 @@ class FileLoader{
             if(material_node["Name"]) {
                 name = material_node["Name"].as<std::string>();
             }
+            if(material_node["ClearCoat"]) {
+                clearcoat = material_node["ClearCoat"].as<float>();
+            }
+            if(material_node["ClearCoatColor"]) {
+                clearCoat_color = LoadVector(material_node, "ClearCoatColor");
+            }
+            if(material_node["RefractionRatio"]) {
+                refraction_ratio = material_node["RefractionRatio"].as<float>();
+            }
 
             // Return shared pointer to correct type of material or throw exception
             std::string type = material_node["Type"].as<std::string>();
             if (type == "Diffuse") {
                 return std::make_shared<Diffuse>(color, name, emission_strength, emission_color);
             }
-            else if (type == "Mirror") {
-                return std::make_shared<Diffuse>(color, name, specularity);
+            else if (type == "Reflective") {
+                return std::make_shared<Reflective>(color, name, specularity);
+            }
+            else if (type == "ClearCoat") {
+                return std::make_shared<ClearCoat>(color, name, specularity, clearcoat, clearCoat_color);
+            }
+            else if (type == "Refractive") {
+                return std::make_shared<Refractive>(color, name, refraction_ratio);
             }
             else {
                 throw MaterialNotFoundException(filepath_, node.Mark().line); // Should be changed to InvalidTypeException
