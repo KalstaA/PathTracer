@@ -22,7 +22,7 @@ int main() {
     std::cout << (*testScene);
     int rays_per_pixel = 5;
 
-    int resX = 800, resY = 600;
+    int resX = 400, resY = 300;
     Renderer testRenderer(resX, resY, testScene);
 
     auto result = testRenderer.parallelRender(rays_per_pixel);

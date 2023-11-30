@@ -12,19 +12,6 @@ typedef Eigen::Matrix<double, 3, 3> Matrix;
 
 // Forward declaration for Material class, such that the Hit struct knows the existence
 class Material;
-
-/*
-struct Material
-{
-    Color color = Color(1.0, 1.0, 1.0);
-    float emission_strength = 0.0;
-    Color emission_color = Color(1.0, 1.0, 1.0);
-    float specularity = 0.0;
-    float clearcoat = 0.0;
-    Color clearcoat_color = Color(1.0, 1.0, 1.0);
-    std::string name = "[UNNAMED MATERIAL]";
-};
-*/
     
 struct Camera
 {

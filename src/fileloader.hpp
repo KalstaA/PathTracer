@@ -108,11 +108,11 @@ class FileLoader{
         }
 
         /**
-         * @brief Creates a material struct based on properties given in yaml node.
+         * @brief Creates a material object based on properties given in yaml node.
          * 
          * @param material_node An yaml node that points to a key that has possible key-value pairs containing
          * material values 
-         * @return A material struct  
+         * @return A shared pointer to material object
          */
         std::shared_ptr<Material> LoadMaterial(YAML::Node node) {
             //Material material
@@ -131,7 +131,7 @@ class FileLoader{
             float refraction_ratio = 1.0;
             Color clearCoat_color = Color(1.0, 1.0, 1.0);
 
-            // Take values from node if they exist
+            // Update the parameters based on .yaml file if the parameters are defined
             if(material_node["Color"]) {
                 color = LoadVector(material_node, "Color");
             }
@@ -157,7 +157,7 @@ class FileLoader{
                 refraction_ratio = material_node["RefractionRatio"].as<float>();
             }
 
-            // Return shared pointer to correct type of material or throw exception
+            // Return shared pointer to the correct material type or throw exception
             std::string type = material_node["Type"].as<std::string>();
             if (type == "Diffuse") {
                 return std::make_shared<Diffuse>(color, name, emission_strength, emission_color);
@@ -172,14 +172,14 @@ class FileLoader{
                 return std::make_shared<Refractive>(color, name, refraction_ratio);
             }
             else {
-                throw MaterialNotFoundException(filepath_, node.Mark().line); // Should be changed to InvalidTypeException
+                throw InvalidMaterialTypeException(filepath_, material_node.Mark().line);
             }
         }
 
         /**
          * @brief Creates a pointer to a ball object from yaml node.
          * 
-         * @param ball Yaml node that contains properties of ball object
+         * @param ball Yaml node that contains properties of the ball object
          * @return A pointer to a ball object 
          */
         std::shared_ptr<Ball> LoadBall(YAML::Node ball) {
