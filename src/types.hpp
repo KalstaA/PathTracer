@@ -10,16 +10,8 @@ typedef Eigen::Vector3d Light;
 typedef Eigen::Vector2d Vector2;
 typedef Eigen::Matrix<double, 3, 3> Matrix;
 
-struct Material
-{
-    Color color = Color(1.0, 1.0, 1.0);
-    float emission_strength = 0.0;
-    Color emission_color = Color(1.0, 1.0, 1.0);
-    float specularity = 0.0;
-    float clearcoat = 0.0;
-    Color clearcoat_color = Color(1.0, 1.0, 1.0);
-    std::string name = "[UNNAMED MATERIAL]";
-};
+// Forward declaration for Material class, such that the Hit struct knows the existence
+class Material;
     
 struct Camera
 {
@@ -41,7 +33,8 @@ struct Ray
 struct Hit
 {
     bool did_hit = false;
-    Material material;
+    bool inside_material = false;
+    std::shared_ptr<Material> material; // Has to be pointer, since compiler do not yet know anything about Material class
     Vector normal;
     Point point;
     float distance;

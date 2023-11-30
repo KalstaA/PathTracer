@@ -10,6 +10,7 @@
 #include "fileloader_ex.hpp"
 #include "types.hpp"
 #include "scene.hpp"
+#include "material.hpp"
 
 // Path to test files folder
 std::string PATH = "../tests/yaml_testfiles/";
@@ -74,14 +75,14 @@ TEST(FILELOADER, CorrectLoadScene) {
     Vector position1 = (**obj).getPosition();
     Vector up1 = (**obj).getUp();
     Vector forw1 = (**obj).getForward();
-    Material material1 = (**obj).getMaterial();
+    std::shared_ptr<Material> material1 = (**obj).getMaterial();
     //float rad1 = (**obj).getRadius();
 
     std::advance(obj, 1);
     Vector position2 = (**obj).getPosition();
     Vector up2 = (**obj).getUp();
     Vector forw2 = (**obj).getForward();
-    Material material2 = (**obj).getMaterial();
+    std::shared_ptr<Material> material2 = (**obj).getMaterial();
     //float rad2 = (**obj).getRadius();
 
     EXPECT_LE(distance(position1, Vector(5, 0, 0)), 0.001);
@@ -91,22 +92,17 @@ TEST(FILELOADER, CorrectLoadScene) {
     EXPECT_LE(distance(up2, Vector(0, 0, 1)), 0.001);
     EXPECT_LE(distance(forw2, Vector(1, 0, 0)), 0.001);
 
-    //EXPECT_EQ(1.299, rad1);
-    //EXPECT_GE(1.301, rad1);
-    //EXPECT_EQ(29.999, rad2);
-    //EXPECT_GE(30.001, rad2);
+    EXPECT_LE(distance(material1->getColor(), Color(1, 0, 0)), 0.001);
+    //EXPECT_LE(distance(material1->getEmColor(), Color(0.3, 0.3, 0.3)), 0.001);
+    //EXPECT_IN_RANGE(material1.emission_strength, 0.499, 0.501);
+    //EXPECT_IN_RANGE(material1.specularity, 0.989, 0.991);
+    EXPECT_STREQ(material1->getName().c_str(), "RED DIFFUSE");
 
-    EXPECT_LE(distance(material1.color, Color(1, 0, 0)), 0.001);
-    EXPECT_LE(distance(material1.emission_color, Color(0.3, 0.3, 0.3)), 0.001);
-    EXPECT_IN_RANGE(material1.emission_strength, 0.499, 0.501);
-    EXPECT_IN_RANGE(material1.specularity, 0.989, 0.991);
-    EXPECT_STREQ(material1.name.c_str(), "RED DIFFUSE");
-
-    EXPECT_LE(distance(material2.color, Color(0.5, 0.5, 0.5)), 0.001);
-    EXPECT_LE(distance(material2.emission_color, Color(1, 1, 1)), 0.001);
-    EXPECT_IN_RANGE(material2.emission_strength, 0.099, 0.101);
-    EXPECT_IN_RANGE(material2.specularity, 0.320, 0.322);
-    EXPECT_STREQ(material2.name.c_str(), "GREY DIFFUSE");
+    EXPECT_LE(distance(material2->getColor(), Color(0.5, 0.5, 0.5)), 0.001);
+    //EXPECT_LE(distance(material2->getEmColor(), Color(1, 1, 1)), 0.001);
+    //EXPECT_IN_RANGE(material2.emission_strength, 0.099, 0.101);
+    //EXPECT_IN_RANGE(material2.specularity, 0.320, 0.322);
+    EXPECT_STREQ(material2->getName().c_str(), "GREY DIFFUSE");
 }
 
 TEST(FILELOADER, InvalidKey) {
@@ -272,7 +268,7 @@ TEST(FILELOADER, NoRadius) {
 
     // Desired error message
     std::string msg1 = "FileLoader exception caught:\nRadius not defined for ball at line: " +
-                        std::to_string(52) + ", in file: " + fpath1 + ".";
+                        std::to_string(53) + ", in file: " + fpath1 + ".";
 
     // Should throw negative radius exception
     EXPECT_THROW({

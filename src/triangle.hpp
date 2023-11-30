@@ -19,7 +19,7 @@ public:
      * @param v2 Vertex 3
      * @param m Material of the triangle
      */
-    Triangle(Vector v0, Vector v1, Vector v2, Material m) : Object(v0, m) {
+    Triangle(Vector v0, Vector v1, Vector v2, std::shared_ptr<Material> m) : Object(v0, m) {
         //Vectors pointing at the vertices
         a = v0;
         b = v1;
@@ -95,7 +95,7 @@ public:
         std::vector<Vector> v = getVertexPos();
         out << "Triangle at: (" << v[0].transpose() << "), (" << v[1].transpose() 
         << "), (" << v[2].transpose() << "), with normal: (" << getNormal().transpose() 
-        << "), with material: " << getMaterial().name << std::endl;
+        << "), with material: " << getMaterial()->getName() << std::endl;
     }
 
     /**

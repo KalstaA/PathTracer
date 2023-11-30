@@ -49,6 +49,7 @@ Objects:
         - 1
         - 1
       Material: 
+        Type: Diffuse
         Color: 
           - 0.5
           - 0.5

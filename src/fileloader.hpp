@@ -12,6 +12,7 @@
 #include "scene.hpp"
 #include "types.hpp"
 #include "fileloader_ex.hpp"
+#include "material.hpp"
 
 /**
  * @brief Implements a class for reading yaml scene files.
@@ -38,24 +39,7 @@ class FileLoader{
             {
                 throw InvalidFilepathException(filepath);
             }
-        } 
-
-        /*
-        Problem in the memory management was that in the loadSceneFile we create a Scene object locally and return it by copy, meaning we
-        can not directly delete objects in Scene destructor, since it will destroy objects immediately after leaving loadSceneFile
-        function scope (and delete the objects where copied pointers are pointing). Also in renderer we used a default operator= which will
-        perform member wise assignment for all the object members (including all the pointers of deleted Objects). Similarly "MyClass a = b" performs
-        a member wise copy constructor for b, which by default takes the pointers pointing to the objects that will be deleted after
-        leaving the function scope.
-
-        Solution:
-        Created scene object with "std::make_shared<Scene>" command and save/use the pointer to scene object instead of the object itself (also changed the code
-        from other places accordingly). Then *scene_ is not destroyed after exiting a loadSceneFile function scope and used shared_ptr so that we don't need to
-        delete scene object manually (It might not be generated in the case of exception, which creates a segfault and it can be shared with renderer)
-
-        Other possible solution:
-        Define operator overloads to copy and assignment for Scene and Object classes, such that the copying works correctly.
-        */
+        }
 
         /**
          * @brief Loads a scene from the file specified in filepath and returns a shared pointer to this scene.
@@ -125,40 +109,78 @@ class FileLoader{
         }
 
         /**
-         * @brief Creates a material struct based on properties given in yaml node.
+         * @brief Creates a material object based on properties given in yaml node.
          * 
          * @param material_node An yaml node that points to a key that has possible key-value pairs containing
          * material values 
-         * @return A material struct  
+         * @return A shared pointer to material object
          */
-        Material LoadMaterial(YAML::Node node) {
-            Material material;
+        std::shared_ptr<Material> LoadMaterial(YAML::Node node) {
+            //Material material
             YAML::Node material_node = node["Material"];
             if (!material_node.IsDefined()) {
                 throw MaterialNotFoundException(filepath_, node.Mark().line);
             }
+
+            // Initialize default values
+            Color color = Color(1.0, 1.0, 1.0);
+            Color emission_color = Color(1.0, 1.0, 1.0);
+            float emission_strength = 0.0;
+            std::string name = "UNDEFINED";
+            float specularity = 1.0;
+            float clearcoat = 0.5;
+            float refraction_ratio = 1.0;
+            Color clearCoat_color = Color(1.0, 1.0, 1.0);
+
+            // Update the parameters based on .yaml file if the parameters are defined
             if(material_node["Color"]) {
-                material.color = LoadVector(material_node, "Color");
+                color = LoadVector(material_node, "Color");
             }
             if(material_node["EmissionColor"]) {
-             material.emission_color = LoadVector(material_node, "EmissionColor");
+                emission_color = LoadVector(material_node, "EmissionColor");
             }
             if(material_node["EmissionStrength"]) {
-                material.emission_strength = material_node["EmissionStrength"].as<float>();
+                emission_strength = material_node["EmissionStrength"].as<float>();
             }
             if(material_node["Specularity"]) {
-                material.specularity = material_node["Specularity"].as<float>();
+                specularity = material_node["Specularity"].as<float>();
             }
             if(material_node["Name"]) {
-                material.name = material_node["Name"].as<std::string>();
+                name = material_node["Name"].as<std::string>();
             }
-            return material;
+            if(material_node["ClearCoat"]) {
+                clearcoat = material_node["ClearCoat"].as<float>();
+            }
+            if(material_node["ClearCoatColor"]) {
+                clearCoat_color = LoadVector(material_node, "ClearCoatColor");
+            }
+            if(material_node["RefractionRatio"]) {
+                refraction_ratio = material_node["RefractionRatio"].as<float>();
+            }
+
+            // Return shared pointer to the correct material type or throw exception
+            std::string type = material_node["Type"].as<std::string>();
+            if (type == "Diffuse") {
+                return std::make_shared<Diffuse>(color, name, emission_strength, emission_color);
+            }
+            else if (type == "Reflective") {
+                return std::make_shared<Reflective>(color, name, specularity);
+            }
+            else if (type == "ClearCoat") {
+                return std::make_shared<ClearCoat>(color, name, specularity, clearcoat, clearCoat_color);
+            }
+            else if (type == "Refractive") {
+                return std::make_shared<Refractive>(color, name, refraction_ratio);
+            }
+            else {
+                throw InvalidMaterialTypeException(filepath_, material_node.Mark().line);
+            }
         }
 
         /**
          * @brief Creates a pointer to a ball object from yaml node.
          * 
-         * @param ball Yaml node that contains properties of ball object
+         * @param ball Yaml node that contains properties of the ball object
          * @return A pointer to a ball object 
          */
         std::shared_ptr<Ball> LoadBall(YAML::Node ball) {

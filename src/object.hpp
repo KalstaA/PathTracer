@@ -1,6 +1,9 @@
 #pragma once
 
 #include "types.hpp"
+#include "material.hpp"
+
+#include <memory>
 
 /**
  * @brief An abstract base class for any type of visible object in a scene
@@ -10,18 +13,18 @@ class Object
 {
 private:
     Vector position_;
-    Material material_;
+    std::shared_ptr<Material> material_;
     Vector up_;
     Vector forward_;
 
 public:
-    Object(Vector position, Material material, Vector up = Vector(0, 0, 1), Vector forward = Vector(1, 0, 0)) 
+    Object(Vector position, std::shared_ptr<Material> material, Vector up = Vector(0, 0, 1), Vector forward = Vector(1, 0, 0)) 
                     : position_(position), material_(material), up_(up), forward_(forward) {}
     
     virtual ~Object() { }
 
     Vector getPosition() const { return position_; }
-    Material getMaterial() const { return material_; }
+    std::shared_ptr<Material> getMaterial() const { return material_; }
     Vector getUp() const { return up_; }
     Vector getForward() const { return forward_; }
 

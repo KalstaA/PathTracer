@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
 #include "ball.hpp"
 #include "types.hpp"
+#include "material.hpp"
+#include <memory>
 
-Material RED_DIFFUSE = { .color = Color(1, 0, 0), .name = "RED DIFFUSE" };
+std::shared_ptr<Diffuse> RED_DIFFUSE = std::make_shared<Diffuse>(Color(1, 0, 0), "RED DIFFUSE", 0.0, Color(1.0, 1.0, 1.0));
 
 // Test GetRadius method
 TEST(BALL, GetRadius) {

@@ -3,6 +3,8 @@
 #include "types.hpp"
 #include "trianglemesh.hpp"
 #include "bvh.hpp"
+#include "material.hpp"
+#include <memory>
 
 TEST(BVH, structure) {
     std::string knight_file = "../objects/knight.obj";
