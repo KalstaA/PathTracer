@@ -60,10 +60,10 @@ int main() {
   //Knight, tree, mirror ball test
 
   std::string knight_file = "../objects/knight.obj";
-  TriangleMesh knight(knight_file, Vector(5,0,-1.5), RED_DIFFUSE, 1, 7*M_PI/4);
+  TriangleMesh knight(knight_file, Vector(5,0,-1.5), RED_DIFFUSE, Vector(0,0,M_PI/4), 1);
 
   std::string tree_file = "../objects/tree.obj";
-  TriangleMesh tree(tree_file, Vector(8,-3,-1), GREEN_DIFFUSE, 0.05, 7*M_PI/4);
+  TriangleMesh tree(tree_file, Vector(8,-3,-1), GREEN_DIFFUSE, Vector(0,0,M_PI/4), 0.05);
 
   std::list<Object*> testList;
   testList.push_back(&tree);
@@ -84,7 +84,7 @@ int main() {
   Scene testScene(testCam, testList);
   testScene.getEnvironment().setSky();
 
-  int resX = 600, resY = 600;
+  int resX = 400, resY = 400;
   Renderer testRenderer(resX, resY, testScene);
 
   auto result = testRenderer.parallelRender();
