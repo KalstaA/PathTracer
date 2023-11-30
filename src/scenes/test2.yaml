@@ -1,0 +1,123 @@
+Camera: 
+  Position: 
+    - 0
+    - 0
+    - 0
+  Direction:
+    - 1
+    - 0
+    - 0
+  Up:
+    - 0
+    - 0
+    - 1
+  Fov: 0.33
+  FocusDistance: 5
+
+Environment: 
+  SkyColor:
+    - 0.2
+    - 0.5
+    - 1.0
+  HorizonColor: 
+    - 0.7
+    - 0.8
+    - 0.8
+  GroundColor:
+    - 0.1 
+    - 0.1
+    - 0.1
+
+Objects:
+  - Object:
+      Type: Ball
+      Position:
+        - 5
+        - 0
+        - 0
+      Radius: 1
+      Material:
+        Type: Diffuse
+        Color: 
+          - 1
+          - 0
+          - 0
+        Name: RED DIFFUSE
+
+  - Object:
+      Type: Ball
+      Position:
+        - 6
+        - 0
+        - -31
+      Radius: 30
+      Material:
+        Type: Diffuse
+        Color: 
+          - 0.5
+          - 0.5
+          - 0.5      
+        Name: GREY DIFFUSE
+
+  - Object:
+      Type: Ball
+      Position:
+        - 10
+        - -30
+        - 20
+      Radius: 20
+      Material:
+        Type: Diffuse
+        Color: 
+          - 1
+          - 1
+          - 0
+        EmissionStrength: 0.5
+        EmissionColor:  
+          - 1
+          - 1
+          - 1
+        Name: SUN
+  - Object:
+      Type: Ball
+      Position:
+        - 4
+        - -0.5
+        - -0.5
+      Radius: 0.5
+      Material:
+        Type: ClearCoat
+        Specularity: 0.8
+        ClearCoat: 0.2
+        Color: 
+          - 0
+          - 1
+          - 0
+        Name: GREEN DIFFUSE
+
+  - Object:
+      Type: Ball
+      Position:
+        - 6
+        - 2
+        - -0.5
+      Radius: 0.5
+      Material:
+        Type: Diffuse
+        Color: 
+          - 0
+          - 0
+          - 1
+        Name: BLUE DIFFUSE
+
+  - Object:
+      Type: Ball
+      Position:
+        - 6
+        - 1.5
+        - 1
+      Radius: 0.7
+      Material:
+        Type: Reflective
+        Specularity: 1
+        Name: MIRROR

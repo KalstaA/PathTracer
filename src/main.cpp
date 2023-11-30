@@ -20,7 +20,7 @@ int main() {
     FileLoader test("../src/scenes/test.yaml");
     std::shared_ptr<Scene> testScene = test.loadSceneFile();
     std::cout << (*testScene);
-    int rays_per_pixel = 5;
+    int rays_per_pixel = 10;
 
     int resX = 400, resY = 300;
     Renderer testRenderer(resX, resY, testScene);
