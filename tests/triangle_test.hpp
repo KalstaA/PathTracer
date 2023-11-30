@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include "triangle.hpp"
 #include "types.hpp"
+#include "material.hpp"
+#include <memory>
 
 // Test GetCentroid method
 TEST(Triangle, GetCentroid) {
