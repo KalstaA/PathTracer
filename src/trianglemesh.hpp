@@ -23,7 +23,7 @@ public:
      * @param scale scaling of the object size
      * @param angle counterclockwise rotation of the object in radians
      */
-    TriangleMesh(std::string obj_filepath, Vector scenePos, Material m, double scale, double angle) : Object(scenePos, m) {
+    TriangleMesh(std::string obj_filepath, Vector scenePos, Material m, Vector rotation, double scale) : Object(scenePos, m) {
         unsigned long pos = obj_filepath.find_last_of("/");
         std::string basepath = obj_filepath.substr(0, pos+1);
         std::string obj_name = obj_filepath.substr(pos+1, obj_filepath.length());
@@ -65,12 +65,19 @@ public:
                     tinyobj::real_t vz = attributes.vertices[3*idx.vertex_index+1];
                     tinyobj::real_t vy = attributes.vertices[3*idx.vertex_index+2];
 
-                    //Orienting the x and y coordinates
-                    tinyobj::real_t x = vx*cos(angle) + vy*sin(angle);
-                    tinyobj::real_t y = -vx*sin(angle) + vy*cos(angle);
+                    //Orientating the object according to the rotation vector
+                    Eigen::AngleAxisd xRotation(rotation[0], Vector::UnitX());
+                    Eigen::AngleAxisd yRotation(rotation[1], Vector::UnitY());
+                    Eigen::AngleAxisd zRotation(rotation[2], Vector::UnitZ());
+
+                    Vector relVertex = Vector(vx, vy, vz);
+                    
+                    relVertex = xRotation * relVertex;
+                    relVertex = yRotation * relVertex;
+                    relVertex = zRotation * relVertex;
 
                     //Creating one vertex
-                    Vector vertex = Vector(x, y, vz)*scale+scenePos;
+                    Vector vertex = relVertex*scale+scenePos;
                     vertices.push_back(vertex);
                 }
                 o_offset += fv;
@@ -104,7 +111,7 @@ public:
         
         return;
     }
-
+    
     /**
      * @brief Print TriangleMesh info to the desired output stream
      * 
