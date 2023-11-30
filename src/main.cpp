@@ -17,12 +17,12 @@ int main() {
   {
     //Gui gui;
     //gui.titleScreen();
-    FileLoader test("../src/scenes/test.yaml");
+    FileLoader test("../src/scene2.yaml");
     std::shared_ptr<Scene> testScene = test.loadSceneFile();
     std::cout << (*testScene);
-    int rays_per_pixel = 10;
+    int rays_per_pixel = 30;
 
-    int resX = 400, resY = 300;
+    int resX = 1200, resY = 900;
     Renderer testRenderer(resX, resY, testScene);
 
     auto result = testRenderer.parallelRender(rays_per_pixel);

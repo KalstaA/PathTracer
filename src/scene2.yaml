@@ -43,6 +43,7 @@ Objects:
         - 0
         - 0.785
       Material: 
+        Type: Diffuse
         Specularity: 0.8
         Color: 
           - 1
@@ -63,6 +64,9 @@ Objects:
         - 0
         - 0.785
       Material: 
+        Type: ClearCoat
+        ClearCoat: 0.3
+        Specularity: 0.7
         Specularity: 0.8
         Color: 
           - 1
@@ -78,6 +82,7 @@ Objects:
         - -31
       Radius: 30
       Material: 
+        Type: Diffuse
         Color: 
           - 0.5
           - 0.5
@@ -92,6 +97,7 @@ Objects:
         - 20
       Radius: 20
       Material: 
+        Type: Diffuse
         Color: 
           - 1
           - 1
@@ -110,11 +116,13 @@ Objects:
         - -0.5
       Radius: 0.5
       Material: 
+        Type: Refractive
+        RefractionRatio: 0.8
         Color: 
-          - 0
           - 1
-          - 0
-        Name: GREEN DIFFUSE
+          - 1
+          - 1
+        Name: Glass
 
   - Object:
       Type: Ball
@@ -124,6 +132,7 @@ Objects:
         - -0.5
       Radius: 0.5
       Material: 
+        Type: Diffuse
         Color: 
           - 0
           - 0
@@ -138,6 +147,7 @@ Objects:
         - 1
       Radius: 0.7
       Material: 
+        Type: Reflective
         Specularity: 1
         Name: MIRROR
 
