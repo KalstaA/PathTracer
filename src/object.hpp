@@ -14,19 +14,15 @@ class Object
 private:
     Vector position_;
     std::shared_ptr<Material> material_;
-    Vector up_;
-    Vector forward_;
 
 public:
-    Object(Vector position, std::shared_ptr<Material> material, Vector up = Vector(0, 0, 1), Vector forward = Vector(1, 0, 0)) 
-                    : position_(position), material_(material), up_(up), forward_(forward) {}
+    Object(Vector position, std::shared_ptr<Material> material) 
+                    : position_(position), material_(material) {}
     
     virtual ~Object() { }
 
     Vector getPosition() const { return position_; }
     std::shared_ptr<Material> getMaterial() const { return material_; }
-    Vector getUp() const { return up_; }
-    Vector getForward() const { return forward_; }
 
     /**
      * @brief Calculate whether a given ray collides with the object.

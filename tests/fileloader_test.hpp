@@ -73,24 +73,14 @@ TEST(FILELOADER, CorrectLoadScene) {
     // Test objects
     auto obj = objects.begin();
     Vector position1 = (**obj).getPosition();
-    Vector up1 = (**obj).getUp();
-    Vector forw1 = (**obj).getForward();
     std::shared_ptr<Material> material1 = (**obj).getMaterial();
-    //float rad1 = (**obj).getRadius();
 
     std::advance(obj, 1);
     Vector position2 = (**obj).getPosition();
-    Vector up2 = (**obj).getUp();
-    Vector forw2 = (**obj).getForward();
     std::shared_ptr<Material> material2 = (**obj).getMaterial();
-    //float rad2 = (**obj).getRadius();
 
     EXPECT_LE(distance(position1, Vector(5, 0, 0)), 0.001);
-    EXPECT_LE(distance(up1, Vector(0, 0, 1)), 0.001);
-    EXPECT_LE(distance(forw1, Vector(1, 0, 0)), 0.001);
     EXPECT_LE(distance(position2, Vector(6, 0, -31)), 0.001);
-    EXPECT_LE(distance(up2, Vector(0, 0, 1)), 0.001);
-    EXPECT_LE(distance(forw2, Vector(1, 0, 0)), 0.001);
 
     EXPECT_LE(distance(material1->getColor(), Color(1, 0, 0)), 0.001);
     //EXPECT_LE(distance(material1->getEmColor(), Color(0.3, 0.3, 0.3)), 0.001);
@@ -283,6 +273,30 @@ TEST(FILELOADER, NoRadius) {
         }
         
     }, RadiusNotFoundException);
+}
+
+TEST(FILELOADER, InvalidMaterialType) {
+    // Initialize filepaths and file loaders
+    std::string fpath1 = PATH + "invalid_material_type.yaml";
+    FileLoader fileloader1(fpath1);
+
+    // Desired error message
+    std::string msg1 = "FileLoader exception caught:\nInvalid material type in file: " +
+                        fpath1 + ", for material starting on line: 64.";
+
+    // Should throw negative radius exception
+    EXPECT_THROW({
+        try
+        {
+            std::shared_ptr<Scene> scene = fileloader1.loadSceneFile();
+        }
+        catch(const InvalidMaterialTypeException& e)
+        {
+            EXPECT_STREQ(msg1.c_str(), e.what());
+            throw;
+        }
+        
+    }, InvalidMaterialTypeException);
 }
 
 #endif

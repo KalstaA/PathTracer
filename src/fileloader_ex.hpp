@@ -179,7 +179,7 @@ class InvalidMaterialTypeException : public FileLoaderException {
     public:
         InvalidMaterialTypeException(std::string filepath, int line) : FileLoaderException() {
             msg_ = "FileLoader exception caught:\nInvalid material type in file: " +
-                    filepath + ", for material starting  on line: " + std::to_string(line) + ".";
+                    filepath + ", for material starting on line: " + std::to_string(line) + ".";
         }
 
         virtual const char* what() const noexcept {

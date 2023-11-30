@@ -12,20 +12,19 @@
 #include <iostream>
 #include <exception>
 
-int main() {
+int main(int argc, char* argv[]) {
   try
   {
     //Gui gui;
     //gui.titleScreen();
-    FileLoader test("../src/scene2.yaml");
+    FileLoader test("../src/scenes/room.yaml");
     std::shared_ptr<Scene> testScene = test.loadSceneFile();
     std::cout << (*testScene);
-    int rays_per_pixel = 30;
 
     int resX = 1200, resY = 900;
     Renderer testRenderer(resX, resY, testScene);
 
-    auto result = testRenderer.parallelRender(rays_per_pixel);
+    auto result = testRenderer.parallelRender(atoi(argv[1]));
 
     Interface interface;
     interface.createImg(result);

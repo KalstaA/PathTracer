@@ -16,17 +16,17 @@ Camera:
 
 Environment: 
   SkyColor:
-    - 0.2
-    - 0.5
-    - 1.0
+    - 0.0
+    - 0.0
+    - 0.0
   HorizonColor: 
-    - 0.7
-    - 0.8
-    - 0.8
+    - 0.0
+    - 0.0
+    - 0.0
   GroundColor:
-    - 0.1 
-    - 0.1
-    - 0.1
+    - 0.0 
+    - 0.0
+    - 0.0
 
 Objects:
   - Object:
@@ -102,7 +102,7 @@ Objects:
           - 1
           - 1
           - 0
-        EmissionStrength: 0.5
+        EmissionStrength: 1.0
         EmissionColor:  
           - 1
           - 1
