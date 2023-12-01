@@ -257,6 +257,12 @@ class FileLoader {
             return box_ptr;
         }
 
+        /**
+         * @brief Creates a pointer to a trianglemesh object from yaml node.
+         * 
+         * @param tmesh Yaml node that contains properties of TriangleMesh object
+         * @return A pointer to a TriangleMesh object
+         */
         std::shared_ptr<TriangleMesh> LoadTriangleMesh(YAML::Node tmesh) {
             YAML::Node filepath_node = tmesh["Filepath"];
             YAML::Node scale_node = tmesh["Scale"];
