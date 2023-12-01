@@ -27,7 +27,7 @@ private:
     float depth_of_field = 0;
     float focusDistance = 5;
 
-    int max_bounces = 10;
+    int max_bounces = 15;
 
     float view_width;
     float view_height;

@@ -75,6 +75,7 @@ Objects:
           - 1
           - 1
         Name: SUN
+        
   - Object:
       Type: Ball
       Position:

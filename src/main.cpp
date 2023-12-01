@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     std::shared_ptr<Scene> testScene = test.loadSceneFile();
     std::cout << (*testScene);
 
-    int resX = 1200, resY = 900;
+    int resX = 1400, resY = 1050;
     Renderer testRenderer(resX, resY, testScene);
 
     auto result = testRenderer.parallelRender(atoi(argv[1]));

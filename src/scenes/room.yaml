@@ -48,7 +48,7 @@ Objects:
           - 1.0
           - 1.0
           - 1.0
-        Name: Mirror
+        Name: Floor Mirror
 
   - Object:
       Type: Rectangle
@@ -69,7 +69,7 @@ Objects:
           - 1.0
           - 1.0
           - 1.0
-        Name: Mirror
+        Name: Back Wall Mirror
 
   - Object:
       Type: Rectangle
@@ -90,7 +90,7 @@ Objects:
           - 1.0
           - 1.0
           - 1.0
-        Name: Mirror
+        Name: Left Wall Mirror
 
   - Object:
       Type: Rectangle
@@ -111,7 +111,7 @@ Objects:
           - 1.0
           - 1.0
           - 1.0
-        Name: Mirror
+        Name: Right Wall Mirror
 
   - Object:
       Type: Rectangle
@@ -126,13 +126,13 @@ Objects:
         - 0
         - 180
       Material: 
-        Type: Reflective
+        Type: Reflective 
         Specularity: 1.0
         Color: 
           - 1.0
           - 1.0
           - 1.0
-        Name: Mirror
+        Name: Front Wall Mirror
 
   - Object:
       Type: Rectangle
@@ -153,7 +153,7 @@ Objects:
           - 1.0
           - 1.0
           - 1.0
-        Name: Mirror
+        Name: Ceiling Mirror
 
 
   - Object:
@@ -176,7 +176,7 @@ Objects:
           - 1
           - 1
           - 1
-        Name: LIGHT
+        Name: Ceiling LIGHT
 
   - Object:
       Type: Ball
@@ -191,7 +191,7 @@ Objects:
           - 1
           - 0
           - 0
-        Name: Red Diffuse
+        Name: Red Diffuse Ball
   
   - Object:
       Type: Box
@@ -213,4 +213,36 @@ Objects:
           - 1
           - 1
           - 1
-        Name: Glass
+        Name: Glass Pole
+
+  - Object:
+      Type: Ball
+      Position:
+        - 2.5
+        - 2.5
+        - -2.5
+      Radius: 0.5
+      Material: 
+        Type: Diffuse
+        EmissionStrength: 1.0
+        EmissionColor:
+          - 1
+          - 1
+          - 1
+        Name: Left light ball
+
+  - Object:
+      Type: Ball
+      Position:
+        - 2.5
+        - -2.5
+        - -2.5
+      Radius: 0.5
+      Material: 
+        Type: Diffuse
+        EmissionStrength: 1.0
+        EmissionColor:
+          - 1
+          - 1
+          - 1
+        Name: Right light ball
