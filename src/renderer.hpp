@@ -205,4 +205,13 @@ public:
         
         return result;
     }
+
+    /**
+     * @brief Set the depth of field of the render.
+     * 
+     * @param dof Value for depth of field
+     */
+    void setDof(float dof) {
+        depth_of_field = dof;
+    }
 };

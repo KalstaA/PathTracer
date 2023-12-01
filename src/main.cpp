@@ -17,14 +17,14 @@ int main() {
   {
     Gui gui;
     gui.titleScreen();
-    FileLoader test("../src/scene.yaml");
+    /*FileLoader test("../src/scene.yaml");
     std::shared_ptr<Scene> testScene = test.loadSceneFile();
     std::cout << (*testScene);
 
     int resX = 400, resY = 300;
     Renderer testRenderer(resX, resY, testScene);
 
-    auto result = testRenderer.parallelRender(5);
+    auto result = testRenderer.parallelRender(1);
 
     Interface interface;
     interface.createImg(result);
@@ -36,7 +36,7 @@ int main() {
     else
     {
       std::cout << "Saving image failed" << std::endl;
-    }
+    }*/
   }
   catch (FileLoaderException& ex)
   {
