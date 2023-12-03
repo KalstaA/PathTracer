@@ -6,10 +6,11 @@
 #include "textbox.hpp"
 #include "fileloader.hpp"
 #include "types.hpp"
+#include "gui_ex.hpp"
 
 class Gui : public Interface {
 public:
-    void titleScreen() {
+    std::shared_ptr<Scene> titleScreen() {
         sf::Font arial;   
         arial.loadFromFile("../src/Arial.ttf");
         sf::Font comic;
@@ -23,6 +24,14 @@ public:
         title.setString("Path Tracer");
         title.setPosition({175, 150});
 
+        sf::Text invalidPath; 
+        invalidPath.setFillColor(sf::Color::Red);
+        invalidPath.setFont(arial);
+        invalidPath.setCharacterSize(25);
+        invalidPath.setString("Invalid filepath");
+        invalidPath.setPosition({175, 250});
+
+        bool error = false;
 
         Textbox filepathBox(25, sf::Color::White, false, 30, "Enter filename ");
         filepathBox.setFont(arial);
@@ -38,17 +47,23 @@ public:
                     case sf::Event::MouseButtonPressed:
                         if(filepathBox.onButton(window)) {
                             filepathBox.setSelected();
+                            filepathBox.setColor(sf::Color::Green);
                         }
                     case sf::Event::TextEntered:
                         filepathBox.typedOn(event);
                     case sf::Event::KeyPressed:
                         if(event.key.code == sf::Keyboard::Enter){ 
-                            std::string filepath = filepathBox.getInput().substr();
-                            std::cout << filepath << std::endl;
-                            FileLoader loader(filepath);
-                            window.close();
-                            std::shared_ptr<Scene> loadedScene = loader.loadSceneFile();
-                            openSettings(loadedScene);
+                            try {
+                                std::string filepath = filepathBox.getInput().substr();
+                                FileLoader loader(filepath);
+                                window.close();
+                                std::shared_ptr<Scene> loadedScene = loader.loadSceneFile();
+                                return loadedScene;
+                            } catch (FileLoaderException& ex) {
+                                error = true;
+                            }
+                        } else if(event.key.code == sf::Keyboard::Escape){
+                            filepathBox.setColor(sf::Color::White);
                         }
                         
                 }
@@ -56,10 +71,14 @@ public:
 
             window.clear();
             window.draw(title);
+            if(error) {
+                window.draw(invalidPath);
+            }
             filepathBox.draw(window);
             window.display();
 
         }
+        throw TitleScreenException();
     }
 
     void openSettings(std::shared_ptr<Scene> loadedScene) {
@@ -85,11 +104,19 @@ public:
 
         Textbox resYbox(20, sf::Color::White, false, 4, "ResY: ");
         resYbox.setFont(arial);
-        resYbox.setPos({0, 50});
+        resYbox.setPos({0, 25});
+
+        Textbox sampleBox(20, sf::Color::White, false, 4, "Samples: ");
+        sampleBox.setFont(arial);
+        sampleBox.setPos({0, 50});
+
+        Textbox bounceBox(20, sf::Color::White, false, 4, "Light bounces: ");
+        bounceBox.setFont(arial);
+        bounceBox.setPos({0, 75});
 
         Textbox fovBox(20, sf::Color::White, false, 4, "Fov: ");
         fovBox.setFont(arial);
-        fovBox.setPos({0, 100});
+        fovBox.setPos({0, 125});
 
         Textbox dofBox(20, sf::Color::White, false, 4, "Depth of field: ");
         dofBox.setFont(arial);
@@ -97,17 +124,10 @@ public:
 
         Textbox focusBox(20, sf::Color::White, false, 4, "Focus distance: ");
         focusBox.setFont(arial);
-        focusBox.setPos({0, 200});
-
-
-        Textbox sampleBox(20, sf::Color::White, false, 4, "Samples: ");
-        sampleBox.setFont(arial);
-        sampleBox.setPos({0, 250});
-
+        focusBox.setPos({0, 175});
 
         Textbox* selectedBox = nullptr;    
         sf::Event event; 
-
 
         while (window.isOpen())
         {
@@ -153,7 +173,7 @@ public:
                                 selectedBox->setColor(sf::Color::White);
                             }
                             fovBox.setSelected();
-                            fovBox.setColor(sf::Color::Red);
+                            fovBox.setColor(sf::Color::Green);
                             selectedBox = &fovBox;
                         }
 
@@ -163,7 +183,7 @@ public:
                                 selectedBox->setColor(sf::Color::White);
                             }
                             resXbox.setSelected();
-                            resXbox.setColor(sf::Color::Red);
+                            resXbox.setColor(sf::Color::Green);
                             selectedBox = &resXbox;
                         }
 
@@ -173,7 +193,7 @@ public:
                                 selectedBox->setColor(sf::Color::White);
                             }
                             resYbox.setSelected();
-                            resYbox.setColor(sf::Color::Red);
+                            resYbox.setColor(sf::Color::Green);
                             selectedBox = &resYbox;
                             
                         }
@@ -184,7 +204,7 @@ public:
                                 selectedBox->setColor(sf::Color::White);
                             }
                             dofBox.setSelected();
-                            dofBox.setColor(sf::Color::Red);
+                            dofBox.setColor(sf::Color::Green);
                             selectedBox = &dofBox;
                             
                         }
@@ -195,7 +215,7 @@ public:
                                 selectedBox->setColor(sf::Color::White);
                             }
                             sampleBox.setSelected();
-                            sampleBox.setColor(sf::Color::Red);
+                            sampleBox.setColor(sf::Color::Green);
                             selectedBox = &sampleBox;
                         }
 
@@ -205,9 +225,19 @@ public:
                                 selectedBox->setColor(sf::Color::White);
                             }
                             focusBox.setSelected();
-                            focusBox.setColor(sf::Color::Red);
+                            focusBox.setColor(sf::Color::Green);
                             selectedBox = &focusBox;
                             
+                        }
+
+                        if(bounceBox.onButton(window)) {
+                            if(selectedBox) {
+                                selectedBox->setUnselected();
+                                selectedBox->setColor(sf::Color::White);
+                            }
+                            bounceBox.setSelected();
+                            bounceBox.setColor(sf::Color::Green);
+                            selectedBox = &bounceBox;    
                         }
 
                     case sf::Event::TextEntered:
@@ -217,12 +247,14 @@ public:
                         dofBox.typedOn(event);
                         sampleBox.typedOn(event);
                         focusBox.typedOn(event);
+                        bounceBox.typedOn(event);
 
                     case sf::Event::KeyPressed:
                         if(event.key.code == sf::Keyboard::Enter){
                             int resX;
                             int resY;
                             int sampleSize;
+                            int bounceAmount;
                             float dof = 0;
                             
                             if(checkIfPosNum(fovBox.getInput()) && fovBox.getInput() != ""){
@@ -254,6 +286,13 @@ public:
                             }else {
                                 break;
                             }
+
+                            if(checkIfPosNum(bounceBox.getInput()) && bounceBox.getInput() != ""){
+                                bounceAmount = std::stoi(bounceBox.getInput());
+                            }else {
+                                break;
+                            }
+                            
                             window.close();
                             openRender(resX, resY, loadedScene, sampleSize, dof);
                         }
@@ -269,6 +308,7 @@ public:
             focusBox.draw(window);
             dofBox.draw(window);
             sampleBox.draw(window);
+            bounceBox.draw(window);
             window.display();
 
             }

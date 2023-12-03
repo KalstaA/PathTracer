@@ -42,8 +42,8 @@ class Button {
         void setPos(sf::Vector2f pos) {
             button_.setPosition(pos);
 
-            float text_pos_x = (pos.x + button_.getLocalBounds().width / 2);
-            float text_pos_y = (pos.y + button_.getLocalBounds().height / 2);
+            float text_pos_x = (pos.x + button_.getLocalBounds().width / 2) - (button_text_.getGlobalBounds().width / 2);
+            float text_pos_y = (pos.y + button_.getLocalBounds().height / 2) - (button_text_.getGlobalBounds().height / 2);
             button_text_.setPosition({text_pos_x, text_pos_y});
         }
 
