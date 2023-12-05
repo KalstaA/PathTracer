@@ -11,12 +11,14 @@
 
 #include <iostream>
 #include <exception>
+#include <string>
+#include <cstdlib>
 
 int main(int argc, char *argv[]) {
 
   try
   {
-    if (argc > 1 && strcmp(argv[1], "gui") == 0)
+    if (argc == 1 && strcmp(argv[1], "gui") == 0)
     {
       Gui gui;
       gui.titleScreen();
@@ -24,14 +26,19 @@ int main(int argc, char *argv[]) {
 
     else
     {
-      FileLoader test("../src/scenes/test2.yaml");
+      std::string filePath = argv[1];
+
+      int resX = std::stoi(argv[2], nullptr);
+      int resY = std::stoi(argv[3], nullptr); 
+      int samples = std::stoi(argv[4], nullptr);
+
+      FileLoader test(filePath);
       std::shared_ptr<Scene> testScene = test.loadSceneFile();
       std::cout << (*testScene);
 
-      int resX = 800, resY = 600;
       Renderer testRenderer(resX, resY, testScene);
 
-      auto result = testRenderer.parallelRender(1);
+      auto result = testRenderer.parallelRender(samples);
 
       Interface interface;
       interface.createImg(result);
@@ -57,6 +64,11 @@ int main(int argc, char *argv[]) {
     std::cout << ex.what() << std::endl;
     return EXIT_FAILURE;
 
+  }
+  catch (std::invalid_argument& ex)
+  {
+    std::cout << "Invalid command line arguments." << std::endl;
+    std::cout << ex.what() << std::endl;
   }
   catch (std::exception& ex)
   {
