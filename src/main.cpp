@@ -12,32 +12,39 @@
 #include <iostream>
 #include <exception>
 
-int main() {
+int main(int argc, char *argv[]) {
 
   try
   {
-    Gui gui;
-    gui.titleScreen();
-    /*FileLoader test("../src/scene.yaml");
-    std::shared_ptr<Scene> testScene = test.loadSceneFile();
-    std::cout << (*testScene);
-
-    int resX = 1400, resY = 1050;
-    Renderer testRenderer(resX, resY, testScene);
-
-    auto result = testRenderer.parallelRender(1);
-
-    Interface interface;
-    interface.createImg(result);
-    bool imgSaved = interface.saveImage("image.png");
-    if (imgSaved)
+    if (argc > 1 && strcmp(argv[1], "gui") == 0)
     {
-      std::cout << "Image saved succesfully" << std::endl;
+      Gui gui;
+      gui.titleScreen();
     }
+
     else
     {
-      std::cout << "Saving image failed" << std::endl;
-    }*/
+      FileLoader test("../src/scenes/test2.yaml");
+      std::shared_ptr<Scene> testScene = test.loadSceneFile();
+      std::cout << (*testScene);
+
+      int resX = 800, resY = 600;
+      Renderer testRenderer(resX, resY, testScene);
+
+      auto result = testRenderer.parallelRender(1);
+
+      Interface interface;
+      interface.createImg(result);
+      bool imgSaved = interface.saveImage("image.png");
+      if (imgSaved)
+      {
+        std::cout << "Image saved succesfully" << std::endl;
+      }
+      else
+      {
+        std::cout << "Saving image failed" << std::endl;
+      }
+    }
   }
   catch (FileLoaderException& ex)
   {

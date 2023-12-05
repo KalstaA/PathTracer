@@ -308,7 +308,7 @@ public:
                             int x = pixel % resX;
                             int y = pixel / resX;
                             
-                            combinedSamples[x][y] = clamp(combinedSamples[x][y] * (1 - weight) + clamp(weight * result[x][y].cwiseSqrt()));
+                            combinedSamples[x][y] = clamp(combinedSamples[x][y] * (1 - weight) + weight * result[x][y]);
                             
                         }
                     }

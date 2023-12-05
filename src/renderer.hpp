@@ -159,30 +159,21 @@ public:
         auto startTime = std::chrono::high_resolution_clock::now();        
         std::vector<std::vector<Color>> result(resolution_x, std::vector<Color> (resolution_y));
 
-        omp_set_num_threads(omp_get_max_threads());
-        
-        Light totalLight;
-        Ray ray;
-
-        int numThreads = 0;
-
         std::cout << "Rendering started..." << std::endl;
 
         for (int sample = 0; sample < samples; ++sample)
         {
-
             float weight = 1.0 / (sample + 1);
 
-            #pragma omp parallel for private(totalLight, ray)
-            for (int pixel = 0; pixel < resolution_x * resolution_y; ++pixel)
+            #pragma omp parallel for num_threads(omp_get_max_threads())
+            for (int x = 0; x < resolution_x; ++x)
             {
-                if (pixel == 0) numThreads = omp_get_num_threads();
-                int x = pixel % resolution_x;
-                int y = pixel / resolution_x;
-
-                ray = createRay(x, y);
-                totalLight = trace(ray);
-                result[x][y] = clamp(result[x][y] * (1 - weight) + weight * totalLight.cwiseSqrt());
+                for (int y = 0; y < resolution_y; ++y)
+                {
+                    Ray ray = createRay(x, y);
+                    Light totalLight = trace(ray);
+                    result[x][y] = clamp(result[x][y] * (1 - weight) + weight * totalLight.cwiseSqrt());
+                }
             }
 
             std::cout << "Sample " << sample + 1 << "/" << samples << " completed." << std::endl;
@@ -190,7 +181,7 @@ public:
 
         auto endTime = std::chrono::high_resolution_clock::now();
         std::chrono::duration<float> duration = endTime - startTime; 
-        std::cout << "Used " << numThreads << " threads.\n" << std::endl;
+        std::cout << "Used " << omp_get_max_threads() << " threads.\n" << std::endl;
         std::cout << "Rendering complete in " << duration.count() << " seconds.\n" << std::endl;
         
         return result;
