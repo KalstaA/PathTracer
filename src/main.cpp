@@ -4,7 +4,7 @@
 #include "interface.hpp"
 #include "fileloader.hpp"
 #include "fileloader_ex.hpp"
-//#include "gui.hpp"
+#include "gui.hpp"
 #include "triangle.hpp"
 #include "trianglemesh.hpp"
 #include "types.hpp"
@@ -12,19 +12,20 @@
 #include <iostream>
 #include <exception>
 
-int main(int argc, char* argv[]) {
+int main() {
+
   try
   {
-    //Gui gui;
-    //gui.titleScreen();
-    FileLoader test("../src/scenes/room.yaml");
+    Gui gui;
+    gui.titleScreen();
+    /*FileLoader test("../src/scene.yaml");
     std::shared_ptr<Scene> testScene = test.loadSceneFile();
     std::cout << (*testScene);
 
     int resX = 1400, resY = 1050;
     Renderer testRenderer(resX, resY, testScene);
 
-    auto result = testRenderer.parallelRender(atoi(argv[1]));
+    auto result = testRenderer.parallelRender(1);
 
     Interface interface;
     interface.createImg(result);
@@ -36,7 +37,7 @@ int main(int argc, char* argv[]) {
     else
     {
       std::cout << "Saving image failed" << std::endl;
-    }
+    }*/
   }
   catch (FileLoaderException& ex)
   {

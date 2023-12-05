@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <list>
 #include <iostream>
 #include "ball.hpp"
@@ -53,7 +54,7 @@ public:
         camera_.fov = fov;
     }
 
-    void setDof(float dof) {
+    void setFocusDist(float dof) {
         camera_.focus_distance = dof;
     }
 

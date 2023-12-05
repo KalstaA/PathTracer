@@ -6,6 +6,7 @@
 #include <iostream>
 #include <omp.h>
 #include <chrono>
+#include <memory>
 
 /**
  * @brief Implements the ray tracing algorithm.
@@ -193,5 +194,14 @@ public:
         std::cout << "Rendering complete in " << duration.count() << " seconds.\n" << std::endl;
         
         return result;
+    }
+
+    /**
+     * @brief Set the depth of field of the render.
+     * 
+     * @param dof Value for depth of field
+     */
+    void setDof(float dof) {
+        depth_of_field = dof;
     }
 };
