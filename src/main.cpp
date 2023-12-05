@@ -18,13 +18,13 @@ int main(int argc, char *argv[]) {
 
   try
   {
-    if (argc == 1 && strcmp(argv[1], "gui") == 0)
+    if (argc == 2 && strcmp(argv[1], "gui") == 0)
     {
       Gui gui;
       gui.titleScreen();
     }
 
-    else
+    else if (argc == 5)
     {
       std::string filePath = argv[1];
 
@@ -51,6 +51,10 @@ int main(int argc, char *argv[]) {
       {
         std::cout << "Saving image failed" << std::endl;
       }
+    }
+    else
+    {
+      std::cout << "Invalid command line arguments." << std::endl;
     }
   }
   catch (FileLoaderException& ex)
