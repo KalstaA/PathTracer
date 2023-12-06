@@ -2,16 +2,16 @@ Camera:
   Position: 
     - 0
     - 0
-    - 0
+    - 1
   Direction:
     - 1
     - 0
-    - 0
+    - 0.25
   Up:
     - 0
     - 0
     - 1
-  Fov: 0.33
+  Fov: 0.5
   FocusDistance: 5
 
 Environment: 
@@ -31,21 +31,64 @@ Environment:
 Objects:
   - Object:
       Type: TriangleMesh
-      Filepath: ../src/objects/knight.obj
+      Filepath: ../objects/knight.obj
       Scale: 1
+      Position:
+        - 10
+        - 2
+        - -1
       Rotation:
         - 0
         - 0
-        - 0
+        - 45
+      Material:
+        Type: ClearCoat
+        Specularity: 0.8
+        ClearCoat: 0.2
+        Color: 
+          - 0.39
+          - 0.19
+          - 0
+        Name: LACQUERED WOOD
+
+  - Object:
+      Type: TriangleMesh
+      Filepath: ../objects/tree.obj
+      Scale: 0.1
       Position:
-        - 5
+        - 10
+        - -2
+        - -1
+      Rotation:
         - 0
         - 0
-      Radius: 1
+        - 45
       Material:
         Type: Diffuse
         Color: 
+          - 0
+          - 0.4
+          - 0
+        Name: DARK GREEN
+
+  - Object:
+      Type: Box
+      Width: 7
+      Height: 1
+      Depth: 7
+      Position:
+        - 10
+        - 0
+        - -1.5
+      Rotation:
+        - 0
+        - 0
+        - 30
+      Material:
+        Type: Reflective
+        Specularity: 0.8
+        Color: 
           - 1
-          - 0
-          - 0
-        Name: RED DIFFUSE
+          - 1
+          - 1
+        Name: MIRROR FLOOR

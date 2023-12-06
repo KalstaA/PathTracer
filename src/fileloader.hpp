@@ -297,6 +297,7 @@ class FileLoader {
                 std::cout << "Standard rotation (0, 0, 0) will be used." << std::endl;
                 rotation = Vector(0, 0, 0);
             }
+            rotation = (rotation / 180.0) * M_PI;
             
             std::shared_ptr<TriangleMesh> tmesh_ptr = std::make_shared<TriangleMesh>(tmesh_filepath, LoadVector(tmesh, "Position"), LoadMaterial(tmesh), rotation, scale);
             

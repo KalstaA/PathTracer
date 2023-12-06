@@ -24,19 +24,21 @@ int main(int argc, char *argv[]) {
       gui.titleScreen();
     }
 
-    else if (argc == 5)
+    else if (argc == 6)
     {
       std::string filePath = argv[1];
 
       int resX = std::stoi(argv[2], nullptr);
       int resY = std::stoi(argv[3], nullptr); 
       int samples = std::stoi(argv[4], nullptr);
+      int bounces = std::stoi(argv[5], nullptr);
 
       FileLoader test(filePath);
       std::shared_ptr<Scene> testScene = test.loadSceneFile();
       std::cout << (*testScene);
 
       Renderer testRenderer(resX, resY, testScene);
+      testRenderer.setMaxBounces(bounces);
 
       auto result = testRenderer.parallelRender(samples);
 

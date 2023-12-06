@@ -28,7 +28,7 @@ private:
     float depth_of_field = 0;
     float focusDistance = 5;
 
-    int max_bounces = 15;
+    int max_bounces = 5;
 
     float view_width;
     float view_height;
@@ -152,6 +152,10 @@ public:
         pixel_x = 2 * view_width / (resolution_x - 1) * camera_.direction.cross(camera_.up);
         pixel_y = - 2 * view_height / (resolution_y - 1) * camera_.up;
         topleft_pixel = camera_.direction * focusDistance - view_width * camera_.direction.cross(camera_.up) + view_height * camera_.up;
+    }
+
+    void setMaxBounces(int bounces) {
+        max_bounces = bounces;
     }
 
     auto parallelRender(int samples) {
