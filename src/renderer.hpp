@@ -162,6 +162,10 @@ public:
         pixel_x = 2 * view_width / (resolution_x - 1) * camera_.direction.cross(camera_.up);
         pixel_y = - 2 * view_height / (resolution_y - 1) * camera_.up;
         topleft_pixel = camera_.direction * focusDistance - view_width * camera_.direction.cross(camera_.up) + view_height * camera_.up;
+    }   
+
+    void setMaxBounces(int bounces) {
+        max_bounces = bounces;
     }
 
     auto parallelRender(int samples) {

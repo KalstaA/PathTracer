@@ -8,8 +8,20 @@
 #include "types.hpp"
 #include "gui_ex.hpp"
 
+/**
+ * @brief Implements the Graphical user interface class.
+ * 
+ */
 class Gui : public Interface {
 public:
+
+    /**
+     * @brief Opens a titlescreen where the user can input a filepath. If the filepath contains a valid yaml file, 
+     * a shared pointer to a scene constructed with this file is returned. An invalid filepath will result in an error
+     * being shown to the user.
+     * 
+     * @return std::shared_ptr<Scene> The shared pointer to the scene created with the inputted yaml file
+     */
     std::shared_ptr<Scene> titleScreen() {
         sf::Font arial;   
         arial.loadFromFile("../src/Arial.ttf");
@@ -33,7 +45,7 @@ public:
 
         bool error = false;
 
-        Textbox filepathBox(25, sf::Color::White, false, 30, "Enter filename ");
+        Textbox filepathBox(25, sf::Color::White, false, 30, "Enter filename: ");
         filepathBox.setFont(arial);
         filepathBox.setPos({175, 225});
 
@@ -81,6 +93,12 @@ public:
         throw TitleScreenException();
     }
 
+
+    /**
+     * @brief 
+     * 
+     * @param loadedScene 
+     */
     void openSettings(std::shared_ptr<Scene> loadedScene) {
         sf::Image image; 
         sf::Sprite sprite;
@@ -146,17 +164,17 @@ public:
                         break;
                     case sf::Event::MouseButtonPressed:
                         if(preview.onButton(window)) {
-                            if(checkIfPosNum(fovBox.getInput()) && fovBox.getInput() != ""){
+                            if(checkIfPosFloat(fovBox.getInput()) && fovBox.getInput() != ""){
                                 loadedScene->setFov((M_PI * std::stof(fovBox.getInput()) / 180));
                             }
 
-                            if(checkIfPosNum(focusBox.getInput()) && focusBox.getInput() != ""){
+                            if(checkIfPosFloat(focusBox.getInput()) && focusBox.getInput() != ""){
                                 loadedScene->setFocusDist(std::stof(focusBox.getInput()));
                             }
 
                             Renderer previewCreator(500, 400, loadedScene);
 
-                            if(checkIfPosNum(dofBox.getInput()) && dofBox.getInput() != ""){
+                            if(checkIfPosFloat(dofBox.getInput()) && dofBox.getInput() != ""){
                                 previewCreator.setDof(std::stof(dofBox.getInput()));
                             }
                             createImg(previewCreator.parallelRender(1));
@@ -257,15 +275,15 @@ public:
                             int bounceAmount;
                             float dof = 0;
                             
-                            if(checkIfPosNum(fovBox.getInput()) && fovBox.getInput() != ""){
+                            if(checkIfPosFloat(fovBox.getInput()) && fovBox.getInput() != ""){
                                 loadedScene->setFov((M_PI * std::stof(fovBox.getInput()) / 180));
                             }
 
-                            if(checkIfPosNum(focusBox.getInput()) && focusBox.getInput() != ""){
+                            if(checkIfPosFloat(focusBox.getInput()) && focusBox.getInput() != ""){
                                 loadedScene->setFocusDist(std::stof(focusBox.getInput()));
                             }
 
-                            if(checkIfPosNum(dofBox.getInput()) && dofBox.getInput() != ""){
+                            if(checkIfPosFloat(dofBox.getInput()) && dofBox.getInput() != ""){
                                 dof = std::stof(dofBox.getInput());
                             }
 
@@ -294,7 +312,7 @@ public:
                             }
                             
                             window.close();
-                            openRender(resX, resY, loadedScene, sampleSize, dof);
+                            openRender(resX, resY, loadedScene, sampleSize, dof, bounceAmount);
                         }
                 }
                 }
@@ -315,7 +333,7 @@ public:
 
         }
 
-    void openRender(int resX, int resY, std::shared_ptr<Scene> loadedScene, int sampleSize, float dof) {
+    void openRender(int resX, int resY, std::shared_ptr<Scene> loadedScene, int sampleSize, float dof, int bounces) {
         sf::RenderWindow window(sf::VideoMode(resX, resY), "Path Tracer", sf::Style::Close);
         window.setSize(sf::Vector2u(resX, resY));
         window.setFramerateLimit(0);
@@ -323,6 +341,8 @@ public:
         sf::Sprite sprite;
         sf::Texture texture;
         Renderer sceneRenderer(resX, resY, loadedScene);
+        sceneRenderer.setMaxBounces(bounces);
+        sceneRenderer.setDof(dof);
         std::vector<std::vector<Color>> combinedSamples;
 
         int i = 0;
@@ -374,6 +394,19 @@ private:
             if(!std::isdigit(i)) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    bool checkIfPosFloat(std::string text) {
+        int j = text.length();
+        for(auto i : text) {
+            if(!std::isdigit(i)) {
+                if(j != 2 && std::to_string(text[text.length()-2]) != ".") {
+                    return false;
+                }
+            }
+            j--;
         }
         return true;
     }
