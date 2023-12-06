@@ -83,7 +83,7 @@ private:
         randomShift = jiggle(0) * pixel_x + jiggle(1) * pixel_y;
         Vector target = topleft_pixel + pixel_y * y + pixel_x * x + randomShift;
 
-        Vector direction = target.normalized();
+        Vector direction = (-origin + target).normalized();
 
         return Ray{.origin = origin, .direction = direction};
     }

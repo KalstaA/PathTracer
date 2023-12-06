@@ -1,13 +1,13 @@
 Camera: 
   Position: 
-    - -20
-    - -20
+    - -100
+    - 0
     - 0
   LookingAt:
-    - -10
+    - 1
     - 0
     - 0
-  Fov: 0.33
+  Fov: 0.3
   Angle: 0
   DepthOfFiled: 0
   FocusDistance: 5

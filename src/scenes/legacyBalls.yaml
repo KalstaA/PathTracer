@@ -1,6 +1,6 @@
 Camera: 
   Position: 
-    - 10
+    - 0
     - 0
     - 0
   LookingAt:
@@ -8,7 +8,7 @@ Camera:
     - 0
     - 0
   Fov: 0.33
-  DepthOfField: 0
+  DepthOfField: 50
   Angle: 0
   FocusDistance: 5
 
