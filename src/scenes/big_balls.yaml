@@ -1,0 +1,83 @@
+Camera: 
+  Position: 
+    - 3
+    - -5
+    - 0.2
+  LookingAt:
+    - 0
+    - 0
+    - 0
+  Fov: 0.33
+  FocusDistance: 5.85
+  DepthOfField: 0
+  Angle: 0
+
+Environment: 
+  SkyColor:
+    - 0.2
+    - 0.5
+    - 1.0
+  HorizonColor: 
+    - 0.7
+    - 0.8
+    - 0.8
+  GroundColor:
+    - 0.1 
+    - 0.1
+    - 0.1
+
+Objects:
+  - Object:
+      Type: Rectangle
+      Position:
+        - 0
+        - 0
+        - -0.5
+      Width: 10
+      Height: 10
+      Rotation:
+       - 0
+       - 90
+       - 0
+      Material:
+        Type: Diffuse
+        Color:
+          - 1
+          - 0
+          - 0
+
+  - Object:
+      Type: Ball
+      Position:
+        - 0
+        - 0
+        - 0
+      Radius: 0.5
+      Material:
+        Type: Refractive
+        RefractionRatio: 0.8
+        Color: 
+          - 1
+          - 1
+          - 1
+        Name: Glass Ball
+
+  - Object:
+      Type: Box
+      Position:
+        - 0
+        - 4
+        - 0
+      Width: 1
+      Height: 1
+      Depth: 1
+      Rotation:
+       - 0
+       - 0
+       - 0
+      Material:
+        Type: Diffuse
+        Color:
+          - 0
+          - 1
+          - 0

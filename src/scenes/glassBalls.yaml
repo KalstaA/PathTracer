@@ -1,10 +1,10 @@
 Camera: 
   Position: 
     - -100
+    - 10
     - 0
-    - 0
-  Direction:
-    - 1
+  LookingAt:
+    - -10
     - 0
     - 0
   Up:

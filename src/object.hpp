@@ -14,6 +14,7 @@ class Object
 private:
     Vector position_;
     std::shared_ptr<Material> material_;
+    std::string name_;
 
 public:
     Object(Vector position, std::shared_ptr<Material> material) 

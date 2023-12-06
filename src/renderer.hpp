@@ -25,10 +25,8 @@ private:
     std::vector<std::vector<Color>> result;
 
     float anti_alias_radius = 1;
-    float depth_of_field = 0;
-    float focusDistance = 5;
 
-    int max_bounces = 15;
+    int max_bounces;
 
     float view_width;
     float view_height;
@@ -36,6 +34,8 @@ private:
     Vector topleft_pixel;
     Vector pixel_x;
     Vector pixel_y;
+
+    int progressBarWidth = 100;
 
     /**
      * @brief Reflects a vector according to a surface normal.
@@ -74,7 +74,7 @@ private:
     Ray createRay(int x, int y) {
 
         // Depth of field effect randomizes the origin
-        Vector2 jiggle = rnd_.randomInCircle() * depth_of_field;
+        Vector2 jiggle = rnd_.randomInCircle() * camera_.DoF;
         Vector randomShift = jiggle(0) * pixel_x + jiggle(1) * pixel_y;
         Point origin = camera_.position + randomShift;
 
@@ -83,7 +83,7 @@ private:
         randomShift = jiggle(0) * pixel_x + jiggle(1) * pixel_y;
         Vector target = topleft_pixel + pixel_y * y + pixel_x * x + randomShift;
 
-        Vector direction = (target - origin).normalized();
+        Vector direction = target.normalized();
 
         return Ray{.origin = origin, .direction = direction};
     }
@@ -131,6 +131,18 @@ private:
         }
         return ray.light;
     }
+
+    void progressBar(int sample, int samples) {
+        std::cout << "[";
+        int pos = progressBarWidth * (sample + 1)/samples;
+        for (int i = 0; i < progressBarWidth; ++i) {
+            if (i < pos) std::cout << "=";
+            else if (i == pos) std::cout << ">";
+            else std::cout << " ";
+        }
+        std::cout << "] " << std::round((sample + 1) * 100.0 / samples) << " %\r";
+        std::cout.flush();
+    }
     
 public:
 
@@ -141,17 +153,18 @@ public:
      * @param res_y vertical resolution of the rendering area
      * @param sceneToRender Scene object to be renderer
      */
-    Renderer(int res_x, int res_y, std::shared_ptr<Scene> sceneToRender) {
+    Renderer(int res_x, int res_y, std::shared_ptr<Scene> sceneToRender, int bounces) {
         resolution_x = res_x;
         resolution_y = res_y;
+        max_bounces = bounces;
         result = std::vector<std::vector<Color>>(resolution_x, std::vector<Color> (resolution_y));
         scene_ = sceneToRender;
         camera_ = (*scene_).getCamera();
-        view_width = focusDistance * tan(camera_.fov / 2);
+        view_width = camera_.focus_distance * tan(camera_.fov / 2);
         view_height = view_width * (resolution_y - 1) / (resolution_x - 1);
         pixel_x = 2 * view_width / (resolution_x - 1) * camera_.direction.cross(camera_.up);
         pixel_y = - 2 * view_height / (resolution_y - 1) * camera_.up;
-        topleft_pixel = camera_.direction * focusDistance - view_width * camera_.direction.cross(camera_.up) + view_height * camera_.up;
+        topleft_pixel = camera_.direction * camera_.focus_distance + view_width * camera_.left + view_height * camera_.up;
     }
 
     auto parallelRender(int samples) {
@@ -175,14 +188,13 @@ public:
                     result[x][y] = clamp(result[x][y] * (1 - weight) + weight * totalLight.cwiseSqrt());
                 }
             }
-
-            std::cout << "Sample " << sample + 1 << "/" << samples << " completed." << std::endl;
+            progressBar(sample, samples);
         }
 
         auto endTime = std::chrono::high_resolution_clock::now();
         std::chrono::duration<float> duration = endTime - startTime; 
         std::cout << "Used " << omp_get_max_threads() << " threads.\n" << std::endl;
-        std::cout << "Rendering complete in " << duration.count() << " seconds.\n" << std::endl;
+        std::cout << "Rendering completed in " << duration.count() << " seconds.\n" << std::endl;
         
         return result;
     }
@@ -193,6 +205,6 @@ public:
      * @param dof Value for depth of field
      */
     void setDof(float dof) {
-        depth_of_field = dof;
+        camera_.DoF = dof;
     }
 };
