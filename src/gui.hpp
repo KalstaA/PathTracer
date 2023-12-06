@@ -24,11 +24,21 @@ public:
      */
     std::shared_ptr<Scene> titleScreen() {
         sf::Font arial;   
-        arial.loadFromFile("../src/Arial.ttf");
+        std::string arialpath = "../src/Arial.ttf";
+        if(!arial.loadFromFile(arialpath)) {
+            throw FontException(arialpath);
+        }
         sf::Font comic;
-        comic.loadFromFile("../src/ComicSansMS.ttf");
+        std::string comicpath = "../src/ComicSansMS.ttf";
+        if(!comic.loadFromFile(comicpath)) {
+            throw FontException(comicpath);
+        }
+        
+        selectedBox = nullptr;
+
         sf::RenderWindow window(sf::VideoMode(700, 400), "Path Tracer", sf::Style::Titlebar | sf::Style::Close);
 
+        //Creates all UI elements
         sf::Text title;
         title.setFillColor(sf::Color::White);
         title.setFont(comic);
@@ -51,33 +61,40 @@ public:
 
         while(window.isOpen()) {
             sf::Event event;
-
+            //Checks user created events constantly
             while(window.pollEvent(event)) {
                 switch(event.type) {
                     case sf::Event::Closed:
                         window.close();
+                        break;
                     case sf::Event::MouseButtonPressed:
                         if(filepathBox.onButton(window)) {
                             filepathBox.setSelected();
                             filepathBox.setColor(sf::Color::Green);
                         }
+                        break;
                     case sf::Event::TextEntered:
                         filepathBox.typedOn(event);
+                        break;
                     case sf::Event::KeyPressed:
                         if(event.key.code == sf::Keyboard::Enter){ 
-                            try {
+                            try 
+                            {
                                 std::string filepath = filepathBox.getInput().substr();
                                 FileLoader loader(filepath);
                                 window.close();
                                 std::shared_ptr<Scene> loadedScene = loader.loadSceneFile();
                                 return loadedScene;
-                            } catch (FileLoaderException& ex) {
+                            } 
+                            catch(FileLoaderException& ex) {
                                 error = true;
                             }
                         } else if(event.key.code == sf::Keyboard::Escape){
                             filepathBox.setColor(sf::Color::White);
                         }
-                        
+                        break;
+                    default: 
+                        break;
                 }
             } 
 
@@ -95,22 +112,29 @@ public:
 
 
     /**
-     * @brief 
+     * @brief Opens a settings menu where the user can preview and influence a loaded scene. 
+     *  
+     * The setting menu contains a "preview" button and textboxes for parameter. There are two 
+     * types of parameters that the user can change. First are the parameters that influence only the final
+     * render the user can initiate with pressing enter. The other parameters, in addition to changing the final 
+     * render, affect the preview image.
+     *  
      * 
-     * @param loadedScene 
+     * @param loadedScene the scene to be influenced 
      */
     void openSettings(std::shared_ptr<Scene> loadedScene) {
         sf::Image image; 
         sf::Sprite sprite;
         sf::Texture texture;
         sf::Font arial;
-        if(!arial.loadFromFile("../src/Arial.ttf")) {
-            std::cout << "Error loading font" << std::endl;
+        std::string arialpath = "../src/Arial.ttf";
+        if(!arial.loadFromFile(arialpath)) {
+            throw FontException(arialpath);
         }
 
         sf::RenderWindow window(sf::VideoMode(700, 400), "Path Tracer", sf::Style::Titlebar | sf::Style::Close);
         
-        
+        //Creates all the UI elements
         sf::Vector2f size(200, 100);
         Button preview("Preview", sf::Color::Black, 20, size, sf::Color::Green);
         preview.setFont(arial);
@@ -144,17 +168,24 @@ public:
         focusBox.setFont(arial);
         focusBox.setPos({0, 175});
 
-        Textbox* selectedBox = nullptr;    
-        sf::Event event; 
+        sf::Text errorText;
+        errorText.setFont(arial);
+        errorText.setFillColor(sf::Color::Red);
+        errorText.setCharacterSize(20);
+        errorText.setPosition({0, 225});
+  
+        selectedBox = nullptr;
 
         while (window.isOpen())
         {
             sf::Event event;
+            //Checks user created events constantly
             while (window.pollEvent(event))
             {   
                 switch(event.type) {
                     case sf::Event::Closed:
                         window.close();
+                        break;
                     case sf::Event::MouseMoved:
                         if(preview.onButton(window)) {
                             preview.setColor(sf::Color::White);
@@ -163,6 +194,7 @@ public:
                         }
                         break;
                     case sf::Event::MouseButtonPressed:
+                        //Checks if preview button can be clicked
                         if(preview.onButton(window)) {
                             if(checkIfPosFloat(fovBox.getInput()) && fovBox.getInput() != ""){
                                 loadedScene->setFov((M_PI * std::stof(fovBox.getInput()) / 180));
@@ -184,79 +216,15 @@ public:
                             sprite.setTexture(texture);
                             sprite.setPosition(200, 0);
                             }
-
-                        if(fovBox.onButton(window)) {
-                            if(selectedBox) {
-                                selectedBox->setUnselected();
-                                selectedBox->setColor(sf::Color::White);
-                            }
-                            fovBox.setSelected();
-                            fovBox.setColor(sf::Color::Green);
-                            selectedBox = &fovBox;
-                        }
-
-                        if(resXbox.onButton(window)) {
-                            if(selectedBox) {
-                                selectedBox->setUnselected();
-                                selectedBox->setColor(sf::Color::White);
-                            }
-                            resXbox.setSelected();
-                            resXbox.setColor(sf::Color::Green);
-                            selectedBox = &resXbox;
-                        }
-
-                        if(resYbox.onButton(window)) {
-                            if(selectedBox) {
-                                selectedBox->setUnselected();
-                                selectedBox->setColor(sf::Color::White);
-                            }
-                            resYbox.setSelected();
-                            resYbox.setColor(sf::Color::Green);
-                            selectedBox = &resYbox;
-                            
-                        }
-
-                        if(dofBox.onButton(window)) {
-                            if(selectedBox) {
-                                selectedBox->setUnselected();
-                                selectedBox->setColor(sf::Color::White);
-                            }
-                            dofBox.setSelected();
-                            dofBox.setColor(sf::Color::Green);
-                            selectedBox = &dofBox;
-                            
-                        }
-
-                        if(sampleBox.onButton(window)) {
-                            if(selectedBox) {
-                                selectedBox->setUnselected();
-                                selectedBox->setColor(sf::Color::White);
-                            }
-                            sampleBox.setSelected();
-                            sampleBox.setColor(sf::Color::Green);
-                            selectedBox = &sampleBox;
-                        }
-
-                        if(focusBox.onButton(window)) {
-                            if(selectedBox) {
-                                selectedBox->setUnselected();
-                                selectedBox->setColor(sf::Color::White);
-                            }
-                            focusBox.setSelected();
-                            focusBox.setColor(sf::Color::Green);
-                            selectedBox = &focusBox;
-                            
-                        }
-
-                        if(bounceBox.onButton(window)) {
-                            if(selectedBox) {
-                                selectedBox->setUnselected();
-                                selectedBox->setColor(sf::Color::White);
-                            }
-                            bounceBox.setSelected();
-                            bounceBox.setColor(sf::Color::Green);
-                            selectedBox = &bounceBox;    
-                        }
+                        //checks if any textboxes can be clicked
+                        clickBox(resXbox, window);
+                        clickBox(resYbox, window);
+                        clickBox(sampleBox, window);
+                        clickBox(bounceBox, window);
+                        clickBox(fovBox, window);
+                        clickBox(dofBox, window);
+                        clickBox(focusBox, window);
+                        break;
 
                     case sf::Event::TextEntered:
                         fovBox.typedOn(event);
@@ -266,6 +234,7 @@ public:
                         sampleBox.typedOn(event);
                         focusBox.typedOn(event);
                         bounceBox.typedOn(event);
+                        break;
 
                     case sf::Event::KeyPressed:
                         if(event.key.code == sf::Keyboard::Enter){
@@ -290,36 +259,46 @@ public:
                             if(checkIfPosNum(resXbox.getInput()) && resXbox.getInput() != ""){
                                 resX = std::stof(resXbox.getInput());
                             }else {
+                                errorText.setString("Invalid resX");
                                 break;
                             }
 
                             if(checkIfPosNum(resYbox.getInput()) && resYbox.getInput() != ""){
                                 resY = std::stof(resYbox.getInput());
                             }else {
+                                errorText.setString("Invalid resY");
                                 break;
                             }
 
                             if(checkIfPosNum(sampleBox.getInput()) && sampleBox.getInput() != ""){
                                 sampleSize = std::stoi(sampleBox.getInput());
                             }else {
+                                errorText.setString("Invalid sample amount");
                                 break;
                             }
 
                             if(checkIfPosNum(bounceBox.getInput()) && bounceBox.getInput() != ""){
                                 bounceAmount = std::stoi(bounceBox.getInput());
                             }else {
+                                errorText.setString("Invalid bounce amount");
                                 break;
                             }
                             
+                            selectedBox = nullptr;
                             window.close();
                             openRender(resX, resY, loadedScene, sampleSize, dof, bounceAmount);
+                            break;  
                         }
-                }
+                    default:
+                        break;
+
+                    }
                 }
 
             window.clear();
             preview.draw(window);
             window.draw(sprite);
+            window.draw(errorText);
             fovBox.draw(window);
             resXbox.draw(window);
             resYbox.draw(window);
@@ -355,8 +334,11 @@ public:
                     switch(event.type) {
                         case sf::Event::Closed:
                             window.close();
-                            }
+                            break;
+                        default:
+                            break;
                     }
+                }
                 while(i < sampleSize) {
                     auto result = sceneRenderer.parallelRender(1);
                     float weight = 1.0 / (1 + i);
@@ -389,6 +371,15 @@ public:
         }
 
 private:
+    Textbox* selectedBox = nullptr;  
+
+    /**
+     * @brief Checks if the given string is a positive integer.
+     * 
+     * @param text string to be checked
+     * @return true if the string is a positive integer
+     * @return false if the string is not a positive integer
+     */
     bool checkIfPosNum(std::string text) {
         for(auto i : text) {
             if(!std::isdigit(i)) {
@@ -398,6 +389,13 @@ private:
         return true;
     }
 
+    /**
+     * @brief Checks if the given string is a positive float with at most one decimal.
+     * 
+     * @param text string to be checked
+     * @return true if the string is a positive float 
+     * @return false if the string is not a positive float 
+     */
     bool checkIfPosFloat(std::string text) {
         int j = text.length();
         for(auto i : text) {
@@ -411,6 +409,33 @@ private:
         return true;
     }
 
+    /**
+     * @brief A helper function to handle what happens when mouse is clicked.
+     * 
+     * Checks if mouse is on the specified textbox. If it is, the previously selected box is unselected
+     * and box is set as the selected box. 
+     * 
+     * @param box textbox to be checked
+     * @param window the window that contains the textbox
+     */
+    void clickBox(Textbox &box, sf::RenderWindow &window) {
+        if(box.onButton(window)) {
+             if(selectedBox) {
+                selectedBox->setUnselected();
+                selectedBox->setColor(sf::Color::White);
+                }
+                box.setSelected();
+                box.setColor(sf::Color::Green);
+                selectedBox = &box;    
+                }
+    }
+
+    /**
+     * @brief Clamps the given color values, i.e., ensures that the maximum value for each R, G, B is 1.
+     * 
+     * @param input the color vector to be clamped
+     * @return Color with the values clamped
+     */
     Color clamp(Color input) {
         float R = input(0) > 1 ? 1 : input(0);
         float G = input(1) > 1 ? 1 : input(1);

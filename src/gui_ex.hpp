@@ -28,4 +28,18 @@ class TitleScreenException : public GuiException {
         std::string msg_;
 };
 
+class FontException : public GuiException {
+    public:
+        FontException(std::string fontPath) : GuiException() {
+            msg_ = "Did not find font in path: " + fontPath;
+        }
+
+        virtual const char* what() const noexcept {
+            return msg_.c_str();
+        }
+
+    private:
+        std::string msg_;
+};
+
 #endif
