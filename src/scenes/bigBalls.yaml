@@ -1,15 +1,15 @@
 Camera: 
   Position: 
-    - 5
-    - -2
-    - 2.2
+    - 6.5
+    - -4
+    - 2.7
   LookingAt:
     - 0
     - 0
     - 2
-  Fov: 0.3
-  FocusDistance: 5.85
-  DepthOfField: 0
+  Fov: 0.33
+  FocusDistance: 7.6
+  DepthOfField: 2.5
   Angle: 0
 
 Environment: 
@@ -42,49 +42,70 @@ Objects:
       Material:
         Type: Diffuse
         Color:
-          - 0.4
-          - 0.6
-          - 0.4
+          - 0.5
+          - 0.5
+          - 0.5
+        Name: Ground Diffuse
 
   - Object:
       Type: Ball
       Position:
-        - 0
-        - 0
-        - 2
-      Radius: 0.5
+        - -40
+        - 120
+        - 80
+      Radius: 50
       Material:
-        Type: Refractive
-        RefractionRatio: 0.8
+        Type: Diffuse
+        EmissionStrength: 1.0
+        EmissionColor:
+          - 1
+          - 1
+          - 1
         Color: 
           - 1
           - 1
           - 1
-        Name: Glass Ball
+        Name: SUN
 
   - Object:
       Type: Ball
       Position:
-        - 2
         - 0
-        - 2
-      Radius: 0.5
+        - 0
+        - 2.2
+      Radius: 0.7
+      Material:
+        Type: Refractive
+        RefractionRatio: 0.67
+        Color: 
+          - 1
+          - 1
+          - 1
+        Name: Glass
+
+  - Object:
+      Type: Ball
+      Position:
+        - 2.5
+        - 0
+        - 2.2
+      Radius: 0.7
       Material:
         Type: Reflective
         Specularity: 1.0
         Color: 
           - 1
           - 1
-          - 0
-        Name: Glass Ball
+          - 0.2
+        Name: Reflective
 
   - Object:
       Type: Ball
       Position:
-        - -2
+        - -2.5
         - 0
-        - 2
-      Radius: 0.5
+        - 2.2
+      Radius: 0.7
       Material:
         Type: ClearCoat
         ClearCoat: 0.7
@@ -97,25 +118,368 @@ Objects:
           - 0
           - 1
           - 1
-        Name: Glass Ball
+        Name: ClearCoat
 
   - Object:
       Type: Ball
       Position:
         - -2
         - -2
-        - 1.7
-      Radius: 0.2
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Reflective
+        Specularity: 1.0
+        Color: 
+          - 1
+          - 1
+          - 1
+        Name: Reflective
+
+  - Object:
+      Type: Ball
+      Position:
+        - -1
+        - -1.5
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 0
+          - 0.3
+          - 1
+        Name: Moonlight Blue Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -1
+        - -3
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 1
+          - 0
+          - 0.3
+        Name: Mild Purple Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - 0
+        - -1
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 1
+          - 0
+          - 0
+        Name: Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - 1
+        - -1.5
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Refractive
+        RefractionRatio: 0.7
+        Color: 
+          - 1
+          - 1
+          - 1
+        Name: Glass
+
+  - Object:
+      Type: Ball
+      Position:
+        - 3
+        - -2
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 0
+          - 1
+          - 0
+        Name: Green Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - 4.5
+        - -2
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 0.9
+          - 0.6
+          - 0
+        Name: Green Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - 2
+        - -1
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Reflective
+        Specularity: 1.0
+        Color: 
+          - 1
+          - 0
+          - 1
+        Name: Purple Mirror
+
+  - Object:
+      Type: Ball
+      Position:
+        - 1.8
+        - -2.7
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Reflective
+        Specularity: 0.7
+        Color: 
+          - 0.5
+          - 0.5
+          - 0
+        Name: Fuzzy Metal
+
+  - Object:
+      Type: Ball
+      Position:
+        - -6
+        - -2
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 0.8
+          - 0
+          - 0.8
+        Name: Purple Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -12
+        - 0
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 1
+          - 0
+          - 0
+        Name: Red Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - 2.8
+        - -1
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 0
+          - 0
+          - 1
+        Name: Blue Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - 4
+        - 0
+        - 1.65
+      Radius: 0.15
       Material:
         Type: ClearCoat
-        ClearCoat: 0.7
-        Specularity: 0.9
+        ClearCoat: 0.4
+        Specularity: 0.8
+        ClearCoatColor:
+          - 1
+          - 0
+          - 0
+        Color: 
+          - 0
+          - 1
+          - 0
+        Name: Green/Red ClearCoat
+
+  - Object:
+      Type: Ball
+      Position:
+        - 3
+        - 1.1
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Reflective
+        Specularity: 1.0
+        Color: 
+          - 1
+          - 1
+          - 1
+        Name: Mirror
+
+  - Object:
+      Type: Ball
+      Position:
+        - 1
+        - 4.5
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 0
+          - 0.8
+          - 0.6
+        Name: Mirror
+
+  - Object:
+      Type: Ball
+      Position:
+        - 4
+        - -1
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Refractive
+        RefractionRatio: 0.7
+        Color: 
+          - 1
+          - 0.2
+          - 0.2
+        Name: Red Glass
+
+  - Object:
+      Type: Ball
+      Position:
+        - 3
+        - -3.5
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 1
+          - 0.3
+          - 0
+        Name: Orange Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -7.5
+        - 3.6
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 1
+          - 1
+          - 0
+        Name: Yellow Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -7.6
+        - 5.5
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 1
+          - 0
+          - 1
+        Name: Purple Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -4.5
+        - 2.2
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: ClearCoat
+        ClearCoat: 0.6
+        Specularity: 0.6
         ClearCoatColor:
           - 1
           - 1
           - 1
         Color: 
+          - 1
+          - 0
+          - 0
+        Name: Red ClearCoat
+
+  - Object:
+      Type: Ball
+      Position:
+        - -3.5
+        - 3
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Diffuse
+        Color: 
+          - 0.4
+          - 0.4
+          - 0
+        Name: Dark Orange Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -2.8
+        - 2
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Reflective
+        Color: 
+          - 0
           - 0
           - 1
+        Name: Blue Mirror
+
+  - Object:
+      Type: Ball
+      Position:
+        - -5
+        - 3
+        - 1.65
+      Radius: 0.15
+      Material:
+        Type: Reflective
+        Specularity: 1.0
+        Color: 
           - 1
-        Name: Glass Ball
+          - 1
+          - 1
+        Name: Mirror
