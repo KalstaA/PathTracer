@@ -1,0 +1,51 @@
+Camera: 
+  Position: 
+    - 0
+    - 0
+    - 0
+  Direction:
+    - 1
+    - 0
+    - 0
+  Up:
+    - 0
+    - 0
+    - 1
+  Fov: 0.33
+  FocusDistance: 5
+
+Environment: 
+  SkyColor:
+    - 0.2
+    - 0.5
+    - 1.0
+  HorizonColor: 
+    - 0.7
+    - 0.8
+    - 0.8
+  GroundColor:
+    - 0.1 
+    - 0.1
+    - 0.1
+
+Objects:
+  - Object:
+      Type: TriangleMesh
+      Filepath: ../src/objects/knight.obj
+      Scale: 1
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Position:
+        - 5
+        - 0
+        - 0
+      Radius: 1
+      Material:
+        Type: Diffuse
+        Color: 
+          - 1
+          - 0
+          - 0
+        Name: RED DIFFUSE

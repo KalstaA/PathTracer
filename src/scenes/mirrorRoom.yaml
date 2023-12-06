@@ -198,9 +198,9 @@ Objects:
       Position:
         - 5
         - 0
-        - -1.5
+        - -1.375
       Width: 1
-      Height: 2
+      Height: 1.75
       Depth: 1
       Rotation:
         - 0
@@ -216,33 +216,23 @@ Objects:
         Name: Glass Pole
 
   - Object:
-      Type: Ball
+      Type: Box
       Position:
-        - 2.5
-        - 2.5
-        - -2.5
-      Radius: 0.5
+        - 5
+        - 0
+        - -2
+      Width: 3
+      Height: 0.25
+      Depth: 3
+      Rotation:
+        - 0
+        - 0
+        - 0
       Material: 
         Type: Diffuse
         EmissionStrength: 1.0
-        EmissionColor:
+        EmissionColor:  
           - 1
           - 1
           - 1
-        Name: Left light ball
-
-  - Object:
-      Type: Ball
-      Position:
-        - 2.5
-        - -2.5
-        - -2.5
-      Radius: 0.5
-      Material: 
-        Type: Diffuse
-        EmissionStrength: 1.0
-        EmissionColor:
-          - 1
-          - 1
-          - 1
-        Name: Right light ball
+        Name: Floor LIGHT
