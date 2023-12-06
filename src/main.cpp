@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
       //gui.titleScreen();
     }
 
-    else if (argc == 6)
+    else if (argc == 7)
     {
       std::string filePath = argv[1];
 
@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
       int resY = std::stoi(argv[3], nullptr); 
       int samples = std::stoi(argv[4], nullptr);
       int bounces = std::stoi(argv[5], nullptr);
+      std::string filename = argv[6];
 
       FileLoader test(filePath);
       std::shared_ptr<Scene> testScene = test.loadSceneFile();
@@ -44,7 +45,7 @@ int main(int argc, char *argv[]) {
 
       Interface interface;
       interface.createImg(result);
-      bool imgSaved = interface.saveImage("image.png");
+      bool imgSaved = interface.saveImage(filename);
       if (imgSaved)
       {
         std::cout << "Image saved succesfully" << std::endl;
