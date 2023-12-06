@@ -8,7 +8,7 @@ Camera:
     - 0
     - 0
   Fov: 0.33
-  DepthOfField: 50
+  DepthOfField: 30
   Angle: 0
   FocusDistance: 5
 

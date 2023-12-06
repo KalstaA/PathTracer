@@ -10,7 +10,7 @@ Camera:
   Fov: 0.5
   DepthOfField: 0
   Angle: 0
-  FocusDistance: 5
+  FocusDistance: 10
 
 Environment: 
   SkyColor:

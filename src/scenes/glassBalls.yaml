@@ -7,8 +7,8 @@ Camera:
     - 1
     - 0
     - 0
-  Fov: 0.3
-  Angle: 0
+  Fov: 0.02
+  Angle: 45
   DepthOfFiled: 0
   FocusDistance: 5
 

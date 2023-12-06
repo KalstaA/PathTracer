@@ -83,7 +83,7 @@ private:
         randomShift = jiggle(0) * pixel_x + jiggle(1) * pixel_y;
         Vector target = topleft_pixel + pixel_y * y + pixel_x * x + randomShift;
 
-        Vector direction = (-origin + target).normalized();
+        Vector direction = (target-origin).normalized();
 
         return Ray{.origin = origin, .direction = direction};
     }
@@ -161,9 +161,9 @@ public:
         camera_ = (*scene_).getCamera();
         view_width = camera_.focus_distance * tan(camera_.fov / 2);
         view_height = view_width * (resolution_y - 1) / (resolution_x - 1);
-        pixel_x = 2 * view_width / (resolution_x - 1) * camera_.direction.cross(camera_.up);
+        pixel_x = -2 * view_width / (resolution_x - 1) * camera_.left;
         pixel_y = - 2 * view_height / (resolution_y - 1) * camera_.up;
-        topleft_pixel = camera_.direction * camera_.focus_distance + view_width * camera_.left + view_height * camera_.up;
+        topleft_pixel = camera_.position + camera_.focus_distance * camera_.direction + view_width * camera_.left + view_height * camera_.up;
     }
 
     void setMaxBounces(int bounces) {

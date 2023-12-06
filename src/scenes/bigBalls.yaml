@@ -6,8 +6,8 @@ Camera:
   LookingAt:
     - 0
     - 0
-    - 4
-  Fov: 0.5
+    - 2
+  Fov: 0.3
   FocusDistance: 5.85
   DepthOfField: 0
   Angle: 0
