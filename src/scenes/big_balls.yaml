@@ -1,12 +1,12 @@
 Camera: 
   Position: 
-    - 3
-    - -5
-    - 0.2
+    - 5
+    - -2
+    - 2.2
   LookingAt:
     - 0
     - 0
-    - 0
+    - 2
   Fov: 0.33
   FocusDistance: 5.85
   DepthOfField: 0
@@ -32,9 +32,9 @@ Objects:
       Position:
         - 0
         - 0
-        - -0.5
-      Width: 10
-      Height: 10
+        - 1.5
+      Width: 1000
+      Height: 1000
       Rotation:
        - 0
        - 90
@@ -42,16 +42,16 @@ Objects:
       Material:
         Type: Diffuse
         Color:
-          - 1
-          - 0
-          - 0
+          - 0.4
+          - 0.6
+          - 0.4
 
   - Object:
       Type: Ball
       Position:
         - 0
         - 0
-        - 0
+        - 2
       Radius: 0.5
       Material:
         Type: Refractive
@@ -63,21 +63,59 @@ Objects:
         Name: Glass Ball
 
   - Object:
-      Type: Box
+      Type: Ball
       Position:
+        - 2
         - 0
-        - 4
-        - 0
-      Width: 1
-      Height: 1
-      Depth: 1
-      Rotation:
-       - 0
-       - 0
-       - 0
+        - 2
+      Radius: 0.5
       Material:
-        Type: Diffuse
-        Color:
-          - 0
+        Type: Reflective
+        Specularity: 1.0
+        Color: 
+          - 1
           - 1
           - 0
+        Name: Glass Ball
+
+  - Object:
+      Type: Ball
+      Position:
+        - -2
+        - 0
+        - 2
+      Radius: 0.5
+      Material:
+        Type: ClearCoat
+        ClearCoat: 0.7
+        Specularity: 0.9
+        ClearCoatColor:
+          - 1
+          - 1
+          - 1
+        Color: 
+          - 0
+          - 1
+          - 1
+        Name: Glass Ball
+
+  - Object:
+      Type: Ball
+      Position:
+        - -2
+        - -2
+        - 1.7
+      Radius: 0.2
+      Material:
+        Type: ClearCoat
+        ClearCoat: 0.7
+        Specularity: 0.9
+        ClearCoatColor:
+          - 1
+          - 1
+          - 1
+        Color: 
+          - 0
+          - 1
+          - 1
+        Name: Glass Ball

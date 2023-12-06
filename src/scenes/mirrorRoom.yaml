@@ -1,32 +1,30 @@
 Camera: 
   Position: 
     - 2.51
-    - 0.5
     - 0
-  Direction:
-    - 1.0
-    - 0.5
-    - 0
-  Up:
+    - 0.2
+  LookingAt:
+    - 5
     - 0
     - 0
-    - 1
-  Fov: 0.333
+  Fov: 0.5
+  DepthOfField: 0
+  Angle: 0
   FocusDistance: 5
 
 Environment: 
   SkyColor:
-    - 0.0
-    - 0.0
-    - 0.0
+    - 0
+    - 0
+    - 0
   HorizonColor: 
-    - 0.0
-    - 0.0
-    - 0.0
+    - 0
+    - 0
+    - 0
   GroundColor:
-    - 0.0 
-    - 0.0
-    - 0.0
+    - 0 
+    - 0
+    - 0
 
 Objects:
   - Object:
