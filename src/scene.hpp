@@ -66,7 +66,7 @@ public:
      * @return std::ostream& the output stream
      */
     friend std::ostream &operator<<(std::ostream& out, const Scene& scene) {
-        out << "\n========================= SCENE INFORMATION =========================" << std::endl;
+        out << "\n======================================== SCENE INFORMATION ========================================" << std::endl;
 
         for (auto object : scene.objects_)
         {
@@ -75,9 +75,11 @@ public:
 
         out << std::endl;
 
-        out << "Camera at: (" << scene.camera_.position.transpose() << ") looking at: (" << scene.camera_.direction.transpose() << ") with FOV: " << scene.camera_.fov / M_PI * 180 << " degrees" << std::endl;
+        out << "Camera at: (" << scene.camera_.position.transpose() << ") looking at point: ("
+            << scene.camera_.lookingAt.transpose() << ") with FOV: " << scene.camera_.fov / M_PI * 180
+            << " degrees, DOF: " << scene.camera_.DoF << " and focus distance; " << scene.camera_.focus_distance << "." << std::endl;
         
-        out << "=====================================================================\n" << std::endl;
+        out << "===================================================================================================\n" << std::endl;
         
         return out;
     }

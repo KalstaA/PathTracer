@@ -385,6 +385,13 @@ class FileLoader {
          */
         Camera LoadCamera() {  
             YAML::Node params = loadParams("Camera");
+
+            YAML::Node angle_node = params["Angle"];
+            float angle = angle_node.IsDefined() ? angle_node.as<float>() : 0; // Set angle to zero if it not defined in yaml
+
+            YAML::Node DoF_node = params["DepthOfField"];
+            float DoF = DoF_node.IsDefined() ? DoF_node.as<float>() : 0; // Set depth of field to zero if not defined in yaml
+
             float fow = params["Fov"].as<float>();
             float focus = params["FocusDistance"].as<float>();
             if (fow < 0)
@@ -397,10 +404,15 @@ class FileLoader {
             }
             Camera camera;
             camera.position = LoadVector(params, "Position");
-            camera.direction = LoadVector(params, "Direction");
-            camera.up = LoadVector(params, "Up");
+            camera.lookingAt = LoadVector(params, "LookingAt");
+            camera.direction = (camera.lookingAt - camera.position).normalized();
+            Eigen::AngleAxisd rotation(angle*M_PI/180, camera.direction); // Rotation around the axis of camera looking direction
+            Vector left = Vector(-camera.direction[1], camera.direction[0], 0).normalized(); // Vector towards left of the image plane (90 degrees with respect to cam dir)
+            camera.left = rotation * left; // Rotate the camera's left direction according to rotation
+            camera.up = camera.direction.cross(camera.left); // Up direction dynamically determined from camera direction and left direction
             camera.fov = M_PI * fow;
             camera.focus_distance = focus;
+            camera.DoF = DoF;
             return camera;
         }
 

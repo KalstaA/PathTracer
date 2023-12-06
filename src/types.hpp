@@ -16,10 +16,13 @@ class Material;
 struct Camera
 {
     Point position;
+    Vector lookingAt;
     Vector direction;
     Vector up;
+    Vector left;
     float fov;
     float focus_distance;
+    float DoF;
 };
 
 struct Ray

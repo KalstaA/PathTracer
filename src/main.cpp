@@ -4,7 +4,7 @@
 #include "interface.hpp"
 #include "fileloader.hpp"
 #include "fileloader_ex.hpp"
-#include "gui.hpp"
+//#include "gui.hpp"
 #include "triangle.hpp"
 #include "trianglemesh.hpp"
 #include "types.hpp"
@@ -20,8 +20,8 @@ int main(int argc, char *argv[]) {
   {
     if (argc == 2 && strcmp(argv[1], "gui") == 0)
     {
-      Gui gui;
-      gui.titleScreen();
+      //Gui gui;
+      //gui.titleScreen();
     }
 
     else if (argc == 6)
