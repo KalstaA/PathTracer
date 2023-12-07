@@ -1,0 +1,244 @@
+Camera: 
+  Position: 
+    - 2.2
+    - -3.7
+    - 2
+  LookingAt:
+    - 0
+    - 0
+    - 1
+  Fov: 0.33
+  FocusDistance: 4.4
+  DepthOfField: 3.5
+  Angle: 0
+
+Environment: 
+  SkyColor:
+    - 0.2
+    - 0.5
+    - 1.0
+  HorizonColor: 
+    - 0.7
+    - 0.8
+    - 0.8
+  GroundColor:
+    - 0.1 
+    - 0.1
+    - 0.1
+
+Objects:
+  - Object:
+      Type: Rectangle
+      Position:
+        - 0
+        - 0
+        - 0
+      Width: 10000
+      Height: 10000
+      Rotation:
+       - 0
+       - 90
+       - 0
+      Material:
+        Type: Diffuse
+        Color:
+          - 0.5
+          - 0.5
+          - 0.5
+        Name: Floor Diffuse
+
+  - Object:
+      Type: Box
+      Position:
+        - 0
+        - 0
+        - 0.5
+      Width: 2
+      Height: 1
+      Depth: 1
+      Material:
+        Type: ClearCoat
+        Specularity: 0.8
+        ClearCoat: 0.4
+        ClearCoatColor:
+          - 1
+          - 1
+          - 1
+        Color:
+          - 0.7
+          - 0.7
+          - 0
+        Name: Mirror
+
+  - Object:
+      Type: Ball
+      Position:
+        - 0
+        - 0.5
+        - 1.5
+      Radius: 0.5
+      Material:
+        Type: Refractive
+        RefractionRatio: 0.7
+        Color:
+          - 1
+          - 1
+          - 1
+        Name: Green Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - 0
+        - -0.5
+        - 1.5
+      Radius: 0.5
+      Material:
+        Type: Refractive
+        RefractionRatio: 0.7
+        Color:
+          - 1
+          - 1
+          - 1
+        Name: Blue Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -3
+        - 12
+        - 0.5
+      Radius: 0.5
+      Material:
+        Type: Diffuse
+        Color:
+          - 1
+          - 0
+          - 0
+        Name: Red Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -1
+        - 5
+        - 0.5
+      Radius: 0.5
+      Material:
+        Type: Diffuse
+        Color:
+          - 1
+          - 0.5
+          - 0
+        Name: Orange Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -5
+        - 10
+        - 0.5
+      Radius: 0.5
+      Material:
+        Type: Diffuse
+        Color:
+          - 0
+          - 1
+          - 0
+        Name: Green Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -10
+        - 12
+        - 0.5
+      Radius: 0.5
+      Material:
+        Type: Diffuse
+        Color:
+          - 0
+          - 0
+          - 1
+        Name: Blue Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -8
+        - 22
+        - 0.5
+      Radius: 0.5
+      Material:
+        Type: Diffuse
+        Color:
+          - 1
+          - 0
+          - 1
+        Name: Purple Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -2
+        - -0.5
+        - 0.5
+      Radius: 0.5
+      Material:
+        Type: Diffuse
+        Color:
+          - 1
+          - 0
+          - 1
+        Name: Purple Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -16
+        - 10
+        - 0.5
+      Radius: 0.5
+      Material:
+        Type: Diffuse
+        Color:
+          - 1
+          - 0
+          - 0
+        Name: Purple Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - 1.5
+        - 1.5
+        - 0.5
+      Radius: 0.5
+      Material:
+        Type: Reflective
+        Specularity: 1.0
+        Color:
+          - 1
+          - 1
+          - 1
+        Name: Purple Diffuse
+
+  - Object:
+      Type: Ball
+      Position:
+        - -50
+        - 0
+        - 50
+      Radius: 30
+      Material:
+        Type: Diffuse
+        EmissionStrength: 1.0
+        EmissionColor:
+          - 1
+          - 1
+          - 0.7
+        Color:
+          - 1
+          - 1
+          - 0.7
+        Name: SUN

@@ -1,6 +1,6 @@
 Camera: 
   Position: 
-    - 1
+    - 2
     - 0
     - 2
   LookingAt:
@@ -10,7 +10,7 @@ Camera:
   Fov: 0.5
   Angle: 0
   DepthOfField: 0
-  FocusDistance: 5
+  FocusDistance: 10
 
 Environment: 
   SkyColor:
@@ -32,13 +32,13 @@ Objects:
       Filepath: ../objects/knight.obj
       Scale: 1
       Position:
-        - 10
-        - 2
+        - 9
+        - 1.5
         - -1
       Rotation:
         - 0
         - 0
-        - 45
+        - 55
       Material:
         Type: ClearCoat
         Specularity: 0.8
@@ -90,3 +90,19 @@ Objects:
           - 1
           - 1
         Name: MIRROR FLOOR
+
+  - Object:
+      Type: Ball
+      Radius: 30
+      Position:
+        - 40
+        - -60
+        - 70
+      Material:
+        Type: Diffuse
+        EmissionStrength: 1.0
+        EmissionColor:
+          - 1
+          - 1
+          - 1
+        Name: SUN
