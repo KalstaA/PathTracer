@@ -1,8 +1,8 @@
 Camera: 
   Position: 
     - 2.51
-    - 0
-    - 0.2
+    - 2.49
+    - 0.9
   LookingAt:
     - 5
     - 0
@@ -208,11 +208,10 @@ Objects:
       Material: 
         Type: Diffuse
         EmissionStrength: 0.2
-        RefractionRatio: 0.8
         Color: 
           - 0
-          - 0.8
-          - 0.8
+          - 1.0
+          - 1.0
         Name: Glass Pole
 
   - Object:
@@ -220,7 +219,7 @@ Objects:
       Position:
         - 5
         - 0
-        - -2
+        - -2.5
       Width: 3
       Height: 0.25
       Depth: 3
