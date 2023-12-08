@@ -29,6 +29,7 @@ struct Ray
 {
     Point origin;
     Vector direction;
+    bool inside_material = false;
     Color color = Color(1.0, 1.0, 1.0);
     Light light = Color(0.0, 0.0, 0.0);
 };
@@ -36,7 +37,6 @@ struct Ray
 struct Hit
 {
     bool did_hit = false;
-    bool inside_material = false;
     std::shared_ptr<Material> material; // Has to be pointer, since compiler do not yet know anything about Material class
     Vector normal;
     Point point;

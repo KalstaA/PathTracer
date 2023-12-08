@@ -301,7 +301,7 @@ class Refractive : public Material {
             updateColor(ray);
 
             // Real refraction ratio depends on the direction
-            float ref_ratio = hit.inside_material ? 1 / refraction_ratio_ : refraction_ratio_;
+            float ref_ratio = ray.inside_material ? 1 / refraction_ratio_ : refraction_ratio_;
 
             // Real glass reflects depending on the intersection angle and refraction ratio
             float cos_theta = cosTheta(-ray.direction, hit.normal);
@@ -316,7 +316,7 @@ class Refractive : public Material {
             } else {
                 // Refracts
                 Vector refractedDir = refractionDir(ray, hit, ref_ratio);
-                hit.inside_material = !(hit.inside_material);
+                ray.inside_material = !(ray.inside_material);
                 ray.direction = refractedDir;
             }
             return;
