@@ -9,7 +9,7 @@ Camera:
     - 2
   Fov: 0.33
   FocusDistance: 7.6
-  DepthOfField: 2.5
+  DepthOfField: 1
   Angle: 0
 
 Environment: 

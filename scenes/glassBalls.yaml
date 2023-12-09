@@ -1,15 +1,15 @@
 Camera: 
   Position: 
-    - 2.2
-    - -3.7
+    - 1.7
+    - -5
     - 2
   LookingAt:
     - 0
     - 0
     - 1
   Fov: 0.33
-  FocusDistance: 4.4
-  DepthOfField: 3.5
+  FocusDistance: 5.35
+  DepthOfField: 3
   Angle: 0
 
 Environment: 
@@ -58,8 +58,8 @@ Objects:
       Depth: 1
       Material:
         Type: ClearCoat
-        Specularity: 0.8
-        ClearCoat: 0.4
+        Specularity: 0.9
+        ClearCoat: 0.5
         ClearCoatColor:
           - 1
           - 1
@@ -68,7 +68,7 @@ Objects:
           - 0.7
           - 0.7
           - 0
-        Name: Mirror
+        Name: ClearCoat
 
   - Object:
       Type: Ball
@@ -84,7 +84,7 @@ Objects:
           - 1
           - 1
           - 1
-        Name: Green Diffuse
+        Name: Glass
 
   - Object:
       Type: Ball
@@ -100,7 +100,7 @@ Objects:
           - 1
           - 1
           - 1
-        Name: Blue Diffuse
+        Name: Glass
 
   - Object:
       Type: Ball
@@ -120,8 +120,8 @@ Objects:
   - Object:
       Type: Ball
       Position:
-        - -1
-        - 5
+        - 1
+        - 9
         - 0.5
       Radius: 0.5
       Material:
@@ -150,8 +150,8 @@ Objects:
   - Object:
       Type: Ball
       Position:
-        - -10
-        - 12
+        - -11
+        - 16
         - 0.5
       Radius: 0.5
       Material:
@@ -165,7 +165,7 @@ Objects:
   - Object:
       Type: Ball
       Position:
-        - -8
+        - -2
         - 22
         - 0.5
       Radius: 0.5
@@ -180,8 +180,8 @@ Objects:
   - Object:
       Type: Ball
       Position:
-        - -2
-        - -0.5
+        - -4
+        - 4
         - 0.5
       Radius: 0.5
       Material:
@@ -195,7 +195,7 @@ Objects:
   - Object:
       Type: Ball
       Position:
-        - -16
+        - -10
         - 10
         - 0.5
       Radius: 0.5
@@ -205,13 +205,13 @@ Objects:
           - 1
           - 0
           - 0
-        Name: Purple Diffuse
+        Name: Red Diffuse
 
   - Object:
       Type: Ball
       Position:
-        - 1.5
-        - 1.5
+        - 2
+        - 1
         - 0.5
       Radius: 0.5
       Material:
@@ -221,13 +221,13 @@ Objects:
           - 1
           - 1
           - 1
-        Name: Purple Diffuse
+        Name: Mirror
 
   - Object:
       Type: Ball
       Position:
         - -50
-        - 0
+        - 50
         - 50
       Radius: 30
       Material:
@@ -242,3 +242,24 @@ Objects:
           - 1
           - 0.7
         Name: SUN
+
+  - Object:
+      Type: Ball
+      Position:
+        - -4
+        - 1
+        - 0.5
+      Radius: 0.5
+      Material:
+        Type: ClearCoat
+        ClearCoat: 0.6
+        ClearCoatColor:
+          - 1
+          - 1
+          - 1
+        Specularity: 0.6
+        Color:
+          - 0
+          - 0
+          - 1
+        Name: Purple Diffuse

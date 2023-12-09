@@ -42,7 +42,7 @@ Objects:
       Material:
         Type: ClearCoat
         Specularity: 0.8
-        ClearCoat: 0.2
+        ClearCoat: 0.3
         Color: 
           - 0.39
           - 0.19
