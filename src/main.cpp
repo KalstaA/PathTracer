@@ -4,7 +4,8 @@
 #include "interface.hpp"
 #include "fileloader.hpp"
 #include "fileloader_ex.hpp"
-//#include "gui.hpp"
+#include "gui.hpp"
+#include "gui_ex.hpp"
 #include "triangle.hpp"
 #include "trianglemesh.hpp"
 #include "types.hpp"
@@ -18,12 +19,11 @@ int main(int argc, char *argv[]) {
 
   try
   {
-    if (argc == 2 && strcmp(argv[1], "gui") == 0)
+    if (argc == 1)
     {
-      //Gui gui;
-      //gui.titleScreen();
+      Gui gui;
+      gui.openSettings(gui.titleScreen());
     }
-
     else if (argc == 7)
     {
       std::string filePath = argv[1];
@@ -70,12 +70,16 @@ int main(int argc, char *argv[]) {
     std::cout << "YAML exception caught:" << std::endl;
     std::cout << ex.what() << std::endl;
     return EXIT_FAILURE;
-
   }
   catch (std::invalid_argument& ex)
   {
     std::cout << "Invalid command line arguments." << std::endl;
     std::cout << ex.what() << std::endl;
+  }
+  catch (GuiException& ex)
+  {
+    std::cout << ex.what() << std::endl;
+    return EXIT_FAILURE;    
   }
   catch (std::exception& ex)
   {

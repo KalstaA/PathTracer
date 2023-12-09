@@ -38,17 +38,6 @@ private:
     int progressBarWidth = 100;
 
     /**
-     * @brief Reflects a vector according to a surface normal.
-     * 
-     * @param in input vector to be reflected
-     * @param normal surface normal
-     * @return reflected vector
-     */
-    Vector reflect(Vector& in, Vector& normal) {
-        return in - 2 * in.dot(normal) * normal;
-    }
-
-    /**
      * @brief Clamps the given color values, i.e., ensures that the maximum value for each R, G, B is 1.
      * 
      * @param input the color vector to be clamped
@@ -132,6 +121,12 @@ private:
         return ray.light;
     }
 
+    /**
+     * @brief Prints really cool progress bar indicating the progress of the rendering process
+     * 
+     * @param sample Integer representing the number of the sample
+     * @param samples Total number of the samples
+     */
     void progressBar(int sample, int samples) {
         std::cout << "[";
         int pos = progressBarWidth * (sample + 1)/samples;
@@ -166,10 +161,20 @@ public:
         topleft_pixel = camera_.position + camera_.focus_distance * camera_.direction + view_width * camera_.left + view_height * camera_.up;
     }
 
+    /**
+     * @brief Function to set maximum bounces for rays
+     * 
+     * @param bounces Number of maximum bounces ray can take
+     */
     void setMaxBounces(int bounces) {
         max_bounces = bounces;
     }
 
+    /**
+     * @brief Rendering function that uses all available CPU cores
+     * 
+     * @param samples Amount of samples that will be taken for each pixel
+     */
     auto parallelRender(int samples) {
 
         auto startTime = std::chrono::high_resolution_clock::now();        
@@ -194,6 +199,7 @@ public:
             progressBar(sample, samples);
         }
 
+        std::cout << std::endl;
         auto endTime = std::chrono::high_resolution_clock::now();
         std::chrono::duration<float> duration = endTime - startTime; 
         std::cout << "Used " << omp_get_max_threads() << " threads.\n" << std::endl;
@@ -203,7 +209,7 @@ public:
     }
 
     /**
-     * @brief Set the depth of field of the render.
+     * @brief Set the depth of field for the camera in the renderer.
      * 
      * @param dof Value for depth of field
      */

@@ -6,6 +6,8 @@
 
 #define BACKSPACE_KEY 8
 #define ESCAPE_KEY 27
+#define TAB_KEY 9
+#define ENTER_KEY 11
 
 /**
  * @brief Implements a class for creating textboxes that take inputs into SFML-window.
@@ -133,9 +135,9 @@ public:
      * @param input a sf::Event of what the user is doing eg. clicking a button or moving mouse
      */
     void typedOn(sf::Event input) {
-        if(isSelected_) {
+        if(isSelected_ && input.key.code != sf::Keyboard::Enter) {
             int inputChar = input.text.unicode;
-            if(inputChar < 128 && inputChar != 0) {
+            if(inputChar < 128 && inputChar != 0 && inputChar != TAB_KEY && inputChar != ENTER_KEY) {
                 if(text_.str().length() <= limit_) {
                     checkInput(inputChar);
                 }else if(inputChar == BACKSPACE_KEY) {
@@ -170,6 +172,7 @@ private:
         } 
         else if(inputChar == ESCAPE_KEY && isSelected_ == true) {
             setUnselected();
+            textbox_.setFillColor(sf::Color::White);
         }
         textbox_.setString(text_.str());
     }

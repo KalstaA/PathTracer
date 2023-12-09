@@ -6,6 +6,9 @@
 
 #include <vector>
 
+/**
+ * @brief An abstract base class for any type of material object can have
+ */
 class Material {
     private:
         Color color_;
@@ -14,8 +17,18 @@ class Material {
     public:
         RandomGenerator rnd_;
 
-        // Getters
+        /**
+        * @brief Gets the color vector for the material
+        * 
+        * @return Color vector representing the RGB value for the material
+        */
         Color getColor() { return color_; }
+
+        /**
+        * @brief Gets the name of the material
+        * 
+        * @return std::string representing the name of the material
+        */
         std::string getName() { return name_; }
 
         /**
@@ -69,17 +82,16 @@ class Material {
         virtual void updateRay(Ray& ray, Hit& hit) = 0;
 };
 
+/**
+ * @brief Representation of a diffusive material
+ * 
+ */
 class Diffuse : public Material {
     private:
 
         bool emitting_;
         Color emission_color_;
         float emission_strength_;
-
-        // Getters
-        Color getEmColor() { return emission_color_; }
-        float getEmStrength() { return emission_strength_; }
-        bool isEmitting() { return emitting_; }
 
         /**
         * @brief Updates the light of the ray that did hit the diffuse material.
@@ -114,6 +126,27 @@ class Diffuse : public Material {
         }
 
         /**
+        * @brief Gets the emission color for the material
+        * 
+        * @return Color vector representing the RGB value for the emission color
+        */
+        Color getEmColor() { return emission_color_; }
+
+        /**
+        * @brief Gets the emission strength for the material
+        * 
+        * @return float representing the emission strength for the material
+        */
+        float getEmStrength() { return emission_strength_; }
+
+        /**
+        * @brief Tells if the material is emitting i.e. has emission strength larger than zero
+        * 
+        * @return true if material is emitting and zero if it is not emitting
+        */
+        bool isEmitting() { return emitting_; }
+
+        /**
         * @brief Updates the ray according to properties of diffuse material
         * 
         * @param ray Ray that did hit the material
@@ -128,6 +161,10 @@ class Diffuse : public Material {
         }
 };
 
+/**
+ * @brief Representation of a reflective material that can be used for mirror or metal like materials
+ * 
+ */
 class Reflective : public Material {
     private:
 
@@ -145,6 +182,11 @@ class Reflective : public Material {
         Reflective(Color color, std::string name, float specularity) :
             Material(color, name), specularity_(specularity) {}
 
+        /**
+        * @brief Gets the specularity of the reflective material
+        * 
+        * @return specularity of the object
+        */
         float getSpecularity() { return specularity_; }
 
         /**
@@ -163,6 +205,11 @@ class Reflective : public Material {
         }
 };
 
+/**
+ * @brief Representation of a clear coat material, which can be used for materials that are partially reflective
+ * and partially diffusive. Reflective color can be defined independently from diffusive color.
+ * 
+ */
 class ClearCoat : public Reflective {
     private:
 
@@ -191,8 +238,18 @@ class ClearCoat : public Reflective {
 
     public:
 
-        // Getters
+        /**
+        * @brief Gets the clear coat color for the material
+        * 
+        * @return Color that represents the RGB value for the clear coat bounces
+        */
         Color getClearCoatColor() { return clearcoat_color_; }
+
+        /**
+        * @brief Gets clear coat value for the clear coat material
+        * 
+        * @return float representing probability of the clear coat bounce
+        */
         float getClearCoat() { return clearcoat_; }
 
         /**
@@ -227,6 +284,10 @@ class ClearCoat : public Reflective {
         }
 };
 
+/**
+ * @brief Representation of a refractive material, which can be used for glass or diamond like materials.
+ * 
+ */
 class Refractive : public Material {
     private:
         float refraction_ratio_; // From outside to inside the material
