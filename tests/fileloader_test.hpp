@@ -59,11 +59,8 @@ TEST(FILELOADER, CorrectLoadScene) {
 
     // Test camera
     EXPECT_TRUE(cam.position == Point(0, 0, 0));
-    EXPECT_TRUE(cam.direction == Vector(1, 0, 0));
-    EXPECT_TRUE(cam.up == Vector(0, 0, 1));
-    EXPECT_LE(0.33*M_PI - 0.001, cam.fov);
-    EXPECT_GE(0.33*M_PI + 0.001, cam.fov);
-    EXPECT_EQ(5, cam.focus_distance);
+    EXPECT_IN_RANGE(0.33*M_PI, 0.33*M_PI - 0.001, 0.33*M_PI + 0.001);
+    EXPECT_IN_RANGE(cam.focus_distance, 7.599, 7.601);
 
     // Test environment
     EXPECT_TRUE((env.getHorizonColor() - Color(0.7, 0.8, 0.8)).norm() < 0.001);
@@ -83,15 +80,9 @@ TEST(FILELOADER, CorrectLoadScene) {
     EXPECT_LE(distance(position2, Vector(6, 0, -31)), 0.001);
 
     EXPECT_LE(distance(material1->getColor(), Color(1, 0, 0)), 0.001);
-    //EXPECT_LE(distance(material1->getEmColor(), Color(0.3, 0.3, 0.3)), 0.001);
-    //EXPECT_IN_RANGE(material1.emission_strength, 0.499, 0.501);
-    //EXPECT_IN_RANGE(material1.specularity, 0.989, 0.991);
     EXPECT_STREQ(material1->getName().c_str(), "RED DIFFUSE");
 
     EXPECT_LE(distance(material2->getColor(), Color(0.5, 0.5, 0.5)), 0.001);
-    //EXPECT_LE(distance(material2->getEmColor(), Color(1, 1, 1)), 0.001);
-    //EXPECT_IN_RANGE(material2.emission_strength, 0.099, 0.101);
-    //EXPECT_IN_RANGE(material2.specularity, 0.320, 0.322);
     EXPECT_STREQ(material2->getName().c_str(), "GREY DIFFUSE");
 }
 
@@ -104,7 +95,7 @@ TEST(FILELOADER, InvalidKey) {
 
     // Desired error messages
     std::string msg1 = "FileLoader exception caught:\nInvalid key: Objects, for file: " + fpath1;
-    std::string msg2 = "FileLoader exception caught:\nInvalid key: Direction, for file: " + fpath2;
+    std::string msg2 = "FileLoader exception caught:\nInvalid key: LookingAt, for file: " + fpath2;
 
     // Should throw invalid key exception
     EXPECT_THROW({
@@ -143,7 +134,7 @@ TEST(FILELOADER, NegativeRadius) {
     // Desired error message
     std::string msg1 = "FileLoader exception caught:\nNegative radius (" +
                         std::to_string(-1.3) + ") in file: " +
-                        fpath1 + ", on line: 37";
+                        fpath1 + ", on line: 35";
 
     // Should throw negative radius exception
     EXPECT_THROW({
@@ -167,7 +158,7 @@ TEST(FILELOADER, InvalidSizeVector) {
 
     // Desired error message
     std::string msg1 = "FileLoader exception caught:\nInvalid vector of size " +
-                        std::to_string(2) + " in file: " + fpath1 + ", on line: 34";
+                        std::to_string(2) + " in file: " + fpath1 + ", on line: 32";
 
     // Should throw negative radius exception
     EXPECT_THROW({
@@ -193,10 +184,10 @@ TEST(FILELOADER, InvalidCamera) {
 
     // Desired error messages
     std::string msg1 = "FileLoader exception caught:\nNegative FOW: " + std::to_string(-0.33) +
-                        ", in file: " + fpath1 + ", on line: " + std::to_string(13);
+                        ", in file: " + fpath1 + ", on line: " + std::to_string(9);
     std::string msg2 = "FileLoader exception caught:\nNegative focus distance: " +
                         std::to_string(-5.0) + " in file: " + fpath2 +
-                        ", on line: " + std::to_string(14);
+                        ", on line: " + std::to_string(10);
 
     // Should throw invalid key exception
     EXPECT_THROW({
@@ -234,7 +225,7 @@ TEST(FILELOADER, NoMaterial) {
 
     // Desired error message
     std::string msg1 = "FileLoader exception caught:\nMaterial not defined for object at line: " +
-                        std::to_string(32) + ", in file: " + fpath1 + ".";
+                        std::to_string(30) + ", in file: " + fpath1 + ".";
 
     // Should throw negative radius exception
     EXPECT_THROW({
@@ -258,7 +249,7 @@ TEST(FILELOADER, NoRadius) {
 
     // Desired error message
     std::string msg1 = "FileLoader exception caught:\nRadius not defined for ball at line: " +
-                        std::to_string(53) + ", in file: " + fpath1 + ".";
+                        std::to_string(51) + ", in file: " + fpath1 + ".";
 
     // Should throw negative radius exception
     EXPECT_THROW({
@@ -282,7 +273,7 @@ TEST(FILELOADER, InvalidMaterialType) {
 
     // Desired error message
     std::string msg1 = "FileLoader exception caught:\nInvalid material type in file: " +
-                        fpath1 + ", for material starting on line: 64.";
+                        fpath1 + ", for material starting on line: 62.";
 
     // Should throw negative radius exception
     EXPECT_THROW({

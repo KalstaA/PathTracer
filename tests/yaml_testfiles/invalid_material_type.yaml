@@ -3,16 +3,14 @@ Camera:
     - 0
     - 0
     - 0
-  Direction:
-    - 1
+  LookingAt:
     - 0
     - 0
-  Up:
-    - 0
-    - 0
-    - 1
+    - 2
   Fov: 0.33
-  FocusDistance: 5
+  FocusDistance: 7.6
+  DepthOfField: 1
+  Angle: 0
 
 Environment: 
   SkyColor:
