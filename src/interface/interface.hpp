@@ -12,7 +12,7 @@ private:
     /**
      * @brief Scale the input from [0, 1] to [0, 255]
      * 
-     * @param x
+     * @param x number to be scaled
      */
     sf::Uint8 scale(float x) {
         return floor(255*x);
@@ -23,7 +23,7 @@ public:
     /**
      * @brief Create a sf::Image from the matrix of RGB values
      * 
-     * @param pixels
+     * @param pixels matrix of RGB values
      */
     void createImg(std::vector<std::vector<Color>> pixels) {
         int width = pixels.size(); 
@@ -42,7 +42,7 @@ public:
     /**
      * @brief Save the image with given filename
      * 
-     * @param filename
+     * @param filename Image filename
      */
     bool saveImage(const std::string &filename) {
         return img.saveToFile(filename);

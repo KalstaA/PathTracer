@@ -24,12 +24,12 @@ public:
      */
     std::shared_ptr<Scene> titleScreen() {
         sf::Font arial;   
-        std::string arialpath = "../src/Arial.ttf";
+        std::string arialpath = "../fonts/Arial.ttf";
         if(!arial.loadFromFile(arialpath)) {
             throw FontException(arialpath);
         }
         sf::Font comic;
-        std::string comicpath = "../src/ComicSansMS.ttf";
+        std::string comicpath = "../fonts/ComicSansMS.ttf";
         if(!comic.loadFromFile(comicpath)) {
             throw FontException(comicpath);
         }
@@ -127,7 +127,7 @@ public:
         sf::Sprite sprite;
         sf::Texture texture;
         sf::Font arial;
-        std::string arialpath = "../src/Arial.ttf";
+        std::string arialpath = "../fonts/Arial.ttf";
         if(!arial.loadFromFile(arialpath)) {
             throw FontException(arialpath);
         }
