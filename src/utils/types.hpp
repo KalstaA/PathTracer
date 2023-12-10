@@ -2,6 +2,7 @@
 
 #include <Eigen/Dense>
 #include <string>
+#include <memory>
 
 typedef Eigen::Vector3d Vector;
 typedef Eigen::Vector3d Point;
