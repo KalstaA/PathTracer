@@ -4,11 +4,19 @@
 #include "triangle.hpp"
 #include <vector>
 
+/**
+ * @brief Struct representing an Axis Aligned Bounding Box
+ * 
+ */
 struct AABB
 {
     Vector min, max;
 };
 
+/**
+ * @brief Struct representing a node in the bounding volume hiererchy
+ * 
+ */
 struct Node
 {
     AABB box;

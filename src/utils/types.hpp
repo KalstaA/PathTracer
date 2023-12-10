@@ -13,7 +13,11 @@ typedef Eigen::Matrix<double, 3, 3> Matrix;
 
 // Forward declaration for Material class, such that the Hit struct knows the existence
 class Material;
-    
+
+/**
+ * @brief Struct representing the camera
+ * 
+ */
 struct Camera
 {
     Point position;
@@ -26,6 +30,10 @@ struct Camera
     float DoF;
 };
 
+/**
+ * @brief Struct representing a ray
+ * 
+ */
 struct Ray
 {
     Point origin;
@@ -35,6 +43,10 @@ struct Ray
     Light light = Color(0.0, 0.0, 0.0);
 };
 
+/**
+ * @brief Struct containing information about a ray hitting an object
+ * 
+ */
 struct Hit
 {
     bool did_hit = false;

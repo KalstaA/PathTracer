@@ -5,6 +5,10 @@
 
 #include "types.hpp"
 
+/**
+ * @brief Class that creates an image from a raw RGB matrix and saves the image
+ * 
+ */
 class Interface {
 private:
     sf::Image img;

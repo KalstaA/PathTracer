@@ -5,6 +5,10 @@
 #include <iostream>
 #include <string>
 
+/**
+ * @brief Abstact class for a GUI exception
+ * 
+ */
 class GuiException : public std::exception {
     public:
         GuiException() {}
@@ -14,6 +18,10 @@ class GuiException : public std::exception {
         virtual ~GuiException() = default;
 };
 
+/**
+ * @brief Exception for unexpected behaviour in the title screen
+ * 
+ */
 class TitleScreenException : public GuiException {
     public:
         TitleScreenException() : GuiException() {
@@ -28,6 +36,10 @@ class TitleScreenException : public GuiException {
         std::string msg_;
 };
 
+/**
+ * @brief Exception for not finding the given font
+ * 
+ */
 class FontException : public GuiException {
     public:
         FontException(std::string fontPath) : GuiException() {
