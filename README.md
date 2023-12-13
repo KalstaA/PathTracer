@@ -25,10 +25,10 @@ cd build && make
 # Running renders for example scenes
 There is a scenes/ directory with few example scenes to render. You can use the program to render these by running the command
 ```
-./PathTracer ..scenes/<scene_name> <res X> <res Y> <rays per pixel> <max bounces> <image name>
+./PathTracer ../scenes/<scene_name> <res X> <res Y> <rays per pixel> <max bounces> <image name>
 ```
 from the build directory. For example
 ```
-./PathTracer ..scenes/mirrorRoom.yaml 1920 1080 50 15 image.png
+./PathTracer ../scenes/mirrorRoom.yaml 1920 1080 50 15 image.png
 ```
-should work.
+should work. Rendered images are saved to build/ directory or to relative path from build/ directory given as a last command line argument together with the image name.
