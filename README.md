@@ -18,7 +18,7 @@ Project was developed by:
 # Building the project
 In order to build the project you need to have CMake version 3.19 or higher and OpenMP, such that CMake is able to find it. You can build the project by simply running the following commands from the project root, where CMakeLists.txt is located and it will fetch other dependencies from GitHub.
 ```
-cmake -S . -B build/ -DCKAME_BUILD_TYPE=Release
+cmake -S . -B build/ -DCMAKE_BUILD_TYPE=Release
 cd build && make
 ```
 
